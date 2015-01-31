@@ -1,0 +1,21 @@
+/*	stylesheet.css - Cascaded Style Sheet
+	@(#) $Id: stylesheet.css 77 2009-01-16 08:14:16Z gfis $
+	2009-01-13: span classes for OK / NOK
+	2005-08-18: copied from html/gfis.css
+	2003-07-25:	body font-family
+	2003-03-22:	without HTML comments and tags
+	2000-11-20,	Georg Fischer
+*/
+body,p,h1,h2,h3,h4,dl,dd,dt,ul,ol,li,div,td,th,address,blockquote,nobr,b,i,a,br,img
+	{ font-family:Verdana,Arial,sans-serif; }
+dt	
+	{ font-weight: bold }
+tt
+	{ font-family:Courier; }
+td
+	{ vertical-align:top }
+body
+	{ background-color:white }/* <span> codes for check digits */
+.OK  { color:green    } /* background-color: white */
+.NOK { background-color:crimson ; color:white }
+

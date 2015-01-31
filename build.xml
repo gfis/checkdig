@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    ant-buildfile for commandline, web application and web service
+    @(#) $Id: build.xml 802 2011-09-12 06:46:18Z gfis $
+    2014-01-20: gen.blz.bean
+    2011-09-12: check.gen.iban.bean
+    2008-04-09: targets run.* renamed to test.*
+    2007-04-10: generation of src.account and test/blz incorporated
+    2007-02-13: use ant import
+    2005-10-10: reformatted
+-->
+<!--
+ * Copyright 2006 Dr. Georg Fischer <punctum at punctum dot kom>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<project name="checkdig" default="all" basedir=".">
+    <property name="app.version"        value="1.8" />
+    <property name="app.main-class"     value="org.teherba.checkdig.DigitChecker" />
+    <property name="xtrans"             value="../../webapps-super/xtrans" />
+    <property name="src.account" 		value="src/main/java/org/teherba/checkdig/account" />
+    <import file="build-import.xml" />
+
+    <target name="generate" depends="" /><!-- deactivated -->
+
+    <target name="gendata" depends="gen.account,gen.test.account,gen.blz.bean,gen.iban.bean,gen.isbn,gen.ismn" />
+        <!-- gen.blz-->
+
+    <target name="gen.account" depends="">
+        <exec executable="xmllint" dir="${web.home}/spec">
+            <arg line="--noout --dtdvalid de_account.dtd ${web.home}/spec/de_account.xml"/>
+        </exec>
+        <exec executable="perl" dir="${src.account}" output="${web.home}/spec/de_account.tmp">
+            <arg line="${etc.home}/xslt/nolead0.pl ${web.home}/spec/de_account.xml"/>
+        </exec>
+        <xslt in    ="${web.home}/spec/de_account.tmp"
+            out     ="${src.account}/DeAccountChecker.java"
+            style   ="${web.home}/xslt/checkdig.xsl"
+            processor="trax"
+        />
+    </target>
+
+    <target name="gen.test.account">
+        <xslt in="${web.home}/spec/de_account.xml"
+            style="${web.home}/xslt/extract_test.xsl"
+            out="${test.home}/account/de_account.tst"
+        />
+    </target>
+
+    <target name="gen.blz" depends="">
+        <exec executable="make" dir="test/blz" >
+            <arg line="" />
+        </exec>
+    </target>
+
+    <target name="gen.blz.bean" depends="check.gen.blz.bean" unless="no.gen.blz.bean">
+        <xslt   in="test/blz/BlzDetailBean.xml"
+                style="${xtrans}/web/xslt/genRecord.xsl"
+                out="${src.account}/BlzDetailBeanBase.java"
+        />
+    </target>
+    <target name="check.gen.blz.bean">
+        <uptodate property="no.gen.blz.bean"
+                targetfile="${src.account}/BlzDetailBeanBase.java">
+            <srcfiles dir=".">
+                <include name="${xtrans}/web/xslt/genRecord.xsl" />
+                <include name="test/blz/BlzDetailBean.xml" />
+            </srcfiles>
+        </uptodate>
+    </target>
+
+    <target name="gen.iban.bean" depends="check.gen.iban.bean" unless="no.gen.iban.bean">
+        <xslt   in="test/iban/IBANDetailBean.xml"
+                style="${xtrans}/web/xslt/genRecord.xsl"
+                out="${src.account}/IBANDetailBeanBase.java"
+        />
+    </target>
+    <target name="check.gen.iban.bean">
+        <uptodate property="no.gen.iban.bean"
+                targetfile="${src.account}/IBANDetailBeanBase.java">
+            <srcfiles dir=".">
+                <include name="${xtrans}/web/xslt/genRecord.xsl" />
+                <include name="test/iban/IBANDetailBean.xml" />
+            </srcfiles>
+        </uptodate>
+    </target>
+
+    <target name="gen.rule.bean" depends="check.gen.rule.bean" unless="no.gen.rule.bean">
+        <xslt   in="test/iban/IBANRuleBean.xml"
+                style="${xtrans}/web/xslt/genRecord.xsl"
+                out="${src.account}/IBANRuleBeanBase.java"
+        />
+    </target>
+    <target name="check.gen.rule.bean">
+        <uptodate property="no.gen.rule.bean"
+                targetfile="${src.account}/IBANRuleBeanBase.java">
+            <srcfiles dir=".">
+                <include name="${xtrans}/web/xslt/genRecord.xsl" />
+                <include name="test/iban/IBANRuleBean.xml" />
+            </srcfiles>
+        </uptodate>
+    </target>
+
+    <target name="gen.isbn" depends="">
+        <exec executable="perl" dir="." output="${src.home}/org/teherba/checkdig/ISBNRanges.java">
+            <arg line="${etc.home}/isbn/gen_ranges.pl -java -isbn ${etc.home}/isbn/isbn-ranges.txt"/>
+        </exec>
+        <exec executable="perl" dir="." output="${etc.home}/isbn/isbn_ranges.pl">
+            <arg line="${etc.home}/isbn/gen_ranges.pl -perl -isbn ${etc.home}/isbn/isbn-ranges.txt"/>
+        </exec>
+        <exec executable="perl" dir="." >
+            <arg line="-c ${etc.home}/isbn/isbn_ranges.pl"/>
+        </exec>
+    </target>
+
+    <target name="gen.ismn" depends="">
+        <exec executable="perl" dir="." output="${src.home}/org/teherba/checkdig/ISMNRanges.java">
+            <arg line="${etc.home}/isbn/gen_ranges.pl -java -ismn ${etc.home}/ismn/ismn-ranges.txt"/>
+        </exec>
+        <exec executable="perl" dir="." output="${etc.home}/ismn/ismn_ranges.pl">
+            <arg line="${etc.home}/isbn/gen_ranges.pl -perl -ismn ${etc.home}/ismn/ismn-ranges.txt"/>
+        </exec>
+        <exec executable="perl" dir="." >
+            <arg line="-c ${etc.home}/ismn/ismn_ranges.pl"/>
+        </exec>
+    </target>
+
+    <target name="test" depends="deploy,test.command,test.servlet,test.service,test.crc" />
+
+    <target name="test.command" depends="test.acc,test.iban,test.isin,test.barcode,test.pnd,test.vatid" />
+    <target name="test.acc"     depends="test.account,test.account.bbk" />
+    <target name="test.barcode" depends="test.ean,test.isbn,test.ismn,test.issn" />
+
+    <target name="test.account"><!-- run the program from the commandline -->
+        <antcall target="run">
+            <param name="class" value="org.teherba.checkdig.DigitChecker" />
+            <param name="args"  value="-account"       />
+        </antcall>
+    </target>
+
+    <target name="test.account.bbk"><!-- check all test account numbers from the Bundesbank document -->
+        <antcall target="run">
+            <param name="class" value="org.teherba.checkdig.account.DeAccountChecker" />
+            <param name="args"  value="${test.home}/account/de_account.tst"       />
+        </antcall>
+    </target>
+
+    <target name="test.account.bav"><!-- check all test account numbers from BAV PHP project -->
+        <antcall target="run">
+            <param name="class" value="org.teherba.checkdig.account.DeAccountChecker" />
+            <param name="args"  value="${test.home}/account/bav.tst"       />
+        </antcall>
+    </target>
+
+    <target name="test.ean">
+        <antcall target="run">
+            <param name="class" value="org.teherba.checkdig.DigitChecker" />
+            <param name="args"  value="-ean"       />
+        </antcall>
+    </target>
+
+    <target name="test.iban"><!-- run the program from the commandline -->
+        <antcall target="run">
+            <param name="class" value="org.teherba.checkdig.DigitChecker" />
+            <param name="args"  value="-iban"       />
+        </antcall>
+    </target>
+
+    <target name="test.isbn"><!-- run the program from the commandline -->
+        <antcall target="run">
+            <param name="class" value="org.teherba.checkdig.DigitChecker" />
+            <param name="args"  value="-isbn"       />
+        </antcall>
+    </target>
+
+    <target name="test.isin"><!-- run the program from the commandline -->
+        <antcall target="run">
+            <param name="class" value="org.teherba.checkdig.DigitChecker" />
+            <param name="args"  value="-isin"       />
+        </antcall>
+    </target>
+
+    <target name="test.ismn"><!-- run the program from the commandline -->
+        <antcall target="run">
+            <param name="class" value="org.teherba.checkdig.DigitChecker" />
+            <param name="args"  value="-ismn"       />
+        </antcall>
+    </target>
+
+    <target name="test.issn"><!-- run the program from the commandline -->
+        <antcall target="run">
+            <param name="class" value="org.teherba.checkdig.DigitChecker" />
+            <param name="args"  value="-issn"       />
+        </antcall>
+    </target>
+
+    <target name="test.pnd"><!-- run the program from the commandline -->
+        <antcall target="run">
+            <param name="class" value="org.teherba.checkdig.DigitChecker" />
+            <param name="args"  value="-pnd"       />
+        </antcall>
+    </target>
+
+    <target name="test.vatid"><!-- run the program from the commandline -->
+        <antcall target="run">
+            <param name="class" value="org.teherba.checkdig.DigitChecker" />
+            <param name="args"  value="-vatid"       />
+        </antcall>
+    </target>
+
+    <target name="test.servlet"><!-- call the web page -->
+        <exec executable="lynx">
+            <arg line="-dump http://localhost/webapps/checkdig/"/>
+        </exec>
+    </target>
+
+    <target name="test.service"><!-- call the webservice -->
+        <antcall target="run">
+            <param name="class" value="org.teherba.checkdig.CheckClient"  />
+            <param name="args"  value="isbn"      />
+        </antcall>
+    </target>
+
+    <target name="test.crc">
+        <antcall target="run">
+            <param name="class" value="org.teherba.checkdig.CRCGenerator"  />
+            <param name="args"  value="16 12 5 0 -1 test/crc.tst"      />
+        </antcall>
+    </target>
+
+</project>

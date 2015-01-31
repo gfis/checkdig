@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    Schema for descriptions of check methods for German bank account numbers
+    @(#) $Id$
+    2014-01-20, Georg Fischer: xsd: -> xs:
+-->
+<!--
+ * Copyright 2006 Dr. Georg Fischer <punctum at punctum dot kom>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<xs:schema xmlns=""
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="">
+    <xs:element name="methods" type="methods" />
+    <xs:complexType name="methods">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element name="method" type="method" />
+            <xs:element name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element name="method" type="method" />
+            <xs:element name="variant" type="variant" />
+            <xs:element name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element name="method" type="method" />
+            <xs:element name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element name="method" type="method" />
+            <xs:element name="variant" type="variant" />
+            <xs:element name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+            <xs:element name="variant" type="variant" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="method" type="method" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="method">
+        <xs:sequence>
+            <xs:choice>
+                <xs:group ref="methodSequence0" />
+                <xs:group ref="methodSequence0" />
+                <xs:group ref="methodSequence0" />
+                <xs:group ref="methodSequence" />
+                <xs:element name="sequence" type="sequence" />
+                <xs:element name="code" type="code" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:token" />
+        <xs:attribute name="like" type="xs:int" />
+        <xs:attribute name="since" type="xs:date" />
+        <xs:attribute name="bank" type="xs:token" />
+    </xs:complexType>
+    <xs:complexType name="product">
+        <xs:sequence/>
+        <xs:attribute name="from" type="xs:int" />
+        <xs:attribute name="special" type="xs:token" />
+        <xs:attribute name="to" type="xs:int" />
+        <xs:attribute name="weights" type="xs:token" />
+    </xs:complexType>
+    <xs:complexType name="premod">
+        <xs:sequence/>
+        <xs:attribute name="method" type="xs:int" />
+    </xs:complexType>
+    <xs:complexType name="modulo">
+        <xs:sequence/>
+        <xs:attribute name="base" type="xs:int" />
+        <xs:attribute name="subfrom" type="xs:int" />
+    </xs:complexType>
+    <xs:complexType name="change">
+        <xs:sequence/>
+        <xs:attribute name="from" type="xs:int" />
+        <xs:attribute name="to" type="xs:int" />
+    </xs:complexType>
+    <xs:complexType name="check">
+        <xs:sequence/>
+        <xs:attribute name="pos" type="xs:int" />
+        <xs:attribute name="result" type="xs:boolean" />
+    </xs:complexType>
+    <xs:complexType name="choose">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="when" type="when" />
+            <xs:element name="otherwise" type="otherwise" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="when">
+        <xs:sequence>
+            <xs:choice>
+                <xs:group ref="whenSequence" />
+                <xs:group ref="whenSequence0" />
+                <xs:element name="sequence" type="sequence" />
+                <xs:element name="call" type="call" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="eq" type="xs:int" />
+        <xs:attribute name="le" type="xs:int" />
+        <xs:attribute name="from" type="xs:long" />
+        <xs:attribute name="to" type="xs:long" />
+    </xs:complexType>
+    <xs:complexType name="set">
+        <xs:sequence/>
+        <xs:attribute name="pos" type="xs:int" />
+    </xs:complexType>
+    <xs:complexType name="sequence">
+        <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="call" type="call" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="call">
+        <xs:sequence/>
+        <xs:attribute name="method" type="xs:token" />
+    </xs:complexType>
+    <xs:complexType name="otherwise">
+        <xs:sequence>
+            <xs:choice>
+                <xs:group ref="otherwiseSequence" />
+                <xs:element name="code" type="code" />
+                <xs:element name="sequence" type="sequence" />
+                <xs:element name="call" type="call" />
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="code">
+        <xs:sequence/>
+        <xs:attribute name="method" type="xs:token" />
+    </xs:complexType>
+    <xs:complexType name="account">
+        <xs:sequence/>
+        <xs:attribute name="div" type="xs:int" />
+        <xs:attribute name="mod" type="xs:int" />
+    </xs:complexType>
+    <xs:complexType name="variant">
+        <xs:sequence>
+            <xs:choice>
+                <xs:group ref="variantSequence0" />
+                <xs:group ref="variantSequence0" />
+                <xs:group ref="variantSequence" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:token" />
+        <xs:attribute name="like" type="xs:int" />
+    </xs:complexType>
+    <xs:group name="methodSequence0">
+        <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="0" name="product" type="product" />
+            <xs:element maxOccurs="1" minOccurs="0" name="premod" type="premod" />
+            <xs:element maxOccurs="1" minOccurs="0" name="modulo" type="modulo" />
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="change" type="change" />
+            <xs:element name="check" type="check" />
+        </xs:sequence>
+    </xs:group>
+    <xs:group name="methodSequence0">
+        <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="0" name="product" type="product" />
+            <xs:element maxOccurs="1" minOccurs="0" name="modulo" type="modulo" />
+            <xs:element maxOccurs="1" minOccurs="0" name="change" type="change" />
+            <xs:element name="choose" type="choose" />
+        </xs:sequence>
+    </xs:group>
+    <xs:group name="whenSequence">
+        <xs:sequence>
+            <xs:element name="product" type="product" />
+            <xs:element name="modulo" type="modulo" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="change" type="change" />
+            <xs:element name="check" type="check" />
+        </xs:sequence>
+    </xs:group>
+    <xs:group name="whenSequence0">
+        <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="0" name="set" type="set" />
+            <xs:element name="check" type="check" />
+        </xs:sequence>
+    </xs:group>
+    <xs:group name="otherwiseSequence"
+                         >
+        <xs:sequence>
+            <xs:element maxOccurs="1" minOccurs="0" name="product" type="product" />
+            <xs:element maxOccurs="1" minOccurs="0" name="modulo" type="modulo" />
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="change" type="change" />
+            <xs:element name="check" type="check" />
+        </xs:sequence>
+    </xs:group>
+    <xs:group name="methodSequence0">
+        <xs:sequence>
+            <xs:element name="account" type="account" />
+            <xs:element name="modulo" type="modulo" />
+            <xs:element name="change" type="change" />
+            <xs:element name="check" type="check" />
+        </xs:sequence>
+    </xs:group>
+    <xs:group name="methodSequence">
+        <xs:sequence>
+            <xs:element name="account" type="account" />
+            <xs:element name="choose" type="choose" />
+        </xs:sequence>
+    </xs:group>
+    <xs:group name="variantSequence0">
+        <xs:sequence>
+            <xs:element name="product" type="product" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="modulo" type="modulo" />
+            <xs:element maxOccurs="unbounded" minOccurs="1" name="change" type="change" />
+            <xs:element maxOccurs="1" minOccurs="0" name="check" type="check" />
+        </xs:sequence>
+    </xs:group>
+    <xs:group name="variantSequence0">
+        <xs:sequence>
+            <xs:element name="product" type="product" />
+            <xs:element name="modulo" type="modulo" />
+            <xs:element name="choose" type="choose" />
+        </xs:sequence>
+    </xs:group>
+    <xs:group name="variantSequence">
+        <xs:sequence>
+            <xs:element name="account" type="account" />
+            <xs:element name="choose" type="choose" />
+        </xs:sequence>
+    </xs:group>
+</xs:schema>

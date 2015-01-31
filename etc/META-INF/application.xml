@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:application="http://java.sun.com/xml/ns/javaee/application_5.xsd"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/j2ee/application_5.xsd"
+        version="5"
+        >
+<!--
+    J2EE application descriptor
+    @(#) $Id: application.xml 902 2012-03-11 19:29:44Z gfis $
+    2014-01-16, Georg Fischer: copied from Dbat
+-->
+    <description>Check Digits</description>
+    <display-name>Checkdig</display-name>
+
+    <module>
+        <web>
+            <web-uri>checkdig.war</web-uri>
+            <context-root>/checkdig</context-root>
+        </web>
+    </module>
+</application>

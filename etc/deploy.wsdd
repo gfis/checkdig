@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<deployment xmlns="http://xml.apache.org/axis/wsdd/"
+            xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+	<service name="CheckService" provider="java:RPC">
+		<parameter name="className" value="org.teherba.checkdig.CheckService"/>
+		<parameter name="allowedMethods" value="getResponse"/>
+	<!-- for Trace with SOAPMonitor 
+		<requestFlow>
+			<handler type="soapmonitor"/>
+		</requestFlow>
+		<responseFlow>
+			<handler type="soapmonitor"/>
+		</responseFlow>
+	-->
+	</service>
+</deployment>

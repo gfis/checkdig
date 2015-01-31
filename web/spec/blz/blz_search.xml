@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    Dbat specification - BLZ Search
+    @(#) $Id: order01.xml 856 2012-01-11 07:06:18Z gfis $
+    2014-01-16, Dr. Georg Fischer: copied from order01
+-->
+<dbat   xmlns   ="http://www.teherba.org/2007/dbat"
+        xmlns:ht="http://www.w3.org/1999/xhtml"
+        encoding="UTF-8"
+        lang="en"
+        conn="worddb"
+        title="blz_search"
+        >
+    <comment lang="en">Select from table Bankleitzahlen</comment>
+    <comment lang="de">Suche in der Bankleitzahlen-Tabelle</comment>
+
+    <ht:h3>Suche nach Bankleitzahlen <ht:em><parm name="blz" init="680" />%</ht:em></ht:h3>
+    <ht:form method="get">
+        <ht:input label="BLZ" name="blz" maxsize="8" size="8" init="680%" />% &#xa0; &#xa0;
+        <ht:input type="submit" value="Suchen" />
+    </ht:form>
+
+    <select>
+        <col label="BLZ" link="blz/blz_search&amp;blz=" >blz</col>
+        <col label="Institut"   >inst</col>
+        <col label="PLZ"        >plz</col>
+        <col label="Ort" link="blz/blz_ort&amp;ort="    >ort</col>
+        <col label="BIC" link="blz/blz_bic&amp;bic="    >bic</col>
+        <col label="pz"  link="blz/blz_pz&amp;pz="      >pzMethode</col>
+        <col label=" "          >aendKnz</col>
+        <col label="x"          >loeschung</col>
+        <col label="Folge-BLZ"  link="blz/blz_search&amp;blz=">
+            case when folgeBlz = '00000000'
+                then ''
+                else folgeBlz
+            end
+        </col>
+        <col label="IBAN-Regel" link="blz/blz_iban_regel&amp;ibanRegel=">
+            case when ibanRegel = '0000'
+                then ' '
+                else ibanRegel
+            end
+        </col>
+        <col label="Vers."      >ibanVersion</col>
+        <from>bankleitzahlen</from>
+        <where>blz like '<parm name="blz" />%'
+           and fuehrend = '1'
+        </where>
+        <order by="1" />
+        <counter desc="Bankleitzahl,en" />
+     </select>
+</dbat>

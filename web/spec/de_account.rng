@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:java="http://www.relaxer.org/xmlns/relaxer/java"
+         xmlns:relaxer="http://www.relaxer.org/xmlns/relaxer"
+         xmlns:sql="http://www.relaxer.org/xmlns/relaxer/sql"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="">
+  <start>
+    <ref name="methods"/>
+  </start>
+  <define name="methods">
+    <element name="methods">
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <ref name="variant"/>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <ref name="method"/>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <ref name="method"/>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <ref name="variant"/>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <ref name="method"/>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <ref name="method"/>
+      <ref name="variant"/>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <ref name="method"/>
+      <ref name="variant"/>
+      <ref name="method"/>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <ref name="method"/>
+      <ref name="variant"/>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <ref name="method"/>
+      <ref name="variant"/>
+      <ref name="method"/>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <ref name="method"/>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="variant"/>
+      </oneOrMore>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <ref name="variant"/>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <ref name="variant"/>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+      <ref name="variant"/>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="method">
+    <element name="method">
+      <attribute name="id">
+        <data type="token"/>
+      </attribute>
+      <optional>
+        <attribute name="like">
+          <data type="int"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="since">
+          <data type="date"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="bank">
+          <data type="token"/>
+        </attribute>
+      </optional>
+      <choice>
+        <ref name="methodSequence0"/>
+        <ref name="methodSequence0"/>
+        <ref name="methodSequence0"/>
+        <ref name="methodSequence"/>
+        <ref name="sequence"/>
+        <ref name="code"/>
+      </choice>
+    </element>
+  </define>
+  <define name="product">
+    <element name="product">
+      <attribute name="from">
+        <data type="int"/>
+      </attribute>
+      <optional>
+        <attribute name="special">
+          <data type="token"/>
+        </attribute>
+      </optional>
+      <attribute name="to">
+        <data type="int"/>
+      </attribute>
+      <attribute name="weights">
+        <data type="token"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="premod">
+    <element name="premod">
+      <attribute name="method">
+        <data type="int"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="modulo">
+    <element name="modulo">
+      <attribute name="base">
+        <data type="int"/>
+      </attribute>
+      <optional>
+        <attribute name="subfrom">
+          <data type="int"/>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="change">
+    <element name="change">
+      <attribute name="from">
+        <data type="int"/>
+      </attribute>
+      <attribute name="to">
+        <data type="int"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="check">
+    <element name="check">
+      <optional>
+        <attribute name="pos">
+          <data type="int"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="result">
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="choose">
+    <element name="choose">
+      <oneOrMore>
+        <ref name="when"/>
+      </oneOrMore>
+      <ref name="otherwise"/>
+    </element>
+  </define>
+  <define name="when">
+    <element name="when">
+      <optional>
+        <attribute name="eq">
+          <data type="int"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="le">
+          <data type="int"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="from">
+          <data type="long"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="to">
+          <data type="long"/>
+        </attribute>
+      </optional>
+      <choice>
+        <ref name="whenSequence"/>
+        <ref name="whenSequence0"/>
+        <ref name="sequence"/>
+        <ref name="call"/>
+      </choice>
+    </element>
+  </define>
+  <define name="set">
+    <element name="set">
+      <attribute name="pos">
+        <data type="int"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="sequence">
+    <element name="sequence">
+      <oneOrMore>
+        <ref name="call"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="call">
+    <element name="call">
+      <attribute name="method">
+        <data type="token"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="otherwise">
+    <element name="otherwise">
+      <choice>
+        <ref name="otherwiseSequence"
+             />
+        <ref name="code"/>
+        <ref name="sequence"/>
+        <ref name="call"/>
+      </choice>
+    </element>
+  </define>
+  <define name="code">
+    <element name="code">
+      <attribute name="method">
+        <data type="token"/>
+      </attribute>
+    </element>
+  </define>
+  <define name="account">
+    <element name="account">
+      <optional>
+        <attribute name="div">
+          <data type="int"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="mod">
+          <data type="int"/>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="variant">
+    <element name="variant">
+      <attribute name="id">
+        <data type="token"/>
+      </attribute>
+      <optional>
+        <attribute name="like">
+          <data type="int"/>
+        </attribute>
+      </optional>
+      <choice>
+        <ref name="variantSequence0"/>
+        <ref name="variantSequence0"/>
+        <ref name="variantSequence"/>
+      </choice>
+    </element>
+  </define>
+  <define name="methodSequence0">
+    <optional>
+      <ref name="product"/>
+    </optional>
+    <optional>
+      <ref name="premod"/>
+    </optional>
+    <optional>
+      <ref name="modulo"/>
+    </optional>
+    <zeroOrMore>
+      <ref name="change"/>
+    </zeroOrMore>
+    <ref name="check"/>
+  </define>
+  <define name="methodSequence0">
+    <optional>
+      <ref name="product"/>
+    </optional>
+    <optional>
+      <ref name="modulo"/>
+    </optional>
+    <optional>
+      <ref name="change"/>
+    </optional>
+    <ref name="choose"/>
+  </define>
+  <define name="whenSequence">
+    <ref name="product"/>
+    <ref name="modulo"/>
+    <oneOrMore>
+      <ref name="change"/>
+    </oneOrMore>
+    <ref name="check"/>
+  </define>
+  <define name="whenSequence0">
+    <optional>
+      <ref name="set"/>
+    </optional>
+    <ref name="check"/>
+  </define>
+  <define name="otherwiseSequence"
+          >
+    <optional>
+      <ref name="product"/>
+    </optional>
+    <optional>
+      <ref name="modulo"/>
+    </optional>
+    <zeroOrMore>
+      <ref name="change"/>
+    </zeroOrMore>
+    <ref name="check"/>
+  </define>
+  <define name="methodSequence0">
+    <ref name="account"/>
+    <ref name="modulo"/>
+    <ref name="change"/>
+    <ref name="check"/>
+  </define>
+  <define name="methodSequence">
+    <ref name="account"/>
+    <ref name="choose"/>
+  </define>
+  <define name="variantSequence0">
+    <ref name="product"/>
+    <oneOrMore>
+      <ref name="modulo"/>
+    </oneOrMore>
+    <oneOrMore>
+      <ref name="change"/>
+    </oneOrMore>
+    <optional>
+      <ref name="check"/>
+    </optional>
+  </define>
+  <define name="variantSequence0">
+    <ref name="product"/>
+    <ref name="modulo"/>
+    <ref name="choose"/>
+  </define>
+  <define name="variantSequence">
+    <ref name="account"/>
+    <ref name="choose"/>
+  </define>
+</grammar>

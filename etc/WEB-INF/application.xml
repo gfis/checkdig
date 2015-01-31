@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application
+        xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        version="1.4"
+        >
+<!--
+    J2EE application descriptor
+    @(#) $Id$
+    2013-12-29, Georg Fischer
+-->
+    <description>Check Digits</description>
+    <display-name>Checkdig</display-name>
+
+    <module>
+        <web>
+            <web-uri>checkdig.war</web-uri>
+            <context-root>checkdig</context-root>
+        </web>
+    </module>
+</application>

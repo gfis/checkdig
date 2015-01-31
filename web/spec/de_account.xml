@@ -1,0 +1,2742 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!--
+ * Copyright 2006 Dr. Georg Fischer <punctum at punctum dot kom>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<!--
+    Definitions for about 120 check digit computation methods 
+    of German bank account numbers, depending on the Bankleitzahl,
+    with published test account numbers
+    @(#) $Id: de_account.xml 802 2011-09-12 06:46:18Z gfis $
+	2009-08-14: method 76 (Dreba), Kontoart = 0,4,6,7,8,9, but wrong Kontoart should not inhibit check digit computation
+    2008-12-09: D2, D3
+    2008-09-25: issue dated 2008-09-08; nyi: 57, C5, C6, D1
+    2007-12-20: issue dated 2007-12-03; nyi: 57, C5, C6
+    2007-04-26: method 74 and A0 ff. for issue dated 2007-06-04; test cases
+    2005-11-09: methods B8, B9, C0
+    2005-10-12: with header                <check result="true" />
+
+    problems in 74, 79, 89
+    91: false test cases are true for a following method
+    97: ? (no summation)
+-->
+<methods>
+    <method id="00">
+        <product from="2" to="10" weights="2,1,2,1,2,1,2,1,2" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+        <test id="00" result="true" account="9290701"/>
+        <test id="00" result="true" account="539290858"/>
+        <test id="00" result="true" account="1501824"/>
+        <test id="00" result="true" account="1501832"/>
+    </method>
+    
+    <method id="01">
+        <product from="2" to="10" weights="3,7,1,3,7,1,3,7,1" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </method>
+    
+    <method id="02">
+        <product from="2" to="10" weights="2,3,4,5,6,7,8,9,2" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" />
+    <!-- DBB claims:
+    -->
+        <change from="10" to="12" /> 
+        <change from="10" to="0" /> 
+        <check pos="1" />
+    </method>
+    
+    <method id="03" like="01">
+        <product from="2" to="10" weights="2,1,2,1,2,1,2,1,2" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </method>
+    
+    <method id="04" like="02">
+        <product from="2" to="10" weights="2,3,4,5,6,7,2,3,4" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="12" />
+        <check pos="1" />
+    </method>
+    
+    <method id="05" like="01">
+        <product from="2" to="10" weights="7,3,1,7,3,1,7,3,1" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </method>
+    
+    <method id="06" like="02">
+        <product from="2" to="10" weights="2,3,4,5,6,7,2,3,4" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+        <test id="06" result="true" account="94012341"/>
+        <test id="06" result="true" account="5073321010"/>
+    </method>
+    
+    <method id="07" like="02">
+        <product from="2" to="10" weights="2,3,4,5,6,7,8,9,10" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="12" />
+        <check pos="1" />
+    </method>
+    
+    <method id="08" like="00">
+        <choose>
+            <when from="0" to="60000">
+                <call method="09" />
+            </when>
+            <otherwise>
+                <call method="00" />
+            </otherwise>
+        </choose>
+    </method>
+    
+    <!-- the empty check method: do not check at all -->
+    <method id="09">
+        <check result="true" />
+    </method>
+
+    <method id="10" like="06">
+        <product from="2" to="10" weights="2,3,4,5,6,7,8,9,10" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+        <test id="10" result="true" account="12345008"/>
+        <test id="10" result="true" account="87654008"/>
+    </method>
+    
+    <method id="11" like="06">
+        <product from="2" to="10" weights="2,3,4,5,6,7,8,9,10" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="9" />
+        <check pos="1" />
+    </method>
+    
+    <method id="12" like="06" bank="unused">
+        <check result="true" />
+    </method>
+    
+    <variant id="13_A">
+        <product from="4" to="9" weights="2,1,2,1,2,1" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="3" />
+    </variant>
+    <variant id="13_B">
+        <product from="2" to="7" weights="2,1,2,1,2,1" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+
+    <method id="13" like="00" bank="Commerzbank"><!-- 4th digit of BLZ = "4" -->
+        <sequence>
+            <call method="13_A" />
+            <call method="13_B" />
+        </sequence>
+    </method>
+    
+    <method id="14" like="02">
+        <product from="2" to="7" weights="2,3,4,5,6,7" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="12" />
+        <check pos="1" />
+    </method>
+    
+    <method id="15" like="06">
+        <product from="2" to="5" weights="2,3,4,5" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+    </method>
+    
+    <method id="16" like="06">
+        <product from="2" to="10" weights="2,3,4,5,6,7,2,3,4" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" />
+        <choose>
+            <when eq="10">
+                <set pos="2" /> <!-- pos2 = pos1 -->
+                <check pos="1" />
+            </when>
+            <otherwise>
+                <check pos="1" />
+            </otherwise>
+        </choose>
+    </method>
+    
+    <method id="17">
+        <product from="4" to="9" weights="2,1,2,1,2,1" special="sumdigits" />
+        <premod method="17" /><!-- decrement by="1" -->
+        <modulo base="11" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="3" />
+        <test id="17" result="true" account="0446786040"/>
+    </method>
+
+    <method id="18" like="01">
+        <product from="2" to="10" weights="3,9,7,1,3,9,7,1,3" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </method>
+
+    <method id="19" like="06">
+        <product from="2" to="10" weights="2,3,4,5,6,7,8,9,1" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+        <test id="19" result="true" account="0240334000"/>
+        <test id="19" result="true" account="0200520016"/>
+    </method>
+
+    <method id="20" like="06">
+        <product from="2" to="10" weights="2,3,4,5,6,7,8,9,3" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+    </method>
+
+    <method id="21" like="00">
+        <product from="2" to="10" weights="2,1,2,1,2,1,2,1,2" special="sumdigits" />
+        <premod method="21" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </method>
+    
+    <method id="22">
+        <product from="2" to="10" weights="3,1,3,1,3,1,3,1,3" special="lastdigit" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" /> <!-- not in DBB document -->
+        <check pos="1" />
+    </method>
+    
+    <method id="23" like="16" since="2001-09-03">
+        <product from="5" to="10" weights="2,3,4,5,6,7" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" />
+        <choose>
+            <when eq="10">
+                <set pos="5" /> <!-- pos4 = pos5 -->
+                <check pos="4" />
+            </when>
+            <otherwise>
+                <check pos="4" />
+            </otherwise>
+        </choose>
+    </method>
+    
+    <method id="24"> 
+        <!-- weights from left to right ?! 
+        <product from="2" to="10" weights="2,1,3,2,1,3,2,1,3" special="code24" />
+        <modulo base="10" />
+        <check pos="1" />
+        -->
+        <code method="24_B" />
+        <test id="24" result="true" account="138301" />
+        <test id="24" result="true" account="1306118605" />
+        <test id="24" result="true" account="3307118608" />
+        <test id="24" result="true" account="9307118603" />
+    </method>
+    
+    <method id="25">
+        <account div="0100000000" mod="10" />
+        <choose> 
+            <when from="8" to="9">
+                <product from="2" to="9" weights="2,3,4,5,6,7,8,9" />
+                <modulo base="11" subfrom="11" />
+                <change from="11" to="0" /><change from="10" to="0" />  
+                <check pos="1" />
+            </when>
+            <otherwise>
+                <product from="2" to="9" weights="2,3,4,5,6,7,8,9" />
+                <modulo base="11" subfrom="11" />
+                <change from="11" to="0" /><change from="10" to="12" />  
+                <check pos="1" />
+            </otherwise>
+        </choose>
+        <test id="25" result="true" account="521382181" />
+    </method>
+    
+    <method id="26">
+        <account div="0100000000" mod="100" />
+        <choose>
+            <when eq="00">
+                <product from="2" to="8" weights="2,3,4,5,6,7,2" />
+                <modulo base="11" subfrom="11" />
+                <change from="11" to="0" /><change from="10" to="0" />
+                <check pos="1" />
+            </when>
+            <otherwise>
+                <product from="4" to="10" weights="2,3,4,5,6,7,2" />
+                <modulo base="11" subfrom="11" />
+                <change from="11" to="0" /><change from="10" to="0" />
+                <check pos="3" />
+            </otherwise>
+        </choose>
+        <test id="26" result="true" account="0520309001"/>
+        <test id="26" result="true" account="1111118111"/>
+        <test id="26" result="true" account="0005501024"/>
+    </method>
+
+    <method id="27">
+        <account div="1000000000" mod="10" />
+        <choose>
+            <when eq="0">
+                <call method="00" />
+            </when>
+            <otherwise>
+                <call method="29" />
+            </otherwise>
+        </choose>
+        <test id="27" result="true" account="2847169488"/>
+    </method>
+
+    <method id="28" like="06">
+        <product from="4" to="10" weights="2,3,4,5,6,7,8" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="3" />
+        <test id="28" result="true" account="19999000"/>
+        <test id="28" result="true" account="9130000201"/>
+    </method>
+    
+    <method id="29"> 
+        <!-- iterated transformation -->
+                                    <!--   P T T T T T T T T T Z1                  Z2                  Z3                  Z4                 -->
+        <product from="2" to="10" weights="0,1,2,3,4,1,2,3,4,1,0,1,5,9,3,7,4,8,2,6,0,1,7,6,9,8,3,2,5,4,0,1,8,4,6,2,9,5,7,3,0,1,2,3,4,5,6,7,8,9" special="code27" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+        <test id="29" result="true" account="3145863029"/>
+    </method>
+
+    <method id="30" like="00">
+        <product from="2" to="10" weights="2,1,2,1,0,0,0,0,2" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </method>
+    
+    <method id="31">
+        <product from="2" to="10" weights="9,8,7,6,5,4,3,2,1" />
+        <modulo base="11" />
+        <change from="11" to="0" /><change from="10" to="12" />
+        <check pos="1" />
+        <test id="31" result="true" account="1000000524"/>
+        <test id="31" result="true" account="1000000583"/>
+    </method>
+    
+    <method id="32" like="06">
+        <product from="2" to="7" weights="2,3,4,5,6,7" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+        <test id="32" result="true" account="9141405"/>
+        <test id="32" result="true" account="1709107983"/>
+        <test id="32" result="true" account="0122116979"/>
+        <test id="32" result="true" account="0121114867"/>
+        <test id="32" result="true" account="9030101192"/>
+        <test id="32" result="true" account="9245500460"/>
+    </method>
+    
+    <method id="33" like="06">
+        <product from="2" to="6" weights="2,3,4,5,6" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+        <test id="33" result="true" account="48658"/>
+        <test id="33" result="true" account="84956"/>
+    </method>
+    
+    <method id="34" like="28">
+        <product from="4" to="10" weights="2,4,8,5,10,9,7" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="3" />
+        <test id="34" result="true" account="9913000700"/>
+        <test id="34" result="true" account="9914001000"/>
+    </method>
+
+    <method id="35" like="16">
+        <product from="2" to="10" weights="2,3,4,5,6,7,8,9,10" />
+        <modulo base="11" />
+        <choose>
+            <when eq="10">
+                <set pos="2" /> <!-- pos2 = pos1 -->
+                <check pos="1" />
+            </when>
+            <otherwise>
+                <check pos="1" />
+            </otherwise>
+        </choose>
+        <test id="35" result="true" account="0000108443"/>
+        <test id="35" result="true" account="0000107451"/>
+        <test id="35" result="true" account="0000102921"/>
+        <test id="35" result="true" account="0000102349"/>
+        <test id="35" result="true" account="0000101709"/>
+        <test id="35" result="true" account="0000101599"/>
+    </method>
+    
+    <method id="36" like="06">
+        <product from="2" to="5" weights="2,4,8,5" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+        <test id="36" result="true" account="113178"/>
+        <test id="36" result="true" account="146666"/>
+    </method>
+    
+    <method id="37" like="06">
+        <product from="2" to="6" weights="2,4,8,5,10" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+        <test id="37" result="true" account="624315"/>
+        <test id="37" result="true" account="632500"/>
+   </method>
+    
+    <method id="38" like="06">
+        <product from="2" to="7" weights="2,4,8,5,10,9" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+        <test id="38" result="true" account="191919"/>
+        <test id="38" result="true" account="1100660"/>
+    </method>
+    
+    <method id="39" like="06">
+        <product from="2" to="8" weights="2,4,8,5,10,9,7" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+        <test id="39" result="true" account="200205"/>
+        <test id="39" result="true" account="10019400"/>
+    </method>
+    
+    <method id="40" like="06">
+        <product from="2" to="10" weights="2,4,8,5,10,9,7,3,6" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+        <test id="40" result="true" account="1258345"/>
+        <test id="40" result="true" account="3231963"/>
+    </method>
+    
+    <method id="41" like="00">
+        <account div="0001000000" mod="10" />
+        <choose>
+            <when eq="9">
+                <product from="2" to="7" weights="2,1,2,1,2,1" special="sumdigits" />
+                <modulo base="10" subfrom="10" />
+                <change from="10" to="0" />
+                <check pos="1" />
+            </when>
+            <otherwise>
+                <product from="2" to="10" weights="2,1,2,1,2,1,2,1,2" special="sumdigits" />
+                <modulo base="10" subfrom="10" />
+                <change from="10" to="0" />
+                <check pos="1" />
+            </otherwise>
+        </choose>
+        <test id="41" result="true" account="4013410024"/>
+        <test id="41" result="true" account="4016660195"/>
+        <test id="41" result="true" account="0166805317"/>
+        <test id="41" result="true" account="4019310079"/>
+        <test id="41" result="true" account="4019340829"/>
+        <test id="41" result="true" account="4019151002"/>
+    </method>
+    
+    <method id="42" like="06">
+        <product from="2" to="9" weights="2,3,4,5,6,7,8,9" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+        <test id="42" result="true" account="59498"/>
+        <test id="42" result="true" account="59510"/>
+    </method>
+    
+    <method id="43">
+        <product from="2" to="10" weights="1,2,3,4,5,6,7,8,9" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+        <test id="43" result="true" account="6135244"/>
+        <test id="43" result="true" account="9516893476"/>
+    </method>
+    
+    <method id="44" like="33">
+        <product from="2" to="6" weights="2,4,8,5,10" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+        <test id="44" result="true" account="889006"/>
+        <test id="44" result="true" account="2618040504"/>
+    </method>
+    
+    
+    <variant id="45_B">
+        <account div="0000100000" mod="10" />
+        <choose>
+            <when eq="1">
+                <call method="09" />
+            </when>
+            <otherwise>
+                <product from="2" to="10" weights="2,1,2,1,2,1,2,1,2" special="sumdigits" />
+                <modulo base="10" subfrom="10" />
+                <change from="10" to="0" />
+                <check pos="1" />
+            </otherwise>
+        </choose>
+    </variant>
+
+    <method id="45" like="00">
+        <account div="1000000000" mod="10" />
+        <choose>
+            <when eq="0">
+                <call method="09" />
+            </when>
+            <otherwise>
+                <call method="45_B" />
+            </otherwise>
+        </choose>
+        <test id="45" result="true"  account="3545343232"/>
+        <test id="45" result="true"  account="4013410024"/>
+        <!-- the following ones contain no check digit: -->
+        <test id="45" result="true"  account="0994681254"/>
+        <test id="45" result="true"  account="0000012340"/>
+        <test id="45" result="true"  account="1000199999"/>
+        <test id="45" result="true"  account="0100114240"/>
+    </method>
+    
+    <method id="46" like="06">
+        <product from="4" to="8" weights="2,3,4,5,6" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="3" />
+        <test id="46" result="true" account="0235468612"/>
+        <test id="46" result="true" account="0837890901"/>
+        <test id="46" result="true" account="1041447600"/>
+    </method>
+    
+    <method id="47" like="06">
+        <product from="3" to="7" weights="2,3,4,5,6" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="2" />
+        <test id="47" result="true" account="1018000"/>
+        <test id="47" result="true" account="1003554450"/>
+    </method>
+    
+    <method id="48" like="06">
+        <product from="3" to="8" weights="2,3,4,5,6,7" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="2" />
+    </method>
+    
+    <variant id="49_1" like="00">
+        <product from="2" to="10" weights="2,1,2,1,2,1,2,1,2" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="49_2" like="01">
+        <product from="2" to="10" weights="3,7,1,3,7,1,3,7,1" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+
+    <method id="49">
+        <sequence>
+            <call method="00" />
+            <call method="01" />
+        </sequence>
+    </method>
+    
+    <variant id="50_A" like="06">
+        <product from="5" to="10" weights="2,3,4,5,6,7" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="4" />
+    </variant>
+    <variant id="50_B" like="06">
+        <product from="2" to="7" weights="2,3,4,5,6,7" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+
+    <method id="50">
+        <sequence>
+            <call method="50_A" />
+            <call method="50_B" />
+        </sequence>
+        <test id="50" result="true" account="4000005001"/>
+        <test id="50" result="true" account="4444442001"/>
+    </method>
+    
+    <variant id="51_A" like="06">
+        <product from="2" to="7" weights="2,3,4,5,6,7" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="51_B" like="06">
+        <product from="2" to="6" weights="2,3,4,5,6" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="51_C" like="06">
+        <account div="1" mod="10" />
+        <choose>
+            <when from="7" to="9">
+                <check result="false" />
+            </when>
+            <otherwise>
+                <product from="2" to="6" weights="2,3,4,5,6" />
+                <modulo base="7" subfrom="7" />
+                <change from="7" to="0" />
+                <check pos="1" />
+            </otherwise>
+        </choose>
+    </variant>
+    <variant id="51_91" like="06">
+        <product from="2" to="8" weights="2,3,4,5,6,7,8" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="51_92" like="06">
+        <product from="2" to="10" weights="2,3,4,5,6,7,8,9,10" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+
+    <method id="51" since="2004-09-06">
+        <account div="0010000000" mod="10" />
+        <choose>
+            <when eq="9">
+                <sequence>
+                    <call method="51_91" />
+                    <call method="51_92" />
+                </sequence>
+            </when>
+            <otherwise>
+                <sequence>
+                    <call method="51_A" />
+                    <call method="51_B" />
+                    <call method="51_C" />
+                </sequence>
+            </otherwise>
+        </choose>
+        <test id="51" result="true"  account="0001156071"/>
+        <test id="51" result="true"  account="0001156136"/>
+        <test id="51" result="true"  account="0000156078"/>
+        <test id="51" result="true"  account="0000156071"/>
+        <test id="51" result="true"  account="0199100002"/>
+        <test id="51" result="true"  account="0099100010"/>
+        <test id="51" result="true"  account="2599100002"/>
+    <!--
+        <test id="51" result="false" account="0199100004"/>
+        <test id="51" result="false" account="2599100003"/>
+        <test id="51" result="false" account="0099345678"/>
+    -->
+        <test id="51" result="true"  account="0199100004"/>
+        <test id="51" result="true"  account="2599100003"/>
+        <test id="51" result="true"  account="3199204090"/>
+        <test id="51" result="false" account="0099345678"/>
+        <test id="51" result="false" account="0099100110"/>
+        <test id="51" result="false" account="0199100040"/>
+    </method>
+    
+    <method id="52">
+        <account div="1000000000" mod="10" />
+        <choose>
+            <when eq="9">
+                <call method="20" />
+            </when>
+            <otherwise>
+                <code method="52_A" /> <!-- ex-DDR ESER, with BLZ -->
+            </otherwise>
+        </choose>
+    </method>
+    
+    <method id="53">
+        <account div="1000000000" mod="10" />
+        <choose>
+            <when eq="9">
+                <call method="20" />
+            </when>
+            <otherwise>
+                <code method="53_A" /> <!-- ex-DDR ESER, with BLZ -->
+            </otherwise>
+        </choose>
+    </method>
+    
+    <method id="54">
+        <account div="0100000000" mod="100" />
+        <choose>
+            <when eq="49">
+                <product from="2" to="8" weights="2,3,4,5,6,7,2" />
+                <modulo base="11" subfrom="11" />
+                <change from="11" to="12" /> <!-- nok -->
+                <change from="10" to="12" /> <!-- nok -->
+                <check pos="1" />
+            </when>
+            <otherwise>
+                <check result="false" />
+            </otherwise>
+        </choose>
+        <test id="54" result="true" account="4964137395"/>
+        <test id="54" result="true" account="4900010987"/>
+    </method>
+    
+    <method id="55" like="06">
+        <product from="2" to="10" weights="2,3,4,5,6,7,8,7,8" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+    </method>
+
+    <method id="56" like="06">
+        <account div="1000000000" mod="10" />
+        <choose>
+            <when eq="9">
+                <product from="2" to="10" weights="2,3,4,5,6,7,2,3,4" />
+                <modulo base="11" subfrom="11" />
+                <change from="11" to="8" />
+                <change from="10" to="7" />
+                <check pos="1" />
+            </when>
+            <otherwise>
+                <product from="2" to="10" weights="2,3,4,5,6,7,2,3,4" />
+                <modulo base="11" subfrom="11" />
+                <change from="11" to="12" /> <!-- nok -->
+                <change from="10" to="12" /> <!-- nok -->
+                <check pos="1" />
+            </otherwise>
+        </choose>
+        <test id="56" result="true" account="0290545005"/>
+        <test id="56" result="true" account="9718304037"/>
+    </method>
+    
+    <variant id="57_B">
+        <account div="0000010000" />
+        <choose>
+            <when eq="7777777">
+                <call method="09" />
+            </when>
+            <when eq="8888888">
+                <call method="09" />
+            </when>
+            <otherwise>
+                <product from="2" to="10" weights="1,2,1,2,1,2,1,2,1" special="sumdigits" />
+                <modulo base="10" subfrom="10" />
+                <change from="10" to="0" />
+                <check pos="1" />
+            </otherwise>
+        </choose>
+    </variant>
+	
+    <method id="57" since="2002-04-03" nyi="2006-12-04"><!-- ??? -->
+        <account div="0100000000" />
+        <choose>
+            <when from="00" to="50">
+                <call method="09" />
+            </when>
+            <when from="91" to="91">
+                <call method="09" />
+            </when>
+            <when from="96" to="99">
+                <call method="09" />
+            </when>
+            <otherwise>
+                <call method="57_B" />
+            </otherwise>
+        </choose>
+        <test id="57" result="true" account="7500021766"/>
+        <test id="57" result="true" account="9400001734"/>
+        <test id="57" result="true" account="7800028282"/>
+        <test id="57" result="true" account="8100244186"/>
+    </method>
+    
+    <method id="58" like="02" since="2002-03-04">
+        <product from="2" to="6" weights="2,3,4,5,6" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="12" />
+        <check pos="1" />
+        <test id="58" result="true" account="1800881120"/>
+        <test id="58" result="true" account="9200654108"/>
+        <test id="58" result="true" account="1015222224"/>
+        <test id="58" result="true" account="3703169668"/>
+    </method>
+
+    <method id="59" like="00" since="2001-12-03">
+        <account div="0100000000" />
+        <choose>
+            <when eq="00">
+                <call method="09" />
+            </when>
+            <otherwise>
+                <call method="00" />
+            </otherwise>
+        </choose>
+    </method>
+
+    <method id="60" like="00">
+        <product from="2" to="8" weights="2,1,2,1,2,1,2" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </method>
+
+    <method id="61" like="00">
+        <account div="0000000010" mod="10" />
+        <choose>
+            <when eq="8">
+                <product from="1" to="10" weights="2,1,0,2,1,2,1,2,1,2" special="sumdigits" />
+                <modulo base="10" subfrom="10" />
+                <change from="10" to="0" />
+                <check pos="3" />
+            </when>
+            <otherwise>
+                <product from="4" to="10" weights="2,1,2,1,2,1,2" special="sumdigits" />
+                <modulo base="10" subfrom="10" />
+                <change from="10" to="0" />
+                <check pos="3" />
+            </otherwise>
+        </choose>
+        <test id="61" result="true" account="2063099200"/>
+        <test id="61" result="true" account="0260760481"/>
+    </method>
+
+    <method id="62" like="00">
+        <product from="4" to="8" weights="2,1,2,1,2" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="3" />
+        <test id="62" result="true" account="5029076701"/>
+    </method>
+
+    <variant id="63_A">
+        <product from="4" to="9" weights="2,1,2,1,2,1" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="3" />
+    </variant>
+    <variant id="63_B">
+        <product from="2" to="7" weights="2,1,2,1,2,1" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+    
+    <method id="63" like="00"><!-- 4th digit of BLZ = "7" -->
+        <account div="1000000000" mod="10" />
+        <choose>
+            <when eq="0">
+                <sequence>
+                    <call method="63_A" />
+                    <call method="63_B" />
+                </sequence>
+            </when>
+            <otherwise>
+                <check result="false" />
+            </otherwise>
+        </choose>
+        <test id="63" result="true" account="0123456600"/>
+        <test id="63" result="true" account="0001234566"/>
+   </method>
+    
+    <method id="64" like="06">
+        <product from="5" to="10" weights="2,4,8,5,10,9" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="4" />
+        <test id="64" result="true" account="1206473010"/>
+        <test id="64" result="true" account="5016511020"/>
+    </method>
+    
+    <method id="65" like="00">
+        <account div="0000000010" mod="10" />
+        <choose>
+            <when eq="9">
+                <product from="1" to="10" weights="2,1,0,2,1,2,1,2,1,2" special="sumdigits" />
+                <modulo base="10" subfrom="10" />
+                <change from="10" to="0" />
+                <check pos="3" />
+            </when>
+            <otherwise>
+                <product from="4" to="10" weights="2,1,2,1,2,1,2" special="sumdigits" />
+                <modulo base="10" subfrom="10" />
+                <change from="10" to="0" />
+                <check pos="3" />
+            </otherwise>
+        </choose>
+        <test id="65" result="true" account="1234567400"/>
+        <test id="65" result="true" account="1234567590"/>
+    </method>
+
+    <method id="66" like="00">
+        <account div="1000000000" mod="10" />
+        <choose>
+            <when eq="0">
+                <product from="2" to="9" weights="2,3,4,5,6,0,0,7" />
+                <modulo base="11" subfrom="11" />
+                <change from="11" to="1" /><change from="10" to="0" />
+                <check pos="1" />
+            </when>
+            <otherwise>
+                <check result="false" />
+            </otherwise>
+        </choose>
+        <test id="66" result="true" account="100154508"/>
+        <test id="66" result="true" account="101154508"/>
+        <test id="66" result="true" account="100154516"/>
+        <test id="66" result="true" account="101154516"/>
+    </method>
+
+    <method id="67" like="00">
+        <product from="4" to="10" weights="2,1,2,1,2,1,2" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="3" />
+    </method>
+
+    <variant id="68_1">
+        <product from="2" to="9" weights="2,1,2,1,2,1,2,1" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="68_2">
+        <product from="2" to="9" weights="2,1,2,1,2,0,0,1" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="68_10">
+        <account div="0001000000" mod="10" />
+        <choose>
+            <when eq="9">
+                <product from="2" to="7" weights="2,1,2,1,2,1" special="sumdigits" />
+                <modulo base="10" subfrom="10" />
+                <change from="10" to="0" />
+                <check pos="1" />
+            </when>
+            <otherwise>
+                <check result="false" />
+            </otherwise>
+        </choose>
+    </variant>
+    
+    <method id="68" like="00">
+        <account div="0100000000" mod="100" />
+        <choose>
+            <when eq="04">
+                <call method="09" />
+            </when>
+            <when le="09">
+                <sequence>
+                    <call method="68_1" />
+                    <call method="68_2" />
+                </sequence>
+            </when>
+            <otherwise><!-- 10 places -->
+                <call method="68_10" />
+            </otherwise>
+        </choose>
+        <test id="68" result="true" account="8889654328"/>
+        <test id="68" result="true" account="987654324"/>
+        <test id="68" result="true" account="987654328"/>
+    </method>
+
+    <method id="69" like="00">
+        <account div="0100000000" mod="100" />
+        <choose>
+            <when eq="93">
+                <call method="09" />
+            </when>
+            <when eq="97">
+                <call method="29" />
+            </when>
+            <otherwise>
+                <sequence>
+                    <call method="28" />
+                    <call method="29" />
+                </sequence>
+            </otherwise>
+        </choose>
+        <test id="69" result="true" account="9721134869"/>
+        <test id="69" result="true" account="1234567900"/>
+        <test id="69" result="true" account="1234567006"/>
+    </method>
+
+    <method id="70" like="06">
+        <account div="0000100000" mod="100" />
+        <choose>
+            <when from="50" to="59">
+                <call method="32" />
+            </when>
+            <when eq="69">
+                <call method="32" />
+            </when>
+            <otherwise> 
+                <call method="06" />
+            </otherwise>
+        </choose>
+    </method>
+
+    <method id="71" like="06">
+        <product from="4" to="9" weights="1,2,3,4,5,6" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="1" />
+        <check pos="1" />
+        <test id="71" result="true" account="7101234007"/>
+    </method>
+
+    <method id="72" like="00">
+        <product from="2" to="7" weights="2,1,2,1,2,1" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </method>
+
+    <variant id="73_1">
+        <product from="2" to="7" weights="2,1,2,1,2,1" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="73_2">
+        <product from="2" to="6" weights="2,1,2,1,2" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="73_3">
+        <product from="2" to="6" weights="2,1,2,1,2" special="sumdigits" />
+        <modulo base="7" subfrom="7" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+
+    <method id="73" like="00" since="2004-12-06">
+        <account div="0010000000" mod="10" />
+        <choose>
+            <when eq="9">
+                <sequence>
+                    <call method="51_91" />
+                    <call method="51_92" />
+                </sequence>
+            </when>
+            <otherwise> 
+                <sequence>
+                    <call method="73_1" />
+                    <call method="73_2" />
+                    <call method="73_3" />
+                </sequence>
+            </otherwise>
+        </choose>
+        <test id="73" result="true"  account="0003503398"/>
+        <test id="73" result="true"  account="0001340967"/>
+        <test id="73" result="true"  account="0003503391"/>
+        <test id="73" result="true"  account="0001340968"/>
+        <test id="73" result="true"  account="0003503392"/>
+        <test id="73" result="true"  account="0001340966"/>
+        <test id="73" result="true"  account="123456"/>
+        <test id="73" result="false" account="121212"/>
+        <test id="73" result="false" account="987654321"/>
+        <!-- from method 51: -->
+        <test id="73" result="true"  account="0199100002"/>
+        <test id="73" result="true"  account="0099100010"/>
+        <test id="73" result="true"  account="2599100002"/>
+        <test id="73" result="true"  account="0199100004"/>
+        <test id="73" result="true"  account="2599100003"/>
+        <test id="73" result="true"  account="3199204090"/>
+        <test id="73" result="false" account="0099345678"/>
+        <test id="73" result="false" account="0099100110"/>
+        <test id="73" result="false" account="0199100040"/>
+     </method>
+    
+    <variant id="74_1">
+        <product from="2" to="10" weights="2,1,2,1,2,1,2,1,2" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="74_2">
+        <product from="2" to="10" weights="2,1,2,1,2,1,2,1,2" special="sumdigits" />
+        <modulo base="5" subfrom="5" />
+        <change from="5" to="0" />
+        <check pos="1" />
+    </variant>
+
+    <method id="74" like="00" since="2007-06-04">
+        <account />
+        <choose>
+            <when from="0000100000" to="0000999999">
+                <sequence>
+                    <call method="74_1" />
+                    <call method="74_2" />
+                </sequence>
+            </when>
+            <otherwise> 
+                <call method="74_1" />
+            </otherwise>
+        </choose>
+        <test id="74" result="true"  account="1016"/>
+        <test id="74" result="true"  account="26260"/>
+        <test id="74" result="true"  account="242243"/>
+        <test id="74" result="true"  account="242248"/>
+        <test id="74" result="true"  account="18002113"/>
+        <test id="74" result="true"  account="1821200043"/>
+        <test id="74" result="false" account="1011"/>
+        <test id="74" result="false" account="26265"/>
+        <test id="74" result="false" account="18002118"/>
+        <test id="74" result="false" account="6160000024"/>
+    </method>
+    
+    <method id="75" like="00">
+        <account div="0100000000" mod="100" />
+        <choose>
+            <when eq="00">
+                <product from="2" to="6" weights="2,1,2,1,2" special="sumdigits" />
+                <modulo base="10" subfrom="10" />
+                <change from="10" to="0" />
+                <check pos="1" />
+            </when>
+            <when eq="09">
+                <product from="4" to="8" weights="2,1,2,1,2" special="sumdigits" />
+                <modulo base="10" subfrom="10" />
+                <change from="10" to="0" />
+                <check pos="3" />
+            </when>
+            <otherwise> 
+                <product from="5" to="9" weights="2,1,2,1,2" special="sumdigits" />
+                <modulo base="10" subfrom="10" />
+                <change from="10" to="0" />
+                <check pos="4" />
+            </otherwise>
+        </choose>
+    </method>
+    
+    <variant id="76_1">
+        <product from="4" to="9" weights="2,3,4,5,6,7" />
+        <modulo base="11" />
+        <change from="10" to="12" />
+        <check pos="3" />
+    </variant>
+    <variant id="76_2">
+        <product from="2" to="7" weights="2,3,4,5,6,7" />
+        <modulo base="11" />
+        <change from="10" to="12" />
+        <check pos="1" />
+    </variant>
+
+    <method id="76" bank="Dresdner Bank"><!-- 4th digit of BLZ = "8" -->
+        <account div="1000000000" />
+        <!-- Kontoart = 0,4,6,7,8,9, but wrong Kontoart should not inhibit check digit computation
+        <choose>
+            <when from="1" to="3">
+                <check result="false" />
+            </when>
+            <when eq="5">
+                <check result="false" />
+            </when>
+            <otherwise> 
+        -->
+                <sequence>
+                    <call method="76_1" />
+                    <call method="76_2" />
+                </sequence>
+		<!--
+            </otherwise>
+        </choose>
+        -->
+        <test id="76" result="true" account="0012345606"/>
+        <test id="76" result="true" account="0000123456"/>
+        <test id="76" result="true" account="0006543200"/>
+        <test id="76" result="true" account="9012345600"/>
+        <test id="76" result="true" account="7876543100"/>
+    </method>
+    
+    <variant id="77_2">
+        <product from="1" to="5" weights="5,4,3,4,5" />
+        <modulo base="11" />
+        <choose>
+            <when eq="0">
+                <check result="true" />
+            </when>
+            <otherwise>
+                <check result="false" />
+            </otherwise>
+        </choose>
+    </variant>
+
+    <method id="77">
+        <product from="1" to="5" weights="1,2,3,4,5" />
+        <modulo base="11" />
+        <choose>
+            <when eq="0">
+                <check result="true" />
+            </when>
+            <otherwise>
+                <call method="77_2" />
+            </otherwise>
+        </choose>
+        <test id="77" result="true" account="47678"/>
+        <test id="77" result="true" account="47671"/>
+        <test id="77" result="true" account="10338"/>
+        <test id="77" result="true" account="13844"/>
+        <test id="77" result="true" account="65354"/>
+        <test id="77" result="true" account="69258"/>
+    </method>
+    
+    <method id="78">
+        <account div="0001000000" />
+        <choose>
+            <when eq="0000">
+                <call method="09" />
+            </when>
+            <otherwise> 
+                <call method="00" />
+            </otherwise>
+        </choose>
+        <test id="78" result="true" account="7581499"/>
+        <test id="78" result="true" account="9999999981"/>
+    </method>
+
+    <method id="79">
+        <account div="1000000000" mod="10" />
+        <choose>
+            <when from="3" to="8">
+                <call method="00" />
+            </when>
+            <when eq="0">
+                <check result="false" />
+            </when>
+            <otherwise><!-- 1, 2 or 9 -->
+                <product from="3" to="10" weights="2,1,2,1,2,1,2,1" special="sumdigits" />
+                <modulo base="10" subfrom="10" />
+                <change from="10" to="0" />
+                <check pos="2" />
+            </otherwise>
+        </choose>
+        <test id="79" result="true" account="3230012688"/>
+        <test id="79" result="true" account="4230028872"/>
+        <test id="79" result="true" account="5440001898"/>
+        <test id="79" result="true" account="6330001063"/>
+        <test id="79" result="true" account="7000149349"/>
+        <test id="79" result="true" account="8000003577"/>
+        <test id="79" result="true" account="1550167850"/>
+        <test id="79" result="true" account="9011200140"/>
+    </method>
+
+    <variant id="80_A" like="00">
+        <product from="2" to="6" weights="2,1,2,1,2" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+    </variant>
+    <variant id="80_B" like="00">
+        <product from="2" to="6" weights="2,1,2,1,2" special="sumdigits" />
+        <modulo base="7" subfrom="7" />
+        <change from="7" to="0" />
+    </variant>
+
+    <method id="80" since="2004-06-08">
+        <account div="0010000000" mod="10" />
+        <choose>
+            <when eq="9">
+                <sequence>
+                    <call method="51_91" />
+                    <call method="51_92" />
+                </sequence>
+            </when>
+            <otherwise> 
+                <sequence>
+                    <call method="80_A" />
+                    <call method="80_B" />
+                </sequence>
+            </otherwise>
+        </choose>
+        <test id="80" result="true"  account="340968"/>
+        <test id="80" result="true"  account="340966"/>
+        <test id="80" result="true"  account="3199500501"/>
+        <test id="80" result="true"  account="0199100002"/>
+        <test id="80" result="true"  account="0099100010"/>
+        <test id="80" result="true"  account="2599100002"/>
+        <test id="80" result="true"  account="0199100004"/>
+        <test id="80" result="true"  account="2599100003"/>
+        <test id="80" result="true"  account="3199204090"/>
+        <test id="80" result="false" account="0099345678"/>
+        <test id="80" result="false" account="0099100110"/>
+        <test id="80" result="false" account="0199100040"/>
+    </method>
+    
+    <method id="81" since="2004-09-06">
+        <account div="0010000000" mod="10" />
+        <choose>
+            <when eq="9">
+                <sequence>
+                    <call method="51_91" />
+                    <call method="51_92" />
+                </sequence>
+            </when>
+            <otherwise> 
+                <call method="32" />
+            </otherwise>
+        </choose>
+        <test id="81" result="true"  account="0646440"/>
+        <test id="81" result="true"  account="1359100"/>
+        <test id="81" result="true"  account="3199500501"/>
+        <test id="81" result="true"  account="0199100002"/>
+        <test id="81" result="true"  account="0099100010"/>
+        <test id="81" result="true"  account="2599100002"/>
+        <test id="81" result="true"  account="0199100004"/>
+        <test id="81" result="true"  account="2599100003"/>
+        <test id="81" result="true"  account="3199204090"/>
+        <test id="81" result="false" account="0099345678"/>
+        <test id="81" result="false" account="0099100110"/>
+        <test id="81" result="false" account="0199100040"/>
+    </method>
+    
+    <method id="82">
+        <account div="0001000000" mod="100" />
+        <choose>
+            <when eq="99">
+                <call method="10" />
+            </when>
+            <otherwise> 
+                <call method="33" />
+            </otherwise>
+        </choose>
+        <test id="82" result="true" account="123897"/>
+        <test id="82" result="true" account="3199500501"/>
+    </method>
+    
+    <variant id="83_1C">
+        <account div="1" mod="10" />
+        <choose>
+            <when from="7" to="9">
+                <check result="false" />
+            </when>
+            <otherwise> 
+                <call method="84_B" />
+            </otherwise>
+        </choose>
+    </variant>
+    <variant id="83_2A">
+        <product from="2" to="8" weights="2,3,4,5,6,7,8" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+
+    <method id="83">
+        <account div="0001000000" mod="100" />
+        <choose>
+            <when eq="99">
+                <sequence>
+                    <call method="83_2A" />
+                    <call method="09" />
+                </sequence>
+            </when>
+            <otherwise> 
+                <sequence>
+                    <call method="32" />
+                    <call method="33" />
+                    <call method="83_1C" />
+                </sequence>
+            </otherwise>
+        </choose>
+        <test id="83" result="true" account="0001156071"/>
+        <test id="83" result="true" account="0000156078"/>
+        <test id="83" result="true" account="0099100002"/>
+    </method>
+    
+    <variant id="84_B">
+        <product from="2" to="6" weights="2,3,4,5,6" />
+        <modulo base="7" subfrom="7" />
+        <change from="7" to="0" />
+        <check pos="1" />
+    </variant>
+
+    <method id="84" since="2004-09-06">
+        <account div="0010000000" mod="10" />
+        <choose>
+            <when eq="9">
+                <sequence>
+                    <call method="51_91" />
+                    <call method="51_92" />
+                </sequence>
+            </when>
+            <otherwise> 
+                <sequence>
+                    <call method="33" />
+                    <call method="84_B" />
+                </sequence>
+            </otherwise>
+        </choose>
+        <test id="84" result="true"  account="100005"/>
+        <test id="84" result="true"  account="393814"/>
+        <test id="84" result="true"  account="950360"/>
+        <test id="84" result="true"  account="3199500501"/>
+        <test id="84" result="true"  account="0199100002"/>
+        <test id="84" result="true"  account="0099100010"/>
+        <test id="84" result="true"  account="2599100002"/>
+        <test id="84" result="true"  account="0199100004"/>
+        <test id="84" result="true"  account="2599100003"/>
+        <test id="84" result="true"  account="3199204090"/>
+        <test id="84" result="false" account="0099345678"/>
+        <test id="84" result="false" account="0099100110"/>
+        <test id="84" result="false" account="0199100040"/>
+    </method>
+    
+    <variant id="85_A">
+        <product from="2" to="7" weights="2,3,4,5,6,7" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="85_C">
+        <product from="2" to="6" weights="2,3,4,5,6" />
+        <modulo base="7" subfrom="7" />
+        <change from="7" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="85_D">
+        <product from="2" to="8" weights="2,3,4,5,6,7,8" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="12" />
+        <check pos="1" />
+    </variant>
+
+    <method id="85">
+        <account div="0001000000" mod="100" />
+        <choose>
+            <when eq="99">
+                <call method="85_D" />
+            </when>
+            <otherwise> 
+                <sequence>
+                    <call method="32" />
+                    <call method="33" />
+                    <call method="83_1C" />
+                </sequence>
+            </otherwise>
+        </choose>
+        <test id="85" result="true" account="0001156071"/>
+        <test id="85" result="true" account="0001156136"/>
+        <test id="85" result="true" account="0000156078"/>
+        <test id="85" result="true" account="3199100002"/>
+    </method>
+    
+    <variant id="86_A">
+        <product from="2" to="7" weights="2,1,2,1,2,1" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+
+    <method id="86" since="2004-09-06">
+        <account div="0010000000" mod="10" />
+        <choose>
+            <when eq="9">
+                <sequence>
+                    <call method="51_91" />
+                    <call method="51_92" />
+                </sequence>
+            </when>
+            <otherwise> 
+                <sequence>
+                    <call method="86_A" />
+                    <call method="32" />
+                </sequence>
+            </otherwise>
+        </choose>
+        <test id="86" result="true"  account="340968"/>
+        <test id="86" result="true"  account="1001171"/>
+        <test id="86" result="true"  account="1009588"/>
+        <test id="86" result="true"  account="123897"/>
+        <test id="86" result="true"  account="340960"/>
+        <test id="86" result="true"  account="3199500501"/>
+        <test id="86" result="true"  account="0199100002"/>
+        <test id="86" result="true"  account="0099100010"/>
+        <test id="86" result="true"  account="2599100002"/>
+        <test id="86" result="true"  account="0199100004"/>
+        <test id="86" result="true"  account="2599100003"/>
+        <test id="86" result="true"  account="3199204090"/>
+        <test id="86" result="false" account="0099345678"/>
+        <test id="86" result="false" account="0099100110"/>
+        <test id="86" result="false" account="0199100040"/>
+    </method>
+    
+    <method id="87" since="2004-09-06">
+        <account div="0010000000" mod="10" />
+        <choose>
+            <when eq="9">
+                <sequence>
+                    <call method="51_91" />
+                    <call method="51_92" />
+                </sequence>
+            </when>
+            <otherwise> 
+                <sequence>
+                    <call method="87_A" /> <!-- PL/1-Program -->
+                    <call method="33" />
+                    <call method="84_B" />
+                </sequence>
+            </otherwise>
+        </choose>
+        <test id="87" result="true" account="0000000406"/>
+        <test id="87" result="true" account="0000051768"/>
+        <test id="87" result="true" account="0010701590"/>
+        <test id="87" result="true" account="0010720185"/>
+        <test id="87" result="true" account="0000100005"/>
+        <test id="87" result="true" account="0000393814"/>
+        <test id="87" result="true" account="0000950360"/>
+        <test id="87" result="true" account="3199500501"/>
+    </method>
+    
+    <variant id="88_A">
+        <product from="2" to="8" weights="2,3,4,5,6,7,8" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="88_B">
+        <product from="2" to="7" weights="2,3,4,5,6,7" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+    <method id="88">
+        <account div="0010000000" mod="10" />
+        <choose>
+            <when eq="9">
+                <call method="88_A" />
+            </when>
+            <otherwise> 
+                <call method="88_B" />
+            </otherwise>
+        </choose>
+        <test id="88" result="true" account="2525259"/>
+        <test id="88" result="true" account="1000500"/>
+        <test id="88" result="true" account="90013000"/>
+        <test id="88" result="true" account="92525253"/>
+        <test id="88" result="true" account="99913003"/>
+    </method>
+    
+    <variant id="89_1">
+        <product from="2" to="7" weights="2,3,4,5,6,7" special="sumdigits" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+
+    <method id="89">
+        <account />
+        <choose>
+            <when lt="0001000000">
+                <call method="09" />
+            </when>
+            <when from="0001000000" to="0009999999">
+                <call method="89_1" />
+            </when>
+            <when from="0010000000" to="0999999999">
+                <call method="10" />
+            </when>
+            <otherwise> 
+                <call method="09" />
+            </otherwise>
+        </choose>
+        <test id="89" result="true" account="1098506"/>
+        <test id="89" result="true" account="32028008"/>
+        <test id="89" result="true" account="218433000"/>
+    </method>
+    
+    <variant id="90_D">
+        <product from="2" to="6" weights="2,3,4,5,6" />
+        <modulo base="9" subfrom="9" />
+        <change from="9" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="90_E">
+        <product from="2" to="6" weights="2,1,2,1,2" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+
+    <method id="90" since="2005-06-06">
+        <account div="0010000000" mod="10" />
+        <choose>
+            <when eq="9">
+                <call method="85_D" />
+            </when>
+            <otherwise> 
+                <sequence>
+                    <call method="32" />
+                    <call method="33" />
+                    <call method="85_C" />
+                    <call method="90_D" />
+                    <call method="90_E" />
+                </sequence>
+            </otherwise>
+        </choose>
+        <test id="90" result="true"  account="0001975641"/>
+        <test id="90" result="true"  account="0001988654"/>
+        <test id="90" result="false" account="0001924592"/>
+        <test id="90" result="true"  account="0000863530"/>
+        <test id="90" result="true"  account="0000784451"/>
+        <test id="90" result="false" account="0000901568"/>
+        <test id="90" result="true"  account="0000654321"/>
+        <test id="90" result="true"  account="0000824491"/>
+        <test id="90" result="false" account="0000820487"/>
+        <test id="90" result="true"  account="0000677747"/>
+        <test id="90" result="true"  account="0000840507"/>
+        <test id="90" result="false" account="0000726393"/>
+        <test id="90" result="true"  account="0000996663"/>
+        <test id="90" result="true"  account="0000666034"/>
+        <test id="90" result="false" account="0000924591"/>
+        <test id="90" result="true"  account="0099100002"/>
+        <test id="90" result="false" account="0099100007"/>
+    </method>
+    
+    <variant id="91_1">
+        <product from="5" to="10" weights="2,3,4,5,6,7" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="4" />
+    </variant>
+    <variant id="91_2">
+        <product from="5" to="10" weights="7,6,5,4,3,2" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="4" />
+    </variant>
+    <variant id="91_3">
+        <product from="1" to="10" weights="2,3,4,0,5,6,7,8,9,10" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="4" />
+    </variant>
+    <variant id="91_4">
+        <product from="5" to="10" weights="2,4,8,5,10,9" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="4" />
+    </variant>
+
+    <method id="91" since="2003-12-08">
+        <sequence>
+            <call method="91_1" />
+            <call method="91_2" />
+            <call method="91_3" />
+            <call method="91_4" />
+		<!-- ???
+            <check result="true" />
+        -->
+        </sequence>
+        <test id="91" result="true"  account="2974118000"/>
+        <test id="91" result="true"  account="5281741000"/>
+        <test id="91" result="true"  account="9952810000"/>
+        <test id="91" result="false" account="8840017000"/>
+        <test id="91" result="false" account="8840023000"/>
+        <test id="91" result="false" account="8840041000"/>
+        
+        <test id="91" result="true"  account="2974117000"/>
+        <test id="91" result="true"  account="5281770000"/>
+        <test id="91" result="true"  account="9952812000"/>
+        <test id="91" result="false" account="8840014000"/>
+        <test id="91" result="false" account="8840026000"/>
+        <test id="91" result="false" account="8840045000"/>
+        
+        <test id="91" result="true"  account="8840019000"/>
+        <test id="91" result="true"  account="8840050000"/>
+        <test id="91" result="true"  account="8840087000"/>
+        <test id="91" result="false" account="8840011000"/>
+        <test id="91" result="false" account="8840025000"/>
+        <test id="91" result="false" account="8840062000"/>
+        
+        <test id="91" result="true"  account="8840012000"/>
+        <test id="91" result="true"  account="8840055000"/>
+        <test id="91" result="true"  account="8840080000"/>
+        <test id="91" result="false" account="8840010000"/>
+        <test id="91" result="false" account="8840057000"/>
+    </method>
+    
+    <method id="92">
+        <product from="2" to="7" weights="3,7,1,3,7,1" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </method>
+    
+    <variant id="93_1">
+        <account div="0001000000" />
+        <choose>
+            <when eq="0000">
+                <product from="2" to="6" weights="2,3,4,5,6" />
+                <modulo base="11" subfrom="11" />
+                <change from="11" to="0" /><change from="10" to="0" />
+                <check pos="1" />
+            </when>
+            <otherwise>
+                <product from="6" to="10" weights="2,3,4,5,6" />
+                <modulo base="11" subfrom="11" />
+                <change from="11" to="0" /><change from="10" to="0" />
+                <check pos="5" />
+            </otherwise>
+        </choose>
+    </variant>
+    <variant id="93_2">
+        <account div="0001000000" />
+        <choose>
+            <when eq="0000">
+                <product from="2" to="6" weights="2,3,4,5,6" />
+                <modulo base="7" subfrom="7" />
+                <change from="7" to="0" />
+                <check pos="1" />
+            </when>
+            <otherwise>
+                <product from="6" to="10" weights="2,3,4,5,6" />
+                <modulo base="7" subfrom="7" />
+                <change from="7" to="0" />
+                <check pos="5" />
+            </otherwise>
+        </choose>
+    </variant>
+
+    <method id="93">
+        <sequence>
+            <call method="93_1" />
+            <call method="93_2" />
+        </sequence>
+        <test id="93" result="true" account="6714790000"/>
+        <test id="93" result="true" account="0000671479"/>
+        <test id="93" result="true" account="1277830000"/>
+        <test id="93" result="true" account="0000127783"/>
+        <test id="93" result="true" account="1277910000"/>
+        <test id="93" result="true" account="0000127791"/>
+        <test id="93" result="true" account="3067540000"/>
+        <test id="93" result="true" account="0000306754"/>
+    </method>
+    
+    <method id="94">
+        <product from="2" to="10" weights="1,2,1,2,1,2,1,2,1" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <test id="94" result="true" account="6782533003"/>
+    </method>
+    
+    <method id="95">
+        <account />
+        <choose>
+            <when from="0000000001" to="0001999999">
+                <call method="09" />
+            </when>
+            <when from="0009000000" to="0025999999">
+                <call method="09" />
+            </when>
+            <when from="0396000000" to="0499999999">
+                <call method="09" />
+            </when>
+            <when from="0700000000" to="0799999999">
+                <call method="09" />
+            </when>
+            <otherwise> 
+                <product from="2" to="10" weights="2,3,4,5,6,7,2,3,4" />
+                <modulo base="11" subfrom="11" />
+                <change from="11" to="0" /><change from="10" to="0" />
+            </otherwise>
+        </choose>
+        <test id="95" result="true" account="0068007003"/>
+        <test id="95" result="true" account="0847321750"/>
+        <test id="95" result="true" account="6450060494"/>
+        <test id="95" result="true" account="6454000003"/>
+    </method>
+
+    <variant id="96_3">
+        <account />
+        <choose>
+            <when from="0001300000" to="0099399999">
+                <check result="true" />
+            </when>
+            <otherwise>
+                <check result="false" />
+            </otherwise>
+        </choose>
+    </variant>
+    
+    <method id="96">
+        <sequence>
+            <call method="19" />
+            <call method="00" />
+            <call method="96_3" />
+        </sequence>
+        <test id="96" result="true" account="0000254100"/>
+        <test id="96" result="true" account="9421000009"/>
+        <test id="96" result="true" account="0000000208"/>
+        <test id="96" result="true" account="0101115152"/>
+        <test id="96" result="true" account="0301204301"/>
+    </method>
+    
+    <method id="97">
+        <account div="10" /> <!-- special code, no summation -->
+        <modulo base="11" />
+        <change from="10" to="0" />
+        <check pos="1" />
+        <test id="97" result="true" account="0024010019"/>
+    </method>
+    
+    <variant id="98_1">
+        <product from="2" to="8" weights="3,1,7,3,1,7,3,1,7" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+
+    <method id="98">
+        <sequence>
+            <call method="98_1" />
+            <call method="32" />
+        </sequence>
+        <test id="98" result="true" account="9619608118"/>
+        <test id="98" result="true" account="9619439213"/>
+        <test id="98" result="true" account="3009800016"/>
+        <test id="98" result="true" account="9619509976"/>
+        <test id="98" result="true" account="5989800173"/>
+        <test id="98" result="true" account="9619319999"/>
+        <test id="98" result="true" account="6719430018"/>
+    </method>
+    
+    <method id="99" since="2002-03-04">
+        <account />
+        <choose>
+            <when from="0396000000" to="0499999999">
+                <call method="09" />
+            </when>
+            <otherwise> 
+                <call method="06" />
+            </otherwise>
+        </choose>
+        <test id="99" result="true" account="0068007003"/>
+        <test id="99" result="true" account="0847321750"/>
+    </method>
+
+    <method id="A0">
+        <account />
+        <choose>
+            <when from="0000000001" to="0000000999">
+                <call method="09" />
+            </when>
+            <otherwise> 
+                <call method="44" />
+            </otherwise>
+        </choose>
+        <test id="A0" result="true" account="521003287"/>
+        <test id="A0" result="true" account="54500"/>
+        <test id="A0" result="true" account="3287"/>
+        <test id="A0" result="true" account="18761"/>
+        <test id="A0" result="true" account="28290"/>
+    </method>
+
+    <method id="A1" like="00" since="2003-06-09">
+        <account />
+        <choose>
+            <when from="0000000001" to="0009999999">
+                <check result="false" />
+            </when>
+            <when from="0100000000" to="0999999999">
+                <check result="false" />
+            </when>
+            <otherwise> 
+               <product from="2" to="10" weights="2,1,2,1,2,1,2,0,0" special="sumdigits" />
+               <modulo base="10" subfrom="10" />
+               <change from="10" to="0" />
+               <check pos="1" />
+            </otherwise>
+        </choose>
+        <test id="A1" result="true"  account="0010030005"/>
+        <test id="A1" result="true"  account="0010030997"/>
+        <test id="A1" result="true"  account="1010030054"/>
+        <test id="A1" result="false" account="0110030005"/>
+        <test id="A1" result="false" account="0010030998"/>
+        <test id="A1" result="false" account="0000030005"/>
+    </method>
+
+    <method id="A2" since="2003-06-09">
+        <sequence>
+            <call method="00" />
+            <call method="04" />
+        </sequence>
+        <test id="A2" result="true"  account="3456789019"/>
+        <test id="A2" result="true"  account="5678901231"/>
+        <test id="A2" result="true"  account="6789012348"/>
+        <test id="A2" result="false" account="1234567890"/>
+        <test id="A2" result="true"  account="3456789012"/>
+        <test id="A2" result="false" account="0123456789"/>
+    </method>
+
+    <method id="A3" since="2003-09-08">
+        <sequence>
+            <call method="00" />
+            <call method="10" />
+        </sequence>
+        <test id="A3" result="true"  account="1234567897"/>
+        <test id="A3" result="true"  account="0123456782"/>
+        <test id="A3" result="false" account="6543217890"/>
+        <test id="A3" result="false" account="0543216789"/>
+        <test id="A3" result="true"  account="9876543210"/>
+        <test id="A3" result="true"  account="1234567890"/>
+        <test id="A3" result="true"  account="0123456789"/>
+    </method>
+
+    <variant id="A4_1">
+        <product from="2" to="7" weights="2,3,4,5,6,7" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+     </variant>
+    <variant id="A4_2">
+        <product from="2" to="7" weights="2,3,4,5,6,7" />
+        <modulo base="7" subfrom="7" />
+        <change from="7" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="A4_3">
+        <product from="2" to="6" weights="2,3,4,5,6" />
+        <modulo base="11" subfrom="11" />
+        <change from="11" to="0" /><change from="10" to="0" />
+        <check pos="1" />
+    </variant>
+    <variant id="A4_4">
+         <product from="2" to="6" weights="2,3,4,5,6" />
+         <modulo base="11" subfrom="11" />
+         <change from="11" to="0" /><change from="10" to="0" />
+         <check pos="1" />
+    </variant>
+    <variant id="A4_5">
+         <product from="2" to="6" weights="2,3,4,5,6" />
+         <modulo base="7" subfrom="7" />
+         <change from="7" to="0" />
+         <check pos="5" />
+    </variant>
+    <method id="A4" since="2003-09-08">
+        <account div="0001000000" mod="100" />
+        <choose>
+            <when eq="99">
+                <sequence>
+                    <call method="A4_3" />
+                    <call method="93" />
+                </sequence>
+            </when>
+            <otherwise>
+                <sequence>
+                    <call method="A4_1" />
+                    <call method="A4_2" />
+                    <call method="A4_3" />
+                    <call method="93" />
+                </sequence>
+            </otherwise>
+        </choose>
+        <test id="A4" result="true"  account="0004711173"/>
+        <test id="A4" result="true"  account="0007093330"/>
+        <test id="A4" result="false" account="8623420004"/>
+
+        <test id="A4" result="true"  account="0004711172"/>
+        <test id="A4" result="true"  account="0007093335"/>
+        <test id="A4" result="false" account="8623420000"/>
+
+        <test id="A4" result="true"  account="1199503010"/>
+        <test id="A4" result="true"  account="8499421235"/>
+        <test id="A4" result="false" account="6099702031"/>
+
+        <test id="A4" result="true"  account="0000862342"/>
+        <test id="A4" result="true"  account="8997710000"/>
+        <test id="A4" result="true"  account="0664040000"/>
+        <test id="A4" result="true"  account="0000905844"/>
+        <test id="A4" result="true"  account="5030101099"/>
+        <test id="A4" result="true"  account="0001123458"/>
+        <test id="A4" result="true"  account="1299503117"/>
+        <test id="A4" result="false" account="0000399443"/>
+        <test id="A4" result="false" account="0000553313"/>
+    </method>
+
+    <method id="A5" since="2003-06-09">
+        <account />
+        <choose>
+            <when from="9000000000" to="9999999999">
+                <call method="00" />
+            </when>
+            <otherwise>
+                <sequence>
+                    <call method="00" />
+                    <call method="10" />
+                </sequence>
+            </otherwise>
+        </choose>
+        <test id="A5" result="true" account="9941510001"/>
+        <test id="A5" result="true" account="9961230019"/>
+        <test id="A5" result="true" account="9380027210"/>
+        <test id="A5" result="true" account="9932290910"/>
+        <test id="A5" result="false" account="9941510002"/>
+        <test id="A5" result="false" account="9961230020"/>
+        <test id="A5" result="true" account="0000251437"/>
+        <test id="A5" result="true" account="0007948344"/>
+        <test id="A5" result="true" account="0000159590"/>
+        <test id="A5" result="true" account="0000051640"/>
+        <test id="A5" result="false" account="0000251438"/>
+        <test id="A5" result="false" account="0007948345"/>
+    </method>
+
+    <method id="A6" since="2003-12-08">
+        <account />
+        <choose>
+            <when from="0800000000" to="0899999999">
+                <call method="00" />
+            </when>
+            <otherwise>
+                <call method="01" />
+            </otherwise>
+        </choose>
+        <test id="A6" result="true" account="800048548"/>
+        <test id="A6" result="true" account="0855000014"/>
+        <test id="A6" result="false" account="860000817"/>
+        <test id="A6" result="false" account="8100336524"/>
+        <test id="A6" result="true" account="17"/>
+        <test id="A6" result="true" account="55300030"/>
+        <test id="A6" result="true" account="150178033"/>
+        <test id="A6" result="true" account="600003555"/>
+        <test id="A6" result="true" account="900291823"/>
+        <test id="A6" result="false" account="305888"/>
+        <test id="A6" result="false" account="200071280"/>
+    </method>
+
+    <method id="A7" since="2003-09-08">
+        <sequence>
+            <call method="00" />
+            <call method="03" />
+        </sequence>
+        <test id="A7" result="true"  account="19010008"/>
+        <test id="A7" result="true"  account="19010438"/>
+        <test id="A7" result="true"  account="19010660"/>
+        <test id="A7" result="true"  account="19010876"/>
+        <test id="A7" result="true"  account="209010892"/>
+        <test id="A7" result="false" account="209010893"/>
+    </method>
+
+    <method id="A8" since="2005-03-07">
+        <account />
+        <choose>
+            <when from="0090000000" to="0099999999">
+                <call method="51" />
+            </when>
+            <otherwise>
+                <sequence>
+                    <call method="32" /> <!-- like="06" -->
+                    <call method="86_A" /> <!-- like="00" -->
+                </sequence>
+            </otherwise>
+        </choose>
+        <test id="A8" result="true" account="7436661"/>
+        <test id="A8" result="true" account="7436670"/>
+        <test id="A8" result="true" account="1359100"/>
+        <test id="A8" result="true" account="7436660"/>
+        <test id="A8" result="true" account="7436678"/>
+        <test id="A8" result="true" account="0003503398"/>
+        <test id="A8" result="true" account="0001340967"/>
+        <test id="A8" result="false" account="7436666"/>
+        <test id="A8" result="false" account="7436677"/>
+        <test id="A8" result="false" account="0003503391"/>
+        <test id="A8" result="false" account="0001340966"/>
+    </method>
+
+    <method id="A9" since="2004-03-08">
+        <sequence>
+            <call method="01" />
+            <call method="06" />
+        </sequence>
+        <test id="A9" result="true" account="5043608"/>
+        <test id="A9" result="true" account="86725"/>
+        <test id="A9" result="true" account="504360"/>
+        <test id="A9" result="true" account="822035"/>
+        <test id="A9" result="true" account="32577083"/>
+        <test id="A9" result="false" account="86724"/>
+        <test id="A9" result="false" account="292497"/>
+        <test id="A9" result="false" account="30767208"/>
+    </method>
+
+    <variant id="B0_1">
+        <account div="100" mod="10" />
+        <choose>
+            <when from="1" to="3">
+                <call method="09" />
+            </when>
+            <when eq="6">
+                <call method="09" />
+            </when>
+            <otherwise>
+                <call method="06" />
+            </otherwise>
+        </choose>
+    </variant>
+    <method id="B0" since="2004-12-06">
+		<account div="1000000000" mod="10" />
+        <choose>
+            <when eq="0">
+                <check result="false" />
+            </when>
+            <when eq="8">
+                <check result="false" />
+            </when>
+            <otherwise>
+		        <call method="B0_1" />
+		    </otherwise>
+        </choose>
+        <test id="B0" result="true"  account="1197423162"/>
+        <test id="B0" result="true"  account="1000000606"/>
+        <test id="B0" result="false" account="8137423260"/>
+        <test id="B0" result="false" account="600000606"/>
+        <test id="B0" result="false" account="51234309"/>
+        <test id="B0" result="true"  account="1000000406"/>
+        <test id="B0" result="true"  account="1035791538"/>
+        <test id="B0" result="true"  account="1126939724"/>
+        <test id="B0" result="true"  account="1197423460"/>
+        <test id="B0" result="false" account="1000000405"/>
+        <test id="B0" result="false" account="1035791539"/>
+        <test id="B0" result="false" account="8035791532"/>
+        <test id="B0" result="false" account="0535791830"/>
+        <test id="B0" result="false" account="51234901"/>
+    </method>
+
+    <method id="B1" since="2004-09-06">
+        <sequence>
+            <call method="05" />
+            <call method="01" />
+        </sequence>
+        <test id="B1" result="true" account="1434253150"/>
+        <test id="B1" result="true" account="2746315471"/>
+    <!--
+        <test id="B1" result="false" account="7414398260"/>
+        <test id="B1" result="false" account="8347251693"/>
+    -->
+        <test id="B1" result="false" account="0123456789"/>
+        <test id="B1" result="false" account="2345678901"/>
+        <test id="B1" result="false" account="5678901234"/>
+        <test id="B1" result="true" account="7414398260"/>
+        <test id="B1" result="true" account="8347251693"/>
+    </method>
+
+    <method id="B2" since="2004-09-06">
+        <account />
+        <choose>
+            <when from="0000000000" to="7999999999">
+                <call method="02" />
+            </when>
+            <otherwise>
+                <call method="00" />
+            </otherwise>
+        </choose>
+        <test id="B2" result="true"  account="0020012357"/>
+        <test id="B2" result="true"  account="0080012345"/>
+        <test id="B2" result="true"  account="0926801910"/>
+        <test id="B2" result="true"  account="1002345674"/>
+        <test id="B2" result="false" account="0020012399"/>
+        <test id="B2" result="false" account="0080012347"/>
+        <test id="B2" result="false" account="0080012370"/>
+        <test id="B2" result="false" account="0932100027"/>
+        <test id="B2" result="false" account="3310123454"/>
+
+        <test id="B2" result="true"  account="8000990054"/>
+        <test id="B2" result="true"  account="9000481805"/>
+        <test id="B2" result="false" account="8000990057"/>
+        <test id="B2" result="false" account="8011000126"/>
+        <test id="B2" result="false" account="9000481800"/>
+        <test id="B2" result="false" account="9980480111"/>
+    </method>
+
+    <method id="B3" since="2004-12-06">
+        <account />
+        <choose>
+            <when from="0000000000" to="8999999999">
+                <call method="32" />
+            </when>
+            <otherwise>
+                <call method="06" />
+            </otherwise>
+        </choose>
+        <test id="B3" result="true" account="1000000060"/>
+        <test id="B3" result="true" account="0000000140"/>
+        <test id="B3" result="true" account="0000000019"/>
+        <test id="B3" result="true" account="1002798417"/>
+        <test id="B3" result="true" account="8409915001"/>
+        <test id="B3" result="false" account="0002799899"/>
+        <test id="B3" result="false" account="1000000111"/>
+                    
+        <test id="B3" result="true" account="9635000101"/>
+        <test id="B3" result="true" account="9730200100"/>
+        <test id="B3" result="false" account="9653100101"/>
+        <test id="B3" result="false" account="9730300100"/>
+    </method>
+
+    <method id="B4" since="2005-03-07">
+        <account />
+        <choose>
+            <when from="9000000000" to="9999999999">
+                <call method="00" />
+            </when>
+            <otherwise><!-- like method 02, but last weight is 10 instead of 2 -->
+                <product from="2" to="10" weights="2,3,4,5,6,7,8,9,10" />
+                <modulo base="11" subfrom="11" />
+                <change from="11" to="0" />
+                <change from="10" to="0" /> 
+                <check pos="1" />
+            </otherwise>
+        </choose>
+        <test id="B4" result="true"  account="9941510001"/>
+        <test id="B4" result="true"  account="9961230019"/>
+        <test id="B4" result="true"  account="9380027210"/>
+        <test id="B4" result="true"  account="9932290910"/>
+        <test id="B4" result="false" account="9941510002"/>
+        <test id="B4" result="false" account="9961230020"/>
+                   
+        <test id="B4" result="true"  account="0000251437"/>
+        <test id="B4" result="true"  account="0007948344"/>
+        <test id="B4" result="true"  account="0000051640"/>
+        <test id="B4" result="false" account="0000251438"/>
+        <test id="B4" result="false" account="0007948345"/>
+        <test id="B4" result="false" account="0000159590"/>
+    </method>
+
+    <method id="B5_A">
+        <product from="2" to="10" weights="7,3,1,7,3,1,7,3,1" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+    </method>
+
+    <method id="B5" since="2005-06-06">
+        <account />
+        <choose>
+            <when from="0000000000" to="7999999999">
+                <sequence>
+                    <call method="B5_A" />
+                    <call method="00" />
+                </sequence>
+            </when>
+            <otherwise>
+                <call method="B5_A" />
+            </otherwise>
+        </choose>
+        <test id="B5" result="true"  account="0159006955"/>
+        <test id="B5" result="true"  account="2000123451"/>
+        <test id="B5" result="true"  account="1151043216"/>
+        <test id="B5" result="true"  account="9000939033"/>
+        <test id="B5" result="false" account="7414398260"/>
+        <test id="B5" result="false" account="8347251693"/>
+        <test id="B5" result="false" account="1151043211"/>
+        <test id="B5" result="false" account="2345678901"/>
+        <test id="B5" result="false" account="5678901234"/>
+        <test id="B5" result="false" account="9000293707"/>
+                   
+        <test id="B5" result="true"  account="0123456782"/>
+        <test id="B5" result="true"  account="0130098767"/>
+        <test id="B5" result="true"  account="1045000252"/>
+        <test id="B5" result="false" account="0159004165"/>
+        <test id="B5" result="false" account="0023456787"/>
+        <test id="B5" result="false" account="0056789018"/>
+        <test id="B5" result="false" account="3045000333"/>
+    </method>
+
+    <method id="B6" since="2005-09-05">
+        <account />
+        <choose>
+            <when from="1000000000" to="9999999999">
+                <call method="20" />
+            </when>
+            <otherwise>
+                <call method="53" />
+            </otherwise>
+        </choose>
+        <test id="B6" result="true"  account="9110000000"/>
+        <test id="B6" result="false" account="9111000000"/>
+        <test id="B6" result="true"  account="487310018" blz="80053782" />
+        <test id="B6" result="false" account="467310018" blz="80053762" />
+        <test id="B6" result="false" account="477310018" blz="80053772" />
+    </method>
+
+    <method id="B7" since="2005-09-05">
+        <account />
+        <choose>
+            <when from="0001000000" to="0005999999">
+                <call method="01" />
+            </when>
+            <when from="0700000000" to="0899999999">
+                <call method="01" />
+            </when>
+            <otherwise>
+                <call method="09" />
+            </otherwise>
+        </choose>
+        <test id="B7" result="true"  account="0700001529"/>
+        <test id="B7" result="true"  account="0730000019"/>
+        <test id="B7" result="true"  account="0001001008"/>
+        <test id="B7" result="true"  account="0001057887"/>
+        <test id="B7" result="true"  account="0001007222"/>
+        <test id="B7" result="true"  account="0810011825"/>
+        <test id="B7" result="true"  account="0800107653"/>
+        <test id="B7" result="true"  account="0005922372"/>
+        <test id="B7" result="false" account="0001057886"/>
+        <test id="B7" result="false" account="0003815570"/>
+        <test id="B7" result="false" account="0005620516"/>
+        <test id="B7" result="false" account="0740912243"/>
+        <test id="B7" result="false" account="0893524479"/>
+    </method>
+
+    <method id="B8" since="2005-09-05">
+        <sequence>
+            <call method="20" />
+            <call method="29" />
+        </sequence>
+        <test id="B8" result="true" account="0734192657"/>
+        <test id="B8" result="true" account="6932875274"/>
+    <!--
+        <test id="B8" result="false" account="3145863029"/>
+        <test id="B8" result="false" account="2938692523"/>
+    -->
+	    <test id="B8" result="false" account="0132572975"/>
+        <test id="B8" result="true" account="3145863029"/>
+        <test id="B8" result="true" account="2938692523"/>
+        <test id="B8" result="false" account="0132572975"/>
+    </method>
+
+    <variant id="B9_1">
+        <product from="2" to="8" weights="1,3,2,1,3,2,1" special="sumweight" />
+        <modulo base="10" />
+        <check pos="1" incr="5" />
+    </variant>
+    <variant id="B9_2">
+        <product from="2" to="7" weights="1,2,3,4,5,6" />
+        <modulo base="11" />
+        <check pos="1" incr="5" />
+    </variant>
+    <method id="B9" since="2005-12-05"> 
+        <account />
+        <choose>
+            <when from="0010000000" to="0099999999">
+				<!-- variant 1 -->
+                <call method="B9_1"/>
+            </when>
+            <when from="0001000000" to="0009999999">
+				<!-- variant 2 -->
+                <call method="B9_2" />
+            </when>
+            <otherwise>
+                <check result="false" />
+            </otherwise>
+        </choose>
+        <test id="B9" result="true"  account="87920187"/>
+        <test id="B9" result="true"  account="41203755"/>
+        <test id="B9" result="true"  account="81069577"/>
+        <test id="B9" result="true"  account="61287958"/>
+        <test id="B9" result="true"  account="58467232"/>
+        <test id="B9" result="false" account="88034023"/>
+        <test id="B9" result="false" account="43025432"/>
+        <test id="B9" result="false" account="86521362"/>
+        <test id="B9" result="false" account="61256523"/>
+        <test id="B9" result="false" account="54352684"/>
+
+        <test id="B9" result="true"  account="7125633"/>
+        <test id="B9" result="true"  account="1253657"/>
+        <test id="B9" result="true"  account="4353631"/>
+        <test id="B9" result="false" account="2356412"/>
+        <test id="B9" result="false" account="5435886"/>
+        <test id="B9" result="false" account="9435414"/>
+    </method>
+
+    <method id="C0" since="2005-12-05"> 
+        <account />
+        <choose>
+            <when from="0010000000" to="0099999999">
+                <sequence>
+                    <call method="52"/>
+                    <call method="20"/>
+                </sequence>
+            </when>
+            <when lt="0010000000">
+                 <call method="20"/>
+            </when>
+            <otherwise>
+                <call method="20"/>
+            </otherwise>
+        </choose>
+        <test id="C0" result="true"  account="43001500" blz="13051172"/>
+        <test id="C0" result="true"  account="48726458" blz="13051172"/>
+        <test id="C0" result="true"  account="82335729" blz="13051172"/>
+        <test id="C0" result="false" account="29837521" blz="13051172"/>
+                  
+        <test id="C0" result="true"  account="0082335729" />
+        <test id="C0" result="true"  account="0734192657"/>
+        <test id="C0" result="true"  account="6932875274"/>
+        <test id="C0" result="false" account="0132572975"/>
+        <test id="C0" result="false" account="3038752371"/>
+    </method>
+
+    <method id="C1" since="2006-06-05"> 
+        <account />
+        <choose>
+            <when from="5000000000" to="5999999999">
+                <product from="2" to="10" weights="1,2,1,2,1,2,1,2,1" special="sumdigits" />
+        		<premod method="17" /><!-- decrement by="1" -->
+        		<modulo base="11" subfrom="10" />
+        		<change from="10" to="0" />
+        		<check pos="1" />
+            </when>
+            <otherwise>
+                <call method="17"/>
+            </otherwise>
+        </choose>
+        <test id="C1" result="true"  account="0446786040"/>
+        <test id="C1" result="true"  account="0478046940"/>
+        <test id="C1" result="true"  account="0701625830"/>
+        <test id="C1" result="true"  account="0701625840"/>
+        <test id="C1" result="true"  account="0882095630"/>
+        <test id="C1" result="false" account="0446786240"/>
+        <test id="C1" result="false" account="0478046340"/>
+        <test id="C1" result="false" account="0701625730"/>
+        <test id="C1" result="false" account="0701625440"/>
+        <test id="C1" result="false" account="0882095130"/>
+                  
+        <test id="C1" result="true"  account="5432112349"/>
+        <test id="C1" result="true"  account="5543223456"/>
+        <test id="C1" result="true"  account="5654334563"/>
+        <test id="C1" result="true"  account="5765445670"/>
+        <test id="C1" result="true"  account="5876556788"/>
+        <test id="C1" result="false" account="5432112341"/>
+        <test id="C1" result="false" account="5543223458"/>
+        <test id="C1" result="false" account="5654334565"/>
+        <test id="C1" result="false" account="5765445672"/>
+        <test id="C1" result="false" account="5876556780"/>
+    </method>
+
+    <method id="C2" since="2006-06-05"> 
+        <sequence>
+            <call method="22" />
+            <call method="00" />
+        </sequence>
+        <test id="C2" result="true"  account="2394871426"/>
+        <test id="C2" result="true"  account="4218461950"/>
+        <test id="C2" result="true"  account="7352569148"/>
+        <test id="C2" result="true"  account="5127485166"/>
+        <test id="C2" result="true"  account="8738142564"/>
+        <test id="C2" result="false" account="0328705282"/>
+        <test id="C2" result="false" account="9024675131"/>
+    </method>
+
+    <method id="C3" since="2007-03-05"> 
+        <account />
+        <choose>
+            <when from="9000000000" to="9999999999">
+                <call method="58"/>
+            </when>
+            <otherwise>
+                <call method="00"/>
+            </otherwise>
+        </choose>
+        <test id="C3" result="true"  account="9294182"/>
+        <test id="C3" result="true"  account="4431276"/>
+        <test id="C3" result="true"  account="19919"/>
+        <test id="C3" result="false" account="17002"/>
+        <test id="C3" result="false" account="123451"/>
+        <test id="C3" result="false" account="122448"/>
+        <test id="C3" result="true"  account="9000420530"/>
+        <test id="C3" result="true"  account="9000010006"/>
+        <test id="C3" result="true"  account="9000577650"/>
+        <test id="C3" result="false" account="9000734028"/>
+        <test id="C3" result="false" account="9000733227"/>
+        <test id="C3" result="false" account="9000731120"/>
+    </method>
+
+    <method id="C4" since="2007-03-05"> 
+        <account />
+        <choose>
+            <when from="9000000000" to="9999999999">
+                <call method="58"/>
+            </when>
+            <otherwise>
+                <call method="15"/>
+            </otherwise>
+        </choose>
+        <test id="C4" result="true"  account="0000000019"/>
+        <test id="C4" result="true"  account="0000292932"/>
+        <test id="C4" result="true"  account="0000094455"/>
+        <test id="C4" result="false" account="0000000017"/>
+        <test id="C4" result="false" account="0000292933"/>
+        <test id="C4" result="false" account="0000094459"/>
+                  
+        <test id="C4" result="true"  account="9000420530"/>
+        <test id="C4" result="true"  account="9000010006"/>
+        <test id="C4" result="true"  account="9000577650"/>
+        <test id="C4" result="false" account="9000726558"/>
+        <test id="C4" result="false" account="9001733457"/>
+        <test id="C4" result="false" account="9000732000"/>
+    </method>
+
+    <method id="C5" since="2007-09-03" nyi="true"> 
+        <account />
+        <choose>
+            <when from="0000100000" to="0000899999">
+                <call method="75"/>
+            </when>
+            <when from="0100000000" to="0899999999">
+                <call method="75"/>
+            </when>
+            <when from="1000000000" to="1999999999">
+                <call method="29"/>
+            </when>
+            <when from="4000000000" to="6999999999">
+                <call method="29"/>
+            </when>
+            <when from="9000000000" to="9999999999">
+                <call method="29"/>
+            </when>
+            <when from="3000000000" to="3999999999">
+                <call method="00"/>
+            </when>
+            <when from="0030000000" to="0059999999">
+                <call method="09"/>
+            </when>
+            <when from="7000000000" to="7099999999">
+                <call method="09"/>
+            </when>
+            <when from="8500000000" to="8599999999">
+                <call method="09"/>
+            </when>
+            <otherwise>
+                <check result="false" />
+            </otherwise>
+        </choose>
+        <test id="C5" result="true"  account="0000301168"/>
+        <test id="C5" result="true"  account="0000302554"/>
+        <test id="C5" result="false" account="0000302589"/>
+        <test id="C5" result="false" account="0000507336"/>
+        <test id="C5" result="true"  account="0300020050"/>
+        <test id="C5" result="true"  account="0300566000"/>
+        <test id="C5" result="false" account="0302555000"/>
+        <test id="C5" result="false" account="0302589000"/>
+        <test id="C5" result="true"  account="1000061378"/> 
+        <test id="C5" result="true"  account="1000061412"/>
+        <test id="C5" result="true"  account="4450164064"/> 
+        <test id="C5" result="true"  account="4863476104"/>
+        <test id="C5" result="true"  account="5000000028"/> 
+        <test id="C5" result="true"  account="5000000391"/>
+        <test id="C5" result="true"  account="6450008149"/> 
+        <test id="C5" result="true"  account="6800001016"/>
+        <test id="C5" result="true"  account="9000100012"/> 
+        <test id="C5" result="true"  account="9000210017"/>
+        <test id="C5" result="false" account="1000061457"/>
+        <test id="C5" result="false" account="1000061498"/>
+        <test id="C5" result="false" account="4864446015"/> 
+        <test id="C5" result="false" account="4865038012"/>
+        <test id="C5" result="false" account="5000001028"/> 
+        <test id="C5" result="false" account="5000001075"/>
+        <test id="C5" result="false" account="6450008150"/> 
+        <test id="C5" result="false" account="6542812818"/>
+        <test id="C5" result="false" account="9000110012"/> 
+        <test id="C5" result="false" account="9000300310"/>
+        <test id="C5" result="true"  account="3060188103"/> 
+        <test id="C5" result="true"  account="3070402023"/>
+        <test id="C5" result="false" account="3081000783"/>
+        <test id="C5" result="false" account="3081308871"/>
+    </method>
+
+    <method id="C6" since="2007-09-03" NYI="2010-06-07"><!-- ??? --> 
+        <prepend value="&quot;5499570&quot;" pos="10"/>
+        <product from="2" to="16" weights="2,1,2,1,2,1,2,1,2,1,2,1,2,1,2" special="sumdigits" />
+        <modulo base="10" subfrom="10" />
+        <change from="10" to="0" />
+        <check pos="1" />
+        <test id="C6" result="true"  account="7008199027"/>
+        <test id="C6" result="true"  account="7002000023"/>
+        <test id="C6" result="true"  account="7000202027"/>
+        <test id="C6" result="false" account="7000062022"/>
+        <test id="C6" result="false" account="7006003027"/>
+        <test id="C6" result="false" account="7003306026"/>
+        <test id="C6" result="false" account="7001501029"/>
+    </method>
+
+    <method id="C7" since="2007-12-03"> 
+        <sequence>
+            <call method="63" />
+            <call method="06" />
+        </sequence>
+        <test id="C7" result="true"  account="3500022"/>
+        <test id="C7" result="true"  account="38150900"/>
+        <test id="C7" result="true"  account="600103660"/>
+        <test id="C7" result="true"  account="39101181"/>
+	    <test id="C7" result="true"  account="94012341"/>
+        <test id="C7" result="true"  account="5073321010"/>
+        <test id="C7" result="false" account="1234517892"/>
+        <test id="C7" result="false" account="987614325"/>
+    </method>
+
+    <method id="C8" since="2008-06-09" nyi="2009-09-07"><!-- ??? --> 
+        <sequence>
+            <call method="00" />
+            <call method="04" />
+            <call method="07" />
+        </sequence>
+        <test id="C8" result="true"  account="3456789019"/>
+        <test id="C8" result="true"  account="5678901231"/>
+        <test id="C8" result="true"  account="3456789012"/><!-- false for 00, true for 04 -->
+        <test id="C8" result="true"  account="0123456789"/><!-- false for 00, 04, true for 07 -->
+        <test id="C8" result="false" account="1234567890"/>
+        <test id="C8" result="false" account="9012345678"/>
+    </method>
+
+    <method id="C9" since="2008-06-09"> 
+         <sequence>
+            <call method="00" />
+            <call method="07" />
+        </sequence>
+        <test id="C9" result="true"  account="3456789019"/>
+        <test id="C9" result="true"  account="5678901231"/>
+        <test id="C9" result="false" account="3456789012"/>
+        <test id="C9" result="true"  account="0123456789"/><!-- false for 00, true for 07 -->
+        <test id="C9" result="false" account="1234567890"/>
+        <test id="C9" result="false" account="9012345678"/>
+    </method>
+
+    <method id="D0" since="2008-09-08"> 
+        <account />
+        <choose>
+            <when from="5700000000" to="5799999999">
+                <call method="09"/>
+            </when>
+            <otherwise>
+                <call method="20"/>
+            </otherwise>
+        </choose>
+        <test id="D0" result="true"  account="6100272324"/>
+        <test id="D0" result="true"  account="6100273479"/>
+        <test id="D0" result="false" account="6100272885"/>
+        <test id="D0" result="false" account="6100273377"/>
+        <test id="D0" result="false" account="6100274012"/>
+        <test id="D0" result="true"  account="5712345678"/>
+    </method>
+
+    <method id="D1" since="2008-09-08" nyi="2011-03-07"><!-- ??? --> 
+        <account />
+        <choose>
+            <when from="0000000000" to="0999999999">
+		        <check result="false" />
+            </when>
+            <when from="3000000000" to="3999999999">
+		        <check result="false" />
+            </when>
+            <when from="9000000000" to="9999999999">
+		        <check result="false" />
+            </when>
+            <otherwise>
+                <prepend value="&quot;428259&quot;" pos="11" />
+                <product from="2" to="16" weights="2,1,2,1,2,1,2,1,2,1,2,1,2,1,2" special="sumdigits" />
+                <modulo base="10" subfrom="10" />
+                <change from="10" to="0" />
+                <check pos="1" />
+            </otherwise>
+        </choose>
+        <test id="D1" result="true"  account="1000004019"/>
+        <test id="D1" result="true"  account="4000008014"/>
+        <test id="D1" result="true"  account="6100020013"/>
+        <test id="D1" result="true"  account="8300042011"/>
+        <test id="D1" result="false" account="2000005018"/>
+        <test id="D1" result="false" account="5000064015"/>
+        <test id="D1" result="false" account="7400041011"/>
+    </method>
+
+    <method id="D2" since="2008-12-08"> 
+         <sequence>
+            <call method="95" />
+            <call method="00" />
+            <call method="68" />
+        </sequence>
+        <test id="D2" result="true"  account="189912137"/>
+        <test id="D2" result="true"  account="235308215"/>
+        <test id="D2" result="true"  account="4455667784"/>
+        <test id="D2" result="true"  account="1234567897"/>
+        <test id="D2" result="true"  account="51181008"/>
+        <test id="D2" result="true"  account="71214205"/>
+        <test id="D2" result="false" account="6414241"/>
+        <test id="D2" result="false" account="179751314"/>
+    </method>
+
+    <method id="D3" since="2008-09-08" nyi="true"><!-- 2008-12-08 ??? --> 
+         <sequence>
+            <call method="00" />
+            <call method="27" />
+        </sequence>
+        <test id="D3" result="true"  account="1600169591"/>
+        <test id="D3" result="true"  account="1600189151"/>
+        <test id="D3" result="true"  account="1800084079"/>
+        <test id="D3" result="true"  account="6019937007"/>
+        <test id="D3" result="true"  account="6021354007"/>
+        <test id="D3" result="true"  account="6030642006"/>
+        <test id="D3" result="true"  account="1600166307"/>
+        <test id="D3" result="true"  account="1600176485"/>
+        <test id="D3" result="true"  account="1600201934"/>
+        <test id="D3" result="false" account="6025017009"/>
+        <test id="D3" result="false" account="6028267003"/>
+        <test id="D3" result="false" account="6019835001"/>
+    </method>
+
+    <method id="D4" since="2010-06-07" nyi="true"> 
+        <check result="true" />
+    </method>
+
+    <method id="D5" since="2010-12-06" nyi="true"> 
+        <check result="true" />
+    </method>
+
+    <method id="D6" since="2008-09-08" nyi="true"> 
+        <check result="true" />
+    </method>
+
+    <method id="D7" since="2008-09-08" nyi="true"> 
+        <check result="true" />
+    </method>
+
+    <method id="D8" since="2008-09-08" nyi="true"> 
+        <check result="true" />
+    </method>
+
+    <method id="D9" since="2008-09-08" nyi="true"> 
+        <check result="true" />
+    </method>
+
+</methods>
