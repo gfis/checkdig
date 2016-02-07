@@ -298,7 +298,7 @@
 
 	<!-- ============= (un-) deployment to Tomcat and Axis =====================
 	-->
-	<target name="deploy" depends="dist,deploy.webapps,deploy.service" />
+	<target name="deploy" depends="dist,deploy.webapps" />
 
 	<!-- Tomcat -->
 	<target name="deploy.webapps" depends="dist">

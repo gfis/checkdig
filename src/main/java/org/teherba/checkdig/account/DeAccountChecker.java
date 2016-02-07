@@ -19,8 +19,8 @@
  * limitations under the License.
  */
 package org.teherba.checkdig.account;
+import  org.teherba.checkdig.account.BlzCheckMap;
 import  org.teherba.checkdig.BaseChecker;
-import  org.teherba.checkdig.blz.BlzCheckMap;
 import  java.io.BufferedReader;
 import  java.io.FileReader;
 import  java.lang.reflect.Method;

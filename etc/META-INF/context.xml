@@ -2,6 +2,7 @@
 <!--
     Configuration of context /checkdig
     @(#) $Id: context.xml 905 2012-03-16 10:02:55Z gfis $
+    2016-02-07: mapperContextRootRedirectEnabled="true"
     2014-01-16, Georg Fischer: copied from dbat
 -->
 <!--
@@ -23,6 +24,7 @@
 <Context
         path="/checkdig" docBase="checkdig"
         debug="5"
+        mapperContextRootRedirectEnabled="true"
         reloadable="true"
         crossContext="true"
         >
