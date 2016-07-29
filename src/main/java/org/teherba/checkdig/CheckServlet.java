@@ -1,5 +1,6 @@
 /*  Servlet interface to class DigitChecker
     @(#) $Id: CheckServlet.java 77 2009-01-16 08:14:16Z gfis $
+    2016-07-29: DeTaxIdChecker
     2014-01-20: LF, no tabs
     2008-11-06: -isbn -ismn -issn -pnd
     2007-04-23: import explicit java packages
@@ -101,6 +102,7 @@ public class CheckServlet extends HttpServlet {
             } else if (   function.startsWith("ismn")          ) {
             } else if (   function.startsWith("issn")          ) {
             } else if (   function.startsWith("pnd" )          ) {
+            } else if (   function.startsWith("taxid")         ) {
             } else if (   function.startsWith("uci" )          ) {
             } else if (   function.startsWith("vat" )          ) {
             } else { // failure: invalid function

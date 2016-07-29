@@ -5,6 +5,7 @@
 <%--
     Display a test form for various check digit methods
     @(#) $Id: index.jsp 78 2009-02-05 17:11:47Z gfis $
+    2016-07-29: DeTaxIdChecker
     2014-01-16: with Dbat specs for blz etc.
     2009-01-13: colored check digit range
     2008-11-18: EAN, ISBN, ISMN, ISSN, PND, UCI
@@ -50,8 +51,9 @@
             /*  6 */ , "ismn"
             /*  7 */ , "issn"
             /*  8 */ , "pnd"
-            /*  9 */ , "uci"
-            /* 10 */ , "vat"
+            /*  9 */ , "taxid"
+            /* 10 */ , "uci"
+            /* 11 */ , "vat"
             } ;
     String[] enFunction = new String []
             /*  0 */ { "dummy"
@@ -63,8 +65,9 @@
             /*  6 */ , "Internat. Standard Music Number (ISMN)"
             /*  7 */ , "Internat. Standard Serial Number (ISSN)"
             /*  8 */ , "Person-Name Database Id (PND-Id)"
-            /*  9 */ , "SEPA Unique Creditor Id (UCI)"
-            /* 10 */ , "European Value Added Tax (VAT) Id"
+            /*  9 */ , "German Tax Identification Number"
+            /* 10 */ , "SEPA Unique Creditor Id (UCI)"
+            /* 11 */ , "European Value Added Tax (VAT) Id"
             } ;
     Object
     field = session.getAttribute("function");

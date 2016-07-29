@@ -1,5 +1,6 @@
 /*  Check digits of various entities: account numbers, VAT ids, IBANs ...
     @(#) $Id: DigitChecker.java 519 2010-07-25 09:28:45Z gfis $
+    2016-07-29: DeTaxIdChecker
     2014-01-20: account.IBANChecker
     2009-01-09: mode HTML, colored check digits
     2008-11-18: EAN
@@ -28,6 +29,7 @@
 package org.teherba.checkdig;
 import  org.teherba.checkdig.BaseChecker;
 import  org.teherba.checkdig.account.DeAccountChecker;
+import  org.teherba.checkdig.DeTaxIdChecker;
 import  org.teherba.checkdig.EAN13Checker;
 import  org.teherba.checkdig.account.IBANChecker;
 import  org.teherba.checkdig.ISBNChecker;
@@ -73,6 +75,7 @@ public class DigitChecker {
      *        \t                           -ismn    <ISMN>
      *        \t                           -issn    <ISSN>
      *        \t                           -pnd     <PND-Id>
+     *        \t                           -taxid   <German Tax Identification Number>
      *        \t                           -uci     <SEPA Unique Creditor Id>
      *        \t                           -vatid   <VAT-Id Number>
      *  </pre>
@@ -94,6 +97,7 @@ public class DigitChecker {
                 out.write("      \t     -ismn    <ISMN-13 or ISMN-10>     " + nl);
                 out.write("      \t     -issn    <ISSN>     " + nl);
                 out.write("      \t     -pnd     <PND>      " + nl);
+                out.write("      \t     -taxid   <German Tax Identification Number>" + nl);
                 out.write("      \t     -uci     <SEPA Unique Creditor Id>" + nl);
                 out.write("      \t     -vatid   <VAT-Id Number>" + nl);
             } else { // >= 1 argument
@@ -130,6 +134,8 @@ public class DigitChecker {
                         checker = new ISSNChecker();
                     } else if (option.startsWith("-pnd"    )) {
                         checker = new PNDChecker();
+                    } else if (option.startsWith("-taxid"  )) {
+                        checker = new DeTaxIdChecker();
                     } else if (option.startsWith("-uci"    )) {
                         checker = new UCIChecker();
                     } else if (option.startsWith("-vat"    )) {
@@ -166,4 +172,3 @@ public class DigitChecker {
     } // main
 
 } // DigitChecker
-
