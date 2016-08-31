@@ -1,5 +1,6 @@
 /*  Servlet interface to class DigitChecker
     @(#) $Id: CheckServlet.java 77 2009-01-16 08:14:16Z gfis $
+    2016-08-31: without JSPs
     2016-07-29: DeTaxIdChecker
     2014-01-20: LF, no tabs
     2008-11-06: -isbn -ismn -issn -pnd
@@ -25,6 +26,10 @@
 
 package org.teherba.checkdig;
 import  org.teherba.checkdig.DigitChecker;
+import  org.teherba.checkdig.web.IndexPage;
+import  org.teherba.checkdig.web.Messages;
+import  org.teherba.common.web.BasePage;
+import  org.teherba.common.web.MetaInfPage;
 import  java.io.IOException;
 import  javax.servlet.RequestDispatcher;
 import  javax.servlet.ServletConfig;
@@ -34,6 +39,7 @@ import  javax.servlet.http.HttpServlet;
 import  javax.servlet.http.HttpServletRequest;
 import  javax.servlet.http.HttpServletResponse;
 import  javax.servlet.http.HttpSession;
+import  org.apache.log4j.Logger;
 
 /** Compute check digits for VAT ids, account numbers, IBANs etc.
  *  This class is the servlet interface to <em>DigitChecker</em>,
@@ -43,6 +49,28 @@ import  javax.servlet.http.HttpSession;
  */
 public class CheckServlet extends HttpServlet {
     public final static String CVSID = "@(#) $Id: CheckServlet.java 77 2009-01-16 08:14:16Z gfis $";
+    public final static long serialVersionUID = 19470629;
+
+    /** URL path to this application */
+    private String applPath;
+    /** log4j logger (category) */
+    private Logger log;
+    /** common code and messages for auxiliary web pages */
+    private BasePage basePage;
+    /** name of this application */
+    private static final String APP_NAME = "CheckDigits";
+
+    /** Called by the servlet container to indicate to a servlet
+     *  that the servlet is being placed into service.
+     *  @param config object containing the servlet's configuration and initialization parameters
+     *  @throws ServletException
+     */
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config); // ???
+        log = Logger.getLogger(CheckServlet.class.getName());
+        basePage = new BasePage(APP_NAME);
+        Messages.addMessageTexts(basePage);
+    } // init
 
     /** Creates the response for a HTTP GET request.
      *  @param request fields from the client input form
@@ -62,21 +90,6 @@ public class CheckServlet extends HttpServlet {
         generateResponse(request, response);
     } // doPost
 
-    /** Gets the value of an HTML input field, maybe as empty string
-     *  @param request request for the HTML form
-     *  @param name name of the input field
-     *  @return non-null (but possibly empty) string value of the input field
-     */
-    private String getInputField(HttpServletRequest request, String name) {
-        String value = request.getParameter(name);
-        if (value == null) {
-            value = "";
-        } else if (value.length() > 256) { // sufficient for this application
-            value = value.substring(0, 256);
-        }
-        return value;
-    } // getInputField
-
     /** Creates the response for a HTTP GET or POST request.
      *  @param request fields from the client input form
      *  @param response data to be sent back the user's browser
@@ -85,36 +98,42 @@ public class CheckServlet extends HttpServlet {
     public void generateResponse(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
         try {
-            HttpSession session = request.getSession();
-            String function = getInputField(request, "function");
-            String parm1    = getInputField(request, "parm1"   );
-            String parm2    = getInputField(request, "parm2"   );
-            session.setAttribute("parm1"   , parm1   );
-            session.setAttribute("parm2"   , parm2   );
-            String newPage = "index";
-            session.setAttribute("function"  , function); // assume success
+            String language = "en";
+            String view     = BasePage.getInputField(request, "view"    , "index");
+            String function = BasePage.getInputField(request, "function", "iban" );
+            String parm1    = BasePage.getInputField(request, "parm1"   , ""     ); // empty: will print a list of testcases
+            String parm2    = BasePage.getInputField(request, "parm2"   , ""     );
+
             if (false) {
-            } else if (   function.startsWith("acc" )          ) {
-            } else if (   function.startsWith("ean" )          ) {
-            } else if (   function.startsWith("iban")          ) {
-            } else if (   function.startsWith("isbn")          ) {
-            } else if (   function.startsWith("isin")          ) {
-            } else if (   function.startsWith("ismn")          ) {
-            } else if (   function.startsWith("issn")          ) {
-            } else if (   function.startsWith("pnd" )          ) {
-            } else if (   function.startsWith("taxid")         ) {
-            } else if (   function.startsWith("uci" )          ) {
-            } else if (   function.startsWith("vat" )          ) {
-            } else { // failure: invalid function
-                newPage = "message";
-                session.setAttribute("messno"  , "001");
+            } else if (view.equals("index")) {
+                if (false) {
+                } else if (function.startsWith("acc"  )   
+                        || function.startsWith("ean"  )   
+                        || function.startsWith("iban" )   
+                        || function.startsWith("isbn" )   
+                        || function.startsWith("isin" )   
+                        || function.startsWith("ismn" )   
+                        || function.startsWith("issn" )   
+                        || function.startsWith("pnd"  )   
+                        || function.startsWith("taxid")  
+                        || function.startsWith("uci"  )   
+                        || function.startsWith("vat"  )   
+                        ) {
+                    (new IndexPage    ()).dialog(request, response, basePage, function, parm1, parm2);
+                } else { // failure: invalid function
+                    basePage.writeMessage(request, response, language, new String[] { "401", "function", function });
+                }
+
+            } else if (view.equals("license")
+                    || view.equals("manifest")
+                    || view.equals("notice")
+                    ) {
+                (new MetaInfPage    ()).showMetaInf (request, response, basePage, language, view);
+            } else {
+                basePage.writeMessage(request, response, language, new String[] { "401", "view", view });
             }
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/" + newPage + ".jsp");
-            dispatcher.forward(request, response);
         } catch (Exception exc) {
-            response.getWriter().write(exc.getMessage());
-            System.err.println(exc.getMessage());
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
         }
     } // generateResponse
 

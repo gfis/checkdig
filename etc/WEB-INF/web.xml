@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!--
+    @(#) $Id: web.xml 78 2009-02-05 17:11:47Z gfis $
+    Copyright (c) 2005 Dr. Georg Fischer <punctum@punctum.com>
+    2016-08-31: - DbatServlet; + welcom-file-list
+    2014-01-16: + DbatServlet
+    2009-01-29: /servlet instead of /checkservlet
+    2005-08-26: copied from numword
+-->
+<!--
  * Copyright 2006 Dr. Georg Fischer <punctum at punctum dot kom>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,13 +24,6 @@
 -->
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     "http://java.sun.com/dtd/web-app_2_3.dtd">
-<!--
-    @(#) $Id: web.xml 78 2009-02-05 17:11:47Z gfis $
-    Copyright (c) 2005 Dr. Georg Fischer <punctum@punctum.com>
-    2014-01-16: + DbatServlet
-    2009-01-29: /servlet instead of /checkservlet
-    2005-08-26: copied from numword
--->
 <web-app>
 
     <display-name>Check Digits</display-name>
@@ -38,17 +39,12 @@
 
     <servlet-mapping>
         <servlet-name>CheckServlet</servlet-name>
-        <url-pattern>/checkservlet</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>DbatServlet</servlet-name>
-        <servlet-class>org.teherba.dbat.DbatServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>DbatServlet</servlet-name>
         <url-pattern>/servlet</url-pattern>
     </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+    </welcome-file-list>
 
 </web-app>

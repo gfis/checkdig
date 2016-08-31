@@ -1,6 +1,7 @@
 /*  IBANGenerator.java - check International Bank Account Numbers
     @(#) $Id: IBANGenerator.java 77 2009-01-16 08:14:16Z gfis $
     2014-01-22, Georg Fischer: copied from IBANChecker and gramword.MorphemTester
+
 Algorithm:
     read lines with IBANs
     check them according to the international algorithm
@@ -194,8 +195,8 @@ public class IBANGenerator {
                 if (readMultiple) { // test all patterns
                     if (ruleBean.matches(account)
                             && (access.equals(ACCESS_BLZMACT)
-                            	|| ruleBean.getOblz().length() == 0
-                            	|| ruleBean.getOblz().equals(blz)
+                                || ruleBean.getOblz().length() == 0
+                                || ruleBean.getOblz().equals(blz)
                                )
                             ) { // nacct, nrid are reassigned
                         busy = false;
@@ -299,7 +300,7 @@ public class IBANGenerator {
             try {
                 config = new Configuration();
                 config.configure(config.CLI_CALL);
-                con = config.getConnection();
+                con = config.getOpenConnection();
                 blzStmt = con.prepareStatement(blzBean.getSelectSQL() + " = ? ");
                 result = fillBlzBean(blz);
                 // check account with pzMethod first ???

@@ -2,6 +2,7 @@
 <!--
     ant-buildfile for commandline, web application and web service
     @(#) $Id: build.xml 802 2011-09-12 06:46:18Z gfis $
+    2016-08-31: properties ${tomcat.*}
     2014-01-20: gen.blz.bean
     2011-09-12: check.gen.iban.bean
     2008-04-09: targets run.* renamed to test.*
@@ -29,6 +30,8 @@
     <property name="app.main-class"     value="org.teherba.checkdig.DigitChecker" />
     <property name="xtrans"             value="../../webapps-super/xtrans" />
     <property name="src.account" 		value="src/main/java/org/teherba/checkdig/account" />
+    <property name="tomcat.base"        value="/var/lib/tomcat" />
+    <property name="tomcat.home"        value="/usr/share/tomcat" />
     <import file="build-import.xml" />
 
     <target name="generate" depends="" /><!-- deactivated -->
