@@ -2,7 +2,7 @@
 <!--
     ant-buildfile for commandline, web application and web service
     @(#) $Id: build.xml 802 2011-09-12 06:46:18Z gfis $
-    2016-08-31: properties ${tomcat.*}
+    2016-09-02: ${tomcat.*}, core.jar
     2014-01-20: gen.blz.bean
     2011-09-12: check.gen.iban.bean
     2008-04-09: targets run.* renamed to test.*
@@ -35,6 +35,17 @@
     <import file="build-import.xml" />
 
     <target name="generate" depends="" /><!-- deactivated -->
+    
+    <target name="core.jar">
+        <!-- without libraries, without web files 
+        -->
+        <jar jarfile="${dist.home}/${ant.project.name}-core.jar"
+                basedir="${build.classes}"
+                manifest="${build.classes}/META-INF/MANIFEST.MF"
+                excludes="web/** **/web/*.class **/dbat/*.class **/xtrans/*.class **/*Servlet.class"
+                >
+        </jar>
+    </target>
 
     <target name="gendata" depends="gen.account,gen.test.account,gen.blz.bean,gen.iban.bean,gen.isbn,gen.ismn" />
         <!-- gen.blz-->

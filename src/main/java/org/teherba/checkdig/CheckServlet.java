@@ -1,6 +1,6 @@
 /*  Servlet interface to class DigitChecker
     @(#) $Id: CheckServlet.java 77 2009-01-16 08:14:16Z gfis $
-    2016-08-31: without JSPs
+    2016-09-03: without JSPs and session
     2016-07-29: DeTaxIdChecker
     2014-01-20: LF, no tabs
     2008-11-06: -isbn -ismn -issn -pnd
@@ -33,12 +33,10 @@ import  org.teherba.common.web.MetaInfPage;
 import  java.io.IOException;
 import  javax.servlet.RequestDispatcher;
 import  javax.servlet.ServletConfig;
-import  javax.servlet.ServletContext;
 import  javax.servlet.ServletException;
 import  javax.servlet.http.HttpServlet;
 import  javax.servlet.http.HttpServletRequest;
 import  javax.servlet.http.HttpServletResponse;
-import  javax.servlet.http.HttpSession;
 import  org.apache.log4j.Logger;
 
 /** Compute check digits for VAT ids, account numbers, IBANs etc.
@@ -58,7 +56,7 @@ public class CheckServlet extends HttpServlet {
     /** common code and messages for auxiliary web pages */
     private BasePage basePage;
     /** name of this application */
-    private static final String APP_NAME = "CheckDigits";
+    private static final String APP_NAME = "CheckDig";
 
     /** Called by the servlet container to indicate to a servlet
      *  that the servlet is being placed into service.
@@ -128,7 +126,7 @@ public class CheckServlet extends HttpServlet {
                     || view.equals("manifest")
                     || view.equals("notice")
                     ) {
-                (new MetaInfPage    ()).showMetaInf (request, response, basePage, language, view);
+                (new MetaInfPage    ()).showMetaInf (request, response, basePage, language, view, this);
             } else {
                 basePage.writeMessage(request, response, language, new String[] { "401", "view", view });
             }
