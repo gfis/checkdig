@@ -1,0 +1,65 @@
+# Collection of Testcases for checkdig
+# @(#) $Id$
+# 2016-09-11, Dr. Georg Fischer
+#-----------------------------------
+# Caution:
+# (1) Adjust the following line: URL where FloDskIm was deployed
+URL=http://localhost:8080/checkdig/servlet
+# (2) Adjust the following line: default commandline arguments
+ARGS=
+#======================================================================
+PACKAGE=org.teherba.checkdig
+
+TEST US01 
+CALL DigitChecker
+
+#--------
+# Commandline functions
+
+TEST FM01
+CALL DigitChecker -account
+TEST FM02
+CALL DigitChecker -ean
+TEST FM03
+CALL DigitChecker -iban
+TEST FM04
+CALL DigitChecker -isbn
+TEST FM05
+CALL DigitChecker -isin
+TEST FM06
+CALL DigitChecker -ismn
+TEST FM07
+CALL DigitChecker -issn
+TEST FM08
+CALL DigitChecker -pnd
+TEST FM09
+CALL DigitChecker -taxid
+TEST FM10
+CALL DigitChecker -uci
+TEST FM11
+CALL DigitChecker -vatid
+#--------
+# Web functions
+
+TEST WW01
+HTTP function=account
+TEST WW02
+HTTP function=ean
+TEST WW03
+HTTP function=iban
+TEST WW04
+HTTP function=isbn
+TEST WW05
+HTTP function=isin
+TEST WW06
+HTTP function=ismn
+TEST WW07
+HTTP function=issn
+TEST WW08
+HTTP function=pnd
+TEST WW09
+HTTP function=taxid
+TEST WW10
+HTTP function=uci
+TEST WW11
+HTTP function=vatid

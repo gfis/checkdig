@@ -2,6 +2,7 @@
 <!--
     ant-buildfile for commandline, web application and web service
     @(#) $Id: build.xml 802 2011-09-12 06:46:18Z gfis $
+    2016-09-11: fill.lib
     2016-09-02: ${tomcat.*}, core.jar
     2014-01-20: gen.blz.bean
     2011-09-12: check.gen.iban.bean
@@ -29,7 +30,7 @@
     <property name="app.version"        value="1.8" />
     <property name="app.main-class"     value="org.teherba.checkdig.DigitChecker" />
     <property name="xtrans"             value="../../webapps-super/xtrans" />
-    <property name="src.account" 		value="src/main/java/org/teherba/checkdig/account" />
+    <property name="src.account"        value="src/main/java/org/teherba/checkdig/account" />
     <property name="tomcat.base"        value="/var/lib/tomcat" />
     <property name="tomcat.home"        value="/usr/share/tomcat" />
     <import file="build-import.xml" />
@@ -45,6 +46,18 @@
                 excludes="web/** **/web/*.class **/dbat/*.class **/xtrans/*.class **/*Servlet.class"
                 >
         </jar>
+    </target>
+
+    <target name="fill.lib">
+        <copy todir="${lib.home}">
+            <fileset dir="${tomcat.base}/openlib">
+                <include name="common-core.jar" />
+                <include name="dbat-core.jar" />
+                <include name="log4j-1.2.17.jar" />
+                <include name="serializer.jar" />
+                <include name="xtrans-core.jar" />
+            </fileset>
+        </copy>
     </target>
 
     <target name="gendata" depends="gen.account,gen.test.account,gen.blz.bean,gen.iban.bean,gen.isbn,gen.ismn" />

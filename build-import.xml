@@ -134,10 +134,10 @@
 
     <target name="clean" depends="empty">
         <!-- only when Tomcat is stopped -->
-    <!-- 
+    <!--
         Normally the libraries are overwritten.
         Caution, if the name (it's version number) is changed, the library must be removed manually.
-        
+
         <delete failonerror="false" verbose="true" >
             <fileset dir="${tomcat.base}/openlib">
                 <include name="**/*.jar" />
