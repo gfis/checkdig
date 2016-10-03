@@ -43,7 +43,7 @@ check_tests:
 	diff -y --suppress-common-lines --width=32 $(TESTDIR)/tests_formal.tmp $(TESTDIR)/tests_actual.tmp
 #---------------------------------------------------
 jfind:
-	find src -iname "*.java" | xargs -l grep -H $(JF)
+	find src -iname "*.java" | xargs -l grep -H "$(JF)"
 rmbak:
 	find src -iname "*.bak"  | xargs -l rm -v
 #---------------------------------------------------

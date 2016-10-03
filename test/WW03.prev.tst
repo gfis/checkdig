@@ -6,7 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml;charset=UTF-8" />
 <meta name="robots" content="noindex, nofollow" />
-<link rel="stylesheet" type="text/css" href="stylesheet.css" />
+<link rel="stylesheet" title="common" type="text/css" href="stylesheet.css" />
 <title>CheckDig Main Page</title>
 </head>
 <body>
@@ -117,6 +117,7 @@ DE<span class="NOK">50</span> 6723 0000 4059 5290 56	?NOK
        </tr>
     </table>
 </form>
+<!-- language="en", features="quest" -->
 <p><span style="font-size:small">
 Questions, remarks: email to  <a href="mailto:punctum@punctum.com?&subject=CheckDig">Dr. Georg Fischer</a></span></p>
 </body></html>

@@ -2,6 +2,7 @@
 <!--
     ant-buildfile for commandline, web application and web service
     @(#) $Id: build.xml 802 2011-09-12 06:46:18Z gfis $
+    2016-09-14: -xtrans, +mysql-connector
     2016-09-11: fill.lib
     2016-09-02: ${tomcat.*}, core.jar
     2014-01-20: gen.blz.bean
@@ -54,8 +55,7 @@
                 <include name="common-core.jar" />
                 <include name="dbat-core.jar" />
                 <include name="log4j-1.2.17.jar" />
-                <include name="serializer.jar" />
-                <include name="xtrans-core.jar" />
+                <include name="mysql-connector-java-5.1.11-bin.jar" />
             </fileset>
         </copy>
     </target>

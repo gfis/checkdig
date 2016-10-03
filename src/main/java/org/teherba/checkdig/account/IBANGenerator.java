@@ -1,5 +1,6 @@
 /*  IBANGenerator.java - check International Bank Account Numbers
     @(#) $Id: IBANGenerator.java 77 2009-01-16 08:14:16Z gfis $
+    2016-09-14: xtrans was only used for debugging
     2014-01-22, Georg Fischer: copied from IBANChecker and gramword.MorphemTester
 
 Algorithm:
@@ -29,7 +30,6 @@ import  org.teherba.checkdig.account.BlzDetailBean;
 import  org.teherba.checkdig.account.IBANChecker;
 import  org.teherba.checkdig.account.IBANRuleBean;
 import  org.teherba.dbat.Configuration;
-import  org.teherba.xtrans.BaseTransformer;
 import  java.io.BufferedReader;
 import  java.io.FileReader;
 import  java.sql.Connection;
@@ -219,10 +219,6 @@ public class IBANGenerator {
                 ruleBean.setNblz    (blz);
                 ruleBean.setNrid    ("0000");
                 result = "!OK";
-            }
-
-            if (debug > 0) {
-                System.out.println("# fillRuleBean " + (new BaseTransformer()).getAttrs(ruleBean.getAttributes()));
             }
         } catch (Exception exc) {
             log.error(exc.getMessage(), exc);
