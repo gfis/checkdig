@@ -1,5 +1,6 @@
 /*  IndexPage.java - main web page for CheckDig
  *  @(#) $Id: 57d01d0860aef0c2f2783647be70c3c381710c86 $
+    2016-10-12: less imports
  *  2016-08-31: Dr. Georg Fischer: copied from Xtool
  */
 /*
@@ -18,15 +19,12 @@
  * limitations under the License.
  */
 package org.teherba.checkdig.web;
-import  org.teherba.checkdig.BaseChecker;
 import  org.teherba.checkdig.DigitChecker;
 import  org.teherba.common.web.BasePage;
 import  java.io.PrintWriter;
 import  java.io.Serializable;
-import  java.util.Iterator;
 import  javax.servlet.http.HttpServletRequest;
 import  javax.servlet.http.HttpServletResponse;
-import  javax.servlet.http.HttpSession;
 import  org.apache.log4j.Logger;
 
 /** CheckDig main dialog page
@@ -67,7 +65,7 @@ public class IndexPage implements Serializable {
             out.write("</head>\n<body>\n");
 
             DigitChecker digitChecker = new DigitChecker();
-            
+
             // 2 parallel arrays, element [0] is ignored
             String[] optFunction = new String []
                     /*  0 */ { "dummy"
@@ -107,7 +105,7 @@ public class IndexPage implements Serializable {
             out.write("        </tr>\n");
             out.write("        <tr valign=\"top\">\n");
             out.write("            <td><select name=\"function\" size=\"" + String.valueOf(enFunction.length - 1) + "\">\n");
-            
+
             int ind = 1; // element [0] is ignored
             while (ind < optFunction.length) {
                 out.write("<option value=\""
@@ -117,7 +115,7 @@ public class IndexPage implements Serializable {
                         + enFunction[ind] + "</option>\n");
                 ind ++;
             } // while ind
-                          
+
             out.write("                </select>\n");
             out.write("                <br />\n");
             basePage.writeAuxiliaryLinks(language, "main");
@@ -131,7 +129,7 @@ public class IndexPage implements Serializable {
             out.write("                <input name=\"parm2\" maxsize=\"80\" size=\"40\" value=\"" + parm2 + "\"/>\n");
             out.write("                <br />\n");
             out.write("                <input type=\"submit\" value=\"Submit\">\n");
-            out.write("                <h3>\n");         
+            out.write("                <h3>\n");
             String result = digitChecker.process(new String[] { "-m", "html", "-" + function, parm1, "-blz", parm2 });
             if (parm1.equals("")) {
                 out.write("\n<pre>\n" + result + "\n</pre>\n");
@@ -143,7 +141,7 @@ public class IndexPage implements Serializable {
             out.write("       </tr>\n");
             out.write("    </table>\n");
             out.write("</form>\n");
-            
+
             basePage.writeTrailer(language, "quest");
         } catch (Exception exc) {
             log.error(exc.getMessage(), exc);

@@ -1,5 +1,6 @@
 /*  Class which checks lifelong German tax identification numbers
  *  @(#)$Id$
+ *  2016-10-13: less imports
  *  2016-07-29, Georg Fischer
  */
 /*
@@ -21,7 +22,6 @@ package org.teherba.checkdig;
 import  org.teherba.checkdig.BaseChecker;
 import  java.io.BufferedReader;
 import  java.io.FileReader;
-import  java.lang.reflect.Method;
 import  java.lang.StringBuffer;
 
 /** Check lifelong German tax identification numbers consisting of 10 digits plus a check digit.

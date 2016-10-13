@@ -1,8 +1,10 @@
 /*  UCIChecker.java - check SEPA Unique Creditor Identifiers
     @(#) $Id: UCIChecker.java 77 2009-01-16 08:14:16Z gfis $
+    2016-10-13: less imports
     2014-01-20: aoount.IBANChecker
     2009-01-09: result of 'check' is: new (formatted) number, tab, [questionmark|exclamationmark]returnstring
     2008-11-29: copied from IBANChecker
+
 References:
     European Payments Council: SEPA Business-to-Business Direct Debit Scheme Customer-to-Bank
         Draft Implementation Guidelines v1.1 07.07.2008
@@ -38,18 +40,17 @@ Activation:
 package org.teherba.checkdig;
 import  org.teherba.checkdig.BaseChecker;
 import  org.teherba.checkdig.account.IBANChecker;
-import  java.io.BufferedReader;
-import  java.io.FileReader;
-import  java.math.BigInteger;
-import  java.util.HashMap;
 
 /** Class for the checkdigits in the SEPA Unique Creditor Identifiers as defined in section 1.5.2 of the document of the
-    European Payments Council: SEPA Business-to-Business Direct Debit Scheme Customer-to-Bank
-            Draft Implementation Guidelines v1.1 07.07.2008.
-    This document sets out the SEPA rules for implementing the customer-to-bank business-to-business
-    direct debit UNIFI (ISO 20022) XML Message Standards based on version 1.1 of the
-            SEPA Business-to-Business Direct Debit Scheme Rulebook.
-    http://www.europeanpaymentscouncil.eu/knowledge_bank_detail.cfm?documents_id=141
+ *  European Payments Council: SEPA Business-to-Business Direct Debit Scheme Customer-to-Bank
+ *          Draft Implementation Guidelines v1.1 07.07.2008.
+ *  <br />
+ *  This document sets out the SEPA rules for implementing the customer-to-bank business-to-business
+ *  direct debit UNIFI (ISO 20022) XML Message Standards based on version 1.1 of the
+ *          SEPA Business-to-Business Direct Debit Scheme Rulebook.
+ *  <br />
+ *  http://www.europeanpaymentscouncil.eu/knowledge_bank_detail.cfm?documents_id=141
+ *  <br />
  *  Several test numbers are found below.
  *  @author Dr. Georg Fischer
  */

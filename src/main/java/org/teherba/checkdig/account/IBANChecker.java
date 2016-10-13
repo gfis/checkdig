@@ -1,5 +1,6 @@
 /*  IBANChecker.java - check International Bank Account Numbers
     @(#) $Id: IBANChecker.java 77 2009-01-16 08:14:16Z gfis $
+    2016-10-12: less imports
     2009-01-09: result of 'check' is: new (formatted) number, space, [questionmark|exclamationmark]returnstring
     2008-11-18: success and error return codes
     2008-03-21: MA??; Berlin -> Andernach
@@ -38,8 +39,6 @@ Activation:
 package org.teherba.checkdig.account;
 import  org.teherba.checkdig.BaseChecker;
 import  org.teherba.checkdig.account.IBANDetailBean;
-import  java.io.BufferedReader;
-import  java.io.FileReader;
 import  java.math.BigInteger;
 import  java.util.HashMap;
 

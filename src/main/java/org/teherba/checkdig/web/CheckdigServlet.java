@@ -1,5 +1,6 @@
 /*  Servlet interface to class DigitChecker
-    @(#) $Id: CheckServlet.java 77 2009-01-16 08:14:16Z gfis $
+    @(#) $Id: CheckdigServlet.java 77 2009-01-16 08:14:16Z gfis $
+    2016-10-12: less imports; moved to package web
     2016-09-03: without JSPs and session
     2016-07-29: DeTaxIdChecker
     2014-01-20: LF, no tabs
@@ -24,14 +25,12 @@
  * limitations under the License.
  */
 
-package org.teherba.checkdig;
-import  org.teherba.checkdig.DigitChecker;
+package org.teherba.checkdig.web;
 import  org.teherba.checkdig.web.IndexPage;
 import  org.teherba.checkdig.web.Messages;
 import  org.teherba.common.web.BasePage;
 import  org.teherba.common.web.MetaInfPage;
 import  java.io.IOException;
-import  javax.servlet.RequestDispatcher;
 import  javax.servlet.ServletConfig;
 import  javax.servlet.ServletException;
 import  javax.servlet.http.HttpServlet;
@@ -45,8 +44,8 @@ import  org.apache.log4j.Logger;
  *  in that class.
  *  @author Dr. Georg Fischer
  */
-public class CheckServlet extends HttpServlet {
-    public final static String CVSID = "@(#) $Id: CheckServlet.java 77 2009-01-16 08:14:16Z gfis $";
+public class CheckdigServlet extends HttpServlet {
+    public final static String CVSID = "@(#) $Id: CheckdigServlet.java 77 2009-01-16 08:14:16Z gfis $";
     public final static long serialVersionUID = 19470629;
 
     /** URL path to this application */
@@ -65,7 +64,7 @@ public class CheckServlet extends HttpServlet {
      */
     public void init(ServletConfig config) throws ServletException {
         super.init(config); // ???
-        log = Logger.getLogger(CheckServlet.class.getName());
+        log = Logger.getLogger(CheckdigServlet.class.getName());
         basePage = new BasePage(APP_NAME);
         Messages.addMessageTexts(basePage);
     } // init
@@ -95,7 +94,7 @@ public class CheckServlet extends HttpServlet {
      */
     public void generateResponse(HttpServletRequest request,
             HttpServletResponse response) throws IOException {
-        try {
+        if (true) { // try {
             String language = "en";
             String view     = BasePage.getInputField(request, "view"    , "index");
             String function = BasePage.getInputField(request, "function", "iban" );
@@ -105,17 +104,17 @@ public class CheckServlet extends HttpServlet {
             if (false) {
             } else if (view.equals("index")) {
                 if (false) {
-                } else if (function.startsWith("acc"  )   
-                        || function.startsWith("ean"  )   
-                        || function.startsWith("iban" )   
-                        || function.startsWith("isbn" )   
-                        || function.startsWith("isin" )   
-                        || function.startsWith("ismn" )   
-                        || function.startsWith("issn" )   
-                        || function.startsWith("pnd"  )   
-                        || function.startsWith("taxid")  
-                        || function.startsWith("uci"  )   
-                        || function.startsWith("vat"  )   
+                } else if (function.startsWith("acc"  )
+                        || function.startsWith("ean"  )
+                        || function.startsWith("iban" )
+                        || function.startsWith("isbn" )
+                        || function.startsWith("isin" )
+                        || function.startsWith("ismn" )
+                        || function.startsWith("issn" )
+                        || function.startsWith("pnd"  )
+                        || function.startsWith("taxid")
+                        || function.startsWith("uci"  )
+                        || function.startsWith("vat"  )
                         ) {
                     (new IndexPage    ()).dialog(request, response, basePage, function, parm1, parm2);
                 } else { // failure: invalid function
@@ -130,9 +129,11 @@ public class CheckServlet extends HttpServlet {
             } else {
                 basePage.writeMessage(request, response, language, new String[] { "401", "view", view });
             }
+    /*
         } catch (Exception exc) {
             log.error(exc.getMessage(), exc);
+    */
         }
     } // generateResponse
 
-} // CheckServlet
+} // CheckdigServlet

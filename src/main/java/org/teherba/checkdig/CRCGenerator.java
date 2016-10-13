@@ -1,7 +1,6 @@
 /*  Read a CRC generator polynomial and write a table
-    useable for bytewise calculation of the CRC remainder,
-    and execute test cases.
     @(#) $Id: CRCGenerator.java 37 2008-09-08 06:11:04Z gfis $
+    2016-10-12: less imports
     2007-04-23, Georg Fischer: rewritten in Java
     1988-01-23: previous version in Turbo-Pascal
     punctum Gesellschaft fuer Software mbH
@@ -40,14 +39,15 @@
  */
 
 package org.teherba.checkdig;
-import  java.io.IOException;
 import  java.io.FileInputStream;
 import  java.io.BufferedReader;
 import  java.nio.channels.Channels;
 import  java.nio.channels.ReadableByteChannel;
-import  java.util.Iterator;
-import  java.util.List;
 
+/** Read a CRC generator polynomial and write a table
+ *  useable for bytewise calculation of the CRC remainder,
+ *  and execute test cases.
+ */
 public class CRCGenerator {
     public final static String CVSID = "@(#) $Id: CRCGenerator.java 37 2008-09-08 06:11:04Z gfis $";
 
@@ -57,17 +57,17 @@ public class CRCGenerator {
      *  @param value some integer
      *  @return the low byte
      */
-    private static int Lo(int value) {
+    private static int lsByte(int value) {
         return value & 0xff;
-    }
+    } // lsByte
 
     /** Gets the higher byte of a 16-bit value
      *  @param value some integer
      *  @return the high byte
      */
-    private static int Hi(int value) {
+    private static int msByte(int value) {
         return (value >> 8) & 0xff;
-    }
+    } // msByte
 
     /** Gets a byte from a character
      *  @param value some character
@@ -75,7 +75,7 @@ public class CRCGenerator {
      */
     private static byte ord(char value) {
         return (byte) (value & 0xff);
-    }
+    } // ord
 
     /** Gets a character from a integer
      *  @param value some byte
@@ -83,7 +83,7 @@ public class CRCGenerator {
      */
     private static char chr(int value) {
         return (char) (value & 0xff);
-    }
+    } // chr
 
     /** Main program, processes the commandline arguments
      *  @param args Arguments:
@@ -239,18 +239,18 @@ public class CRCGenerator {
                 int pos = 0;
                 while (pos < line.length()) {
                     ch = line.charAt(pos);
-                    x   = Lo(crc) ^ ord(ch);
+                    x   = lsByte(crc) ^ ord(ch);
                     crc = (crc >> 8) ^ (table[x]);
                     pos ++;
                 } // while pos
                 System.out.print("send 0x" + Integer.toHexString(crc));
                 // send 1COM(crc) with LSB first
-                ch  = chr(Lo(crc) ^ 0xFF);
-                ch2 = chr(Hi(crc) ^ 0xFF);
-                x   = (Lo(crc) ^ ord(ch)) & 0xff;
+                ch  = chr(lsByte(crc) ^ 0xFF);
+                ch2 = chr(msByte(crc) ^ 0xFF);
+                x   = (lsByte(crc) ^ ord(ch)) & 0xff;
                 crc = (crc >> 8) ^ (table[x]);
                 ch  = ch2;
-                x   = (Lo(crc) ^ ord(ch)) & 0xff;
+                x   = (lsByte(crc) ^ ord(ch)) & 0xff;
                 crc = (crc >> 8) ^ (table[x]);
                 System.out.println(", check for 0x" + Integer.toHexString(crc));
             } // while not EOF
@@ -260,4 +260,4 @@ public class CRCGenerator {
             exc.printStackTrace();
         }
     } // main
-}
+} // CRCGenerator
