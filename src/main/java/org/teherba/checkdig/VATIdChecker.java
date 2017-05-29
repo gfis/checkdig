@@ -1,8 +1,9 @@
 /*  VATIdChecker.java - check European Value Added Tax Identification Numbers
     @(#) $Id: VATIdChecker.java 91 2009-03-03 17:46:57Z gfis $
     Caution, must be stored as UTF-8: äöüÄÖÜß
-	2009-01-09: result of 'check' is: new (formatted) number, space, [questionmark|exclamationmark]returnstring
-	2008-12-01: success and error codes
+    2016-10-12: less imports
+    2009-01-09: result of 'check' is: new (formatted) number, space, [questionmark|exclamationmark]returnstring
+    2008-12-01: success and error codes
     2008-11-14: test case convention
     2007-05-24: name was VatIdChecker
     2007-04-17: Poland and Slovenia
@@ -12,13 +13,13 @@
     2003-08-19, Georg Fischer: copied from iso7064.java
     reads lines with VAT ids
     checks them according to the country-specific algorithms
-    
+
     Activation (test data in the source program):
         java -cp dist/checkdig.jar org.teherba.checkdig.VATIdChecker [infile]
 
     VAT IDs can be checked online at:
     http://ec.europa.eu/taxation_customs/vies/lang.do?fromWhichPage=vieshome&selectedLanguage=DE
-    
+
     The structure in various countries is described at:
     http://ec.europa.eu/taxation_customs/vies/faqvies.do?selectedLanguage=EN#item11
 
@@ -26,7 +27,7 @@
         http://ec.europa.eu/taxation_customs/vies/faqvies.do?selectedLanguage=EN
         http://sima-pc.com/nif.php
         http://chemeng.p.lodz.pl/zylla/ut/translation.html
-        
+
         AT-Austria      ATU999999991    1 block of 9 characters
         BE-Belgium      BE999999999 or
                         BE09999999992   1 block of 9 digits or
@@ -34,7 +35,7 @@
         BG-Bulgaria     BG999999999 or
                         BG9999999999    1 block of 9 digits or 1 block of 10 digits
         CY-Cyprus       CY99999999L     1 block of 9 characters
-        CZ-Czech 
+        CZ-Czech
            Republic     CZ99999999 or
                         CZ999999999 or
                         CZ9999999999
@@ -46,12 +47,12 @@
         ES-Spain        ESX9999999X     1 block of 9 characters
         FI-Finland      FI99999999      1 block of 8 digits
         FR-France       FRXX 999999999  1 block of 2 characters, 1 block of 9 digits
-        GB-United 
+        GB-United
            Kingdom      GB999 9999 99 or
                         GB999 9999 99 9995 or
                         GBGD9996 or
-                        GBHA9997        1 block of 3 digits, 1 block of 4 digits and 1 block of 2 digits; 
-                                            or the above followed by a block of 3 digits; 
+                        GBHA9997        1 block of 3 digits, 1 block of 4 digits and 1 block of 2 digits;
+                                            or the above followed by a block of 3 digits;
                                             or 1 block of 5 characters
         HU-Hungary      HU99999999      1 block of 8 digits
         IE-Ireland      IE9S99999L      1 block of 8 characters
@@ -61,7 +62,7 @@
         LU-Luxembourg   LU99999999      1 block of 8 digits
         LV-Latvia       LV99999999999   1 block of 11 digits
         MT-Malta        MT99999999      1 block of 8 digits
-        NL-The 
+        NL-The
         Netherlands     NL999999999B99  1 block of 12 characters
         PL-Poland       PL9999999999    1 block of 10 digits
         PT-Portugal     PT999999999     1 block of 9 digits
@@ -87,12 +88,9 @@
  */
 package org.teherba.checkdig;
 import  org.teherba.checkdig.BaseChecker;
-import  java.io.BufferedReader;
-import  java.io.FileReader;
 import  java.lang.reflect.Method;
-import  java.util.ArrayList;
 
-/** Class for the checkdigits in European 
+/** Class for the checkdigits in European
  *  Value Added Tax Identification (VAT-Id) numbers.
  *  For example, the German VAT Id of punctum GmbH is DE129443785.
  *  For each country, a special method is implemented which returns the correct
@@ -102,18 +100,18 @@ import  java.util.ArrayList;
  */
 public class VATIdChecker extends BaseChecker {
     public final static String CVSID = "@(#) $Id: VATIdChecker.java 91 2009-03-03 17:46:57Z gfis $";
-    
+
     /** No-args constructor
      */
     public VATIdChecker() {
         super();
     } // constructor
-    
+
      /** Gets a predefined set of test numbers.
      *  @return array of all testcases as strings
      */
-	public String[] getTestCases() {
-		return new String[] 
+    public String[] getTestCases() {
+        return new String[]
             { "ATU13585627"
             , "ATU83256904"
             , "BE123487631"
@@ -146,60 +144,60 @@ public class VATIdChecker extends BaseChecker {
             , "GR094359842"
             , "EL12345678"
             };
-	} // getTestCases
+    } // getTestCases
 
     /** Lists the ISO codes for all countries which have methods implemented;
      *  this list MUST correspond with the method names below, because the
-     *	latter are "reflected".
+     *  latter are "reflected".
      */
-    private static String ISO_LIST 
+    private static String ISO_LIST
             = ",AT,BE,BG,CY,CZ,DE,DK,EE,EL,ES,FI,FR,GB,HU,IE,IT,LT,LU,LV,MT,NL,PL,PT,RO,SE,SI,SK,";
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Austria.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
-    public String checkAT(String vatId) { 
+     */
+    public String checkAT(String vatId) {
         int nlen = 8; // number of digits to be checked
-        //      pos       0   1   2   3   4   5   6   7 
-        int factor[] = {  0,  1,  2,  1,  2,  1,  2,  1}; 
+        //      pos       0   1   2   3   4   5   6   7
+        int factor[] = {  0,  1,  2,  1,  2,  1,  2,  1};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 1; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
             int prod = digit * factor[ipos];
-            sum += prod % 10 + (int) prod / 10; 
+            sum += prod % 10 + (int) prod / 10;
         } // for ipos
         sum = 10 - (sum + 4) % 10;
         int result = (sum >= 10) ? 0 : sum;
         return String.valueOf(result);
     } // checkAT
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Belgium.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
-    public String checkBE(String vatId) { 
+     */
+    public String checkBE(String vatId) {
         int nlen = 7; // number of digits to be checked
         setCheckRange(2 + nlen, 2);
         long number = 0;
-		int result = 0;
+        int result = 0;
         try {
             number = Long.parseLong(vatId.substring(0, nlen));
-        	result = (int) (97 - (number % 97));
+            result = (int) (97 - (number % 97));
         } catch (Exception exc) {
-        	return "?";
+            return "?";
         }
         return (result < 10 ? "0" : "") + String.valueOf(result);
     } // checkBE
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Bulgaria.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
-    public String checkBG(String vatId) { 
+     */
+    public String checkBG(String vatId) {
         //      pos       0   1   2   3   4   5   6   7   8
         int factor1[] = { 4,  3,  2,  7,  6,  5,  4,  3,  2};
         int sum = 0;
@@ -221,12 +219,12 @@ public class VATIdChecker extends BaseChecker {
         return result;
     } // checkBG
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Cyprus.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
-    public String checkCY(String vatId) { 
+     */
+    public String checkCY(String vatId) {
         int nlen = 8; // number of digits to be checked
         //    digit       0   1   2   3   4   5   6   7   8   9
         int factor[] =   {1,  0,  5,  7,  9,  13, 15, 17, 19, 21};
@@ -240,9 +238,9 @@ public class VATIdChecker extends BaseChecker {
         return BaseChecker.LETTER_MAP.substring(sum, sum + 1); // +10 skipped over digits
     } // checkCY
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Czech Republic.
-	 * <pre>
+     * <pre>
         CZ, SK: VAT Number/DIČ
         S=8*N(1)+7*N(2)+6*N(3)+5*N(4)+4*N(5)+3*N(6)+2*N(7)
         C(1)=11-S%11; if C(1)=10, C(1)=0; if C(1)=11, C(1)=1
@@ -250,13 +248,13 @@ public class VATIdChecker extends BaseChecker {
         N(1)={6}        612345670
         S=8*N(2)+7*N(3)+6*N(4)+5*N(5)+4*N(6)+3*N(7)+2*N(8)
         C(1)=9-(11-S%11)%10
-	 * </pre>
+     * </pre>
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
-    public String checkCZ(String vatId) { 
-        //      pos        0   1   2   3   4   5   6  
-        int factor1[] = {  8,  7,  6,  5,  4,  3,  2 }; 
+     */
+    public String checkCZ(String vatId) {
+        //      pos        0   1   2   3   4   5   6
+        int factor1[] = {  8,  7,  6,  5,  4,  3,  2 };
         int sum = 0;
         String result = "?";
         int nlen = vatId.length() - 1; // number of digits to be checked
@@ -287,16 +285,16 @@ public class VATIdChecker extends BaseChecker {
         } else if (nlen == 10) {
             sum = 9 - (11 - sum % 11) % 10;
             result = String.valueOf(sum);
-        } 
+        }
         // else cdig = '?'
         return result;
     } // checkCZ
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Germany.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkDE(String vatId) { // Germany
         int nlen = 8; // number of digits to be checked
         int rest = 10;
@@ -314,15 +312,15 @@ public class VATIdChecker extends BaseChecker {
         return String.valueOf(result);
     } // check
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Denmark.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkDK(String vatId) { // Denmark
         int nlen = 7; // number of digits to be checked
         //      pos       0   1   2   3   4   5   6
-        int factor[] = {  2,  7,  6,  5,  4,  3,  2}; 
+        int factor[] = {  2,  7,  6,  5,  4,  3,  2};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 0; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
@@ -334,15 +332,15 @@ public class VATIdChecker extends BaseChecker {
         return String.valueOf(result);
     } // checkDK
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Estonia.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
-    public String checkEE(String vatId) { 
+     */
+    public String checkEE(String vatId) {
         int nlen = 8; // number of digits to be checked
         //      pos       0   1   2   3   4   5   6   7
-        int factor[] = {  3,  7,  1,  3,  7,  1,  3,  7}; 
+        int factor[] = {  3,  7,  1,  3,  7,  1,  3,  7};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 0; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
@@ -354,15 +352,15 @@ public class VATIdChecker extends BaseChecker {
         return String.valueOf(result);
     } // checkEE
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Greece.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkEL(String vatId) { // Greece
         int nlen =  8; // number of digits to be checked
-        //      pos       0   1   2   3   4   5   6   7 
-        int factor[] = {256,128, 64, 32, 16,  8,  4,  2}; 
+        //      pos       0   1   2   3   4   5   6   7
+        int factor[] = {256,128, 64, 32, 16,  8,  4,  2};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 0; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
@@ -374,44 +372,44 @@ public class VATIdChecker extends BaseChecker {
         return String.valueOf(result);
     } // checkEL
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Greece, but with ISO 3160 country code "GR".
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkGR(String vatId) { // Greece
         return checkEL(vatId);
     } // checkGR
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Spain.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkES(String vatId) { // France
         int nlen = 8; // number of digits to be checked
-        //      pos       0   1   2   3   4   5   6   7 
-        int factor[] = {  0,  2,  1,  2,  1,  2,  1,  2}; 
+        //      pos       0   1   2   3   4   5   6   7
+        int factor[] = {  0,  2,  1,  2,  1,  2,  1,  2};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 1; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
             int prod = digit * factor[ipos];
-            sum += prod % 10 + (int) prod / 10; 
+            sum += prod % 10 + (int) prod / 10;
         } // for ipos
         sum = 10 - sum % 10;
         int result = (sum >= 10) ? 0 : sum;
         return String.valueOf(result);
     } // checkES
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Finland.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkFI(String vatId) { // Finland
         int nlen = 7; // number of digits to be checked
         //      pos       0   1   2   3   4   5   6
-        int factor[] = {  7,  9, 10,  5,  8,  4,  2}; 
+        int factor[] = {  7,  9, 10,  5,  8,  4,  2};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 0; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
@@ -423,36 +421,36 @@ public class VATIdChecker extends BaseChecker {
         return String.valueOf(result);
     } // checkFI
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  France.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkFR(String vatId) { // France
         int nlen = 10; // number of digits to be checked
-        //      pos       0   1   2   3   4   5   6   7   8   9 
-        int factor[] = {  0,  0,  1,  2,  1,  2,  1,  2,  1,  2}; 
+        //      pos       0   1   2   3   4   5   6   7   8   9
+        int factor[] = {  0,  0,  1,  2,  1,  2,  1,  2,  1,  2};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 2; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
             int prod = digit * factor[ipos];
-            sum += prod % 10 + (int) prod / 10; 
+            sum += prod % 10 + (int) prod / 10;
         } // for ipos
         sum = 10 - sum % 10;
         int result = (sum >= 10) ? 0 : sum;
         return String.valueOf(result);
     } // checkFR
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Great Britain (United Kingdom).
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkGB(String vatId) { // Great Britain
         int nlen = 7; // number of digits to be checked
-		setCheckRange(2 + nlen, 2);
-        //      pos       0   1   2   3   4   5   6 
-        int factor[] = {  8,  7,  6,  5,  4,  3,  2}; 
+        setCheckRange(2 + nlen, 2);
+        //      pos       0   1   2   3   4   5   6
+        int factor[] = {  8,  7,  6,  5,  4,  3,  2};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 0; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
@@ -467,15 +465,15 @@ public class VATIdChecker extends BaseChecker {
         return (result < 10 ? "0" : "") + String.valueOf(result);
      } // checkGB
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Hungary.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
-    public String checkHU(String vatId) { 
+     */
+    public String checkHU(String vatId) {
         int nlen = 7; // number of digits to be checked
-        //      pos       0   1   2   3   4   5   6 
-        int factor[] = {  9,  7,  3,  1,  9,  7,  3}; 
+        //      pos       0   1   2   3   4   5   6
+        int factor[] = {  9,  7,  3,  1,  9,  7,  3};
         int sum = 0;
         // vatId.charAt(0) > '0'
         for (int ipos = nlen - 1; ipos >= 0; ipos --) {
@@ -488,15 +486,15 @@ public class VATIdChecker extends BaseChecker {
         return String.valueOf(result);
     } // checkHU
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Ireland.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkIE(String vatId) { // Ireland
         int nlen = 7; // number of digits to be checked
-        //      pos       0   1   2   3   4   5   6 
-        int factor[] = {  8,  7,  6,  5,  4,  3,  2}; 
+        //      pos       0   1   2   3   4   5   6
+        int factor[] = {  8,  7,  6,  5,  4,  3,  2};
         //                     01234567890123456789012
         String checkLetters = "WABCDEFGHIJKLMNOPQRSTUV";
         int sum = 0;
@@ -509,35 +507,35 @@ public class VATIdChecker extends BaseChecker {
         return checkLetters.substring(sum, sum + 1);
     } // checkIE
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Italy.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkIT(String vatId) { // Ireland
         int nlen = 10; // number of digits to be checked
-        //      pos       0   1   2   3   4   5   6   7   8   9 
-        int factor[] = {  1,  2,  1,  2,  1,  2,  1,  2,  1,  2}; 
+        //      pos       0   1   2   3   4   5   6   7   8   9
+        int factor[] = {  1,  2,  1,  2,  1,  2,  1,  2,  1,  2};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 0; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
             int prod = digit * factor[ipos];
-            sum += prod % 10 + (int) prod / 10; 
+            sum += prod % 10 + (int) prod / 10;
         } // for ipos
         sum = 10 - sum % 10;
         int result = (sum >= 10) ? 0 : sum;
         return String.valueOf(result);
     } // checkIT
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Lithuania.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
-    public String checkLT(String vatId) { 
+     */
+    public String checkLT(String vatId) {
         //      pos        0   1   2   3   4   5   6   7   8   9  10
-        int factor1[] = {  1,  2,  3,  4,  5,  6,  7,  8,  9,  1,  2}; 
-        int factor2[] = {  3,  4,  5,  6,  7,  8,  9,  1,  2,  3,  4}; 
+        int factor1[] = {  1,  2,  3,  4,  5,  6,  7,  8,  9,  1,  2};
+        int factor2[] = {  3,  4,  5,  6,  7,  8,  9,  1,  2,  3,  4};
         int sum = 0;
         String result = "?";
         int nlen = vatId.length() - 1; // number of digits to be checked
@@ -565,11 +563,11 @@ public class VATIdChecker extends BaseChecker {
         return result;
     } // checkLT
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Luxemburg.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkLU(String vatId) { // Luxemburg
         int nlen = 6; // number of digits to be checked
         setCheckRange(2 + nlen, 2);
@@ -577,25 +575,25 @@ public class VATIdChecker extends BaseChecker {
         try {
             number = Long.parseLong(vatId.substring(0, nlen));
         } catch (Exception exc) {
-        	return "?";
+            return "?";
         }
         int mod = 89;
         int result = (int) (number % mod);
         return (result < 10 ? "0" : "") + String.valueOf(result);
     } // checkLU
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Latvia.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
-    public String checkLV(String vatId) { 
+     */
+    public String checkLV(String vatId) {
         //      pos        0   1   2   3   4   5   6   7   8   9  10
-        int factor1[] = {  9,  1,  4,  8,  3, 10,  2,  5,  7,  6}; 
+        int factor1[] = {  9,  1,  4,  8,  3, 10,  2,  5,  7,  6};
         int sum = 0;
         String result = "?";
         int nlen = vatId.length() - 1; // number of digits to be checked
-        if (nlen == 10) { 
+        if (nlen == 10) {
             char ch0 = vatId.charAt(0);
             if (ch0 >= '4') { // legal persons
                 for (int ipos = nlen - 1; ipos >= 0; ipos --) {
@@ -619,7 +617,7 @@ public class VATIdChecker extends BaseChecker {
                     // if S%11=4 and N(1)=9, S=S-45
                     // if S%11=4, C(1)=4-S%11
                     // if S%11>4, C(1)=14-S%11
-                    // if S%11<4, C(1)=3-S%11                       
+                    // if S%11<4, C(1)=3-S%11
             } else { // natural persons: check birth date ddMMyynnnnn
                 if (false) {
                 } else {
@@ -631,16 +629,16 @@ public class VATIdChecker extends BaseChecker {
         return result;
     } // checkLV
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Malta.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkMT(String vatId) { // Malta
         int nlen = 6; // number of digits to be checked
         setCheckRange(2 + nlen, 2);
         //      pos       0   1   2   3   4   5   6
-        int factor[] = {  3,  4,  6,  7,  8,  9}; 
+        int factor[] = {  3,  4,  6,  7,  8,  9};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 0; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
@@ -652,16 +650,16 @@ public class VATIdChecker extends BaseChecker {
         return (result < 10 ? "0" : "") + String.valueOf(result);
     } // checkMT
 
-    /** Checks the VAT Id numbers used in 
-     *  the Netherlands (Omzetbelastingnummer, OB nummer)   
+    /** Checks the VAT Id numbers used in
+     *  the Netherlands (Omzetbelastingnummer, OB nummer)
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkNL(String vatId) { // Nederlands
         int nlen = 8; // number of digits to be checked
         setCheckRange(2 + nlen, 1);
         //      pos       0   1   2   3   4   5   6   7
-        int factor[] = {  9,  8,  7,  6,  5,  4,  3,  2}; 
+        int factor[] = {  9,  8,  7,  6,  5,  4,  3,  2};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 0; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
@@ -673,16 +671,16 @@ public class VATIdChecker extends BaseChecker {
         return String.valueOf(result);
     } // checkNL
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Poland.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkPL(String vatId) { // Portugal
         int nlen = 9; // number of digits to be checked
         //      pos       0   1   2   3   4   5   6   7   8
-        int factor[] = {  6,  5,  7,  2,  3,  4,  5,  6,  7}; 
-    //  int factor[] = {  7,  6,  5,  4,  3,  2,  7,  5,  6}; 
+        int factor[] = {  6,  5,  7,  2,  3,  4,  5,  6,  7};
+    //  int factor[] = {  7,  6,  5,  4,  3,  2,  7,  5,  6};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 0; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
@@ -694,15 +692,15 @@ public class VATIdChecker extends BaseChecker {
         return (sum == 11 ? "?" : String.valueOf(result));
     } // checkPL
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Portugal.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkPT(String vatId) { // Portugal
         int nlen = 8; // number of digits to be checked
-        //      pos       0   1   2   3   4   5   6   7  
-        int factor[] = {  9,  8,  7,  6,  5,  4,  3,  2}; 
+        //      pos       0   1   2   3   4   5   6   7
+        int factor[] = {  9,  8,  7,  6,  5,  4,  3,  2};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 0; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
@@ -714,12 +712,12 @@ public class VATIdChecker extends BaseChecker {
         return String.valueOf(result);
     } // checkPT
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Romania.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
-    public String checkRO(String vatId) { 
+     */
+    public String checkRO(String vatId) {
         //      pos        0   1   2   3   4   5   6   7   8   9  10  11
         int factor1[] = {  7,  5,  3,  2,  1,  7,  5,  3,  2}; // 7,5,3,2,1,7,5,3,2
         int factor2[] = {  2,  7,  9,  1,  4,  6,  3,  5,  8,  2,  7,  9}; // 2,7,9,1,4,6,3,5,8,2,7,9)
@@ -750,24 +748,24 @@ public class VATIdChecker extends BaseChecker {
                 sum = 1;
             }
             result = String.valueOf(sum);
-        } 
+        }
         return result;
     } // checkRO
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Sweden.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
     public String checkSE(String vatId) { // Sverige
         int nlen = 9; // number of digits to be checked
-        //      pos       0   1   2   3   4   5   6   7   8 
-        int factor[] = {  2,  1,  2,  1,  2,  1,  2,  1,  2}; 
+        //      pos       0   1   2   3   4   5   6   7   8
+        int factor[] = {  2,  1,  2,  1,  2,  1,  2,  1,  2};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 0; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
             int prod = digit * factor[ipos];
-            sum += prod % 10 + (int) prod / 10; 
+            sum += prod % 10 + (int) prod / 10;
         } // for ipos
         sum = 10 - sum % 10;
         int result = (sum >= 10) ? 0 : sum;
@@ -776,17 +774,17 @@ public class VATIdChecker extends BaseChecker {
         //    + vatId.substring(10,12);
     } // checkSE
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Slovenia.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
         // S=8*N(3)+7*N(4)+6*N(5)+5*N(6)+4*N(7)+3*N(8)+2*N(9)
         // C(1)=11-S%11; if C(1)=10, C(1)=0; if C(1)=11, C(1)=1
-    public String checkSI(String vatId) { 
+    public String checkSI(String vatId) {
         int nlen = 7; // number of digits to be checked
-        //      pos       0   1   2   3   4   5   6 
-        int factor[] = {  8,  7,  6,  5,  4,  3,  2}; 
+        //      pos       0   1   2   3   4   5   6
+        int factor[] = {  8,  7,  6,  5,  4,  3,  2};
         int sum = 0;
         for (int ipos = nlen - 1; ipos >= 0; ipos --) {
             int digit = Character.digit(vatId.charAt(ipos), 10);
@@ -798,19 +796,19 @@ public class VATIdChecker extends BaseChecker {
         return (sum == 11 ? "?" : String.valueOf(result));
     } // checkSI
 
-    /** Checks the VAT Id numbers used in 
+    /** Checks the VAT Id numbers used in
      *  Slovakia.
      *  @param vatId number to be checked
      *  @return new VAT Id number, eventually with correct check digit
-     */ 
+     */
         /*
         SK: VAT Number/DIČ
         S=8*N(3)+7*N(4)+6*N(5)+5*N(6)+4*N(7)+3*N(8)+2*N(9)
-        C(1)=11-S%11; if C(1)=10, C(1)=0; if C(1)=11, C(1)=1    
-        */      
-    public String checkSK(String vatId) { 
-        //      pos        0   1   2   3   4   5   6  
-        int factor1[] = {  8,  7,  6,  5,  4,  3,  2 }; 
+        C(1)=11-S%11; if C(1)=10, C(1)=0; if C(1)=11, C(1)=1
+        */
+    public String checkSK(String vatId) {
+        //      pos        0   1   2   3   4   5   6
+        int factor1[] = {  8,  7,  6,  5,  4,  3,  2 };
         int sum = 0;
         String result = "?";
         int nlen = vatId.length() - 1; // number of digits to be checked
@@ -834,7 +832,7 @@ public class VATIdChecker extends BaseChecker {
         } else if (nlen == 10) {
             sum = 9 - (11 - sum % 11) % 10;
             result = String.valueOf(sum);
-        } 
+        }
         // else result = "?"
         return result;
     } // checkSK
@@ -847,8 +845,8 @@ public class VATIdChecker extends BaseChecker {
     public String check(String rawNumber) { // calling by reflection
         String result = null;
         String vatId = trim(rawNumber);
-    	int nlen = vatId.length();
-	    setCheckRange(nlen - 1, 1);
+        int nlen = vatId.length();
+        setCheckRange(nlen - 1, 1);
         if (nlen >= 8) {
             try {
                 String isoCode = vatId.substring(0, 2);
@@ -857,7 +855,7 @@ public class VATIdChecker extends BaseChecker {
                     // call the country-specific check routine by reflection
                     Method method = this.getClass().getMethod("check" + isoCode, new Class[] { digits.getClass() } );
                     String newCheck = (String) method.invoke(this, new Object[] { digits }); // returns the computed checksum
-		        	result = checkResponse(rawNumber, format(vatId), getRangeStart(), getRangeLength(), newCheck);
+                    result = checkResponse(rawNumber, format(vatId), getRangeStart(), getRangeLength(), newCheck);
                 } else {
                     result = checkResponse(rawNumber, BaseChecker.WRONG_COUNTRY);
                 }
@@ -875,13 +873,13 @@ public class VATIdChecker extends BaseChecker {
      *  <ul>
      *  <li>args[0] = name of file containing single VAT Ids on a line</li>
      *  </ul>
-     */     
-    public static void main (String args[]) { 
-    	(new VATIdChecker()).process(args);
+     */
+    public static void main (String args[]) {
+        (new VATIdChecker()).process(args);
     } // main
 
 } // VATIdChecker
-/* 
+/*
 ATU13585627
 ATU15249103
 ATU83256904
@@ -934,7 +932,7 @@ CZ00576425
 CZ15270076
 CZ15503020
 CZ17046009
-CZ25251759 
+CZ25251759
 CZ25358839
 CZ25401092
 CZ25435400
@@ -950,10 +948,10 @@ CZ27123979
 CZ27253937
 CZ27471489
 CZ27697665
-CZ45273227 
+CZ45273227
 CZ46963642
 CZ46966170
-CZ47671386 
+CZ47671386
 CZ47717076
 CZ48909173
 CZ501225107
@@ -962,7 +960,7 @@ CZ5703142225
 CZ60193336
 CZ60793414
 CZ61064025
-CZ6303170522 
+CZ6303170522
 CZ6311081524
 CZ63979632
 CZ63980541
@@ -981,7 +979,7 @@ DE187355628
 DE811207273
 
 DK10572649
-DK13585628 
+DK13585628
 
 EE100013434
 EE100069996
@@ -1212,7 +1210,7 @@ MT14507936
 MT15900836
 MT17157330
 MT17207012
-MT17510006 
+MT17510006
 MT17673409
 MT17707511
 MT18154313
@@ -1221,7 +1219,7 @@ NL025836729B01
 NL123456782B12
 
 PL8567349219
-PL9511287906 
+PL9511287906
 
 PT136695973
 PT195437250
@@ -1232,13 +1230,13 @@ RO13529500
 RO15052199
 RO15957066
 RO17499739
-RO6276774       
-RO6519490 
+RO6276774
+RO6519490
 RO15957066
 RO3553943
 RO11723763
 RO15957066
-RO1879871       
+RO1879871
 RO20624890
 RO21432303
 RO1630615123457
@@ -1255,12 +1253,12 @@ SK2020052837
 SK2020237857
 SK2020446054
 SK2021546879
-SK2021947081 
+SK2021947081
 SK2022042968
 SK2022119110
 SK2022119572
 SK2022124225
-SK2022215217 
+SK2022215217
 SK2022237833
 WRONGVATID
 */

@@ -3,6 +3,7 @@
     Stylesheet for the Java code of account checker frame,
     and special German bank account check methods
     @(#) $Id: account.xsl 78 2009-02-05 17:11:47Z gfis $
+    2017-05-29: javadoc 1.8
     2014-01-20: LF and no tabs
     2009-01-15: call checkResponse and highlight check digits in HTML
     2008-11-14: test cases convention
@@ -57,7 +58,7 @@
  */
 package org.teherba.checkdig.account;
 import  org.teherba.checkdig.BaseChecker;
-import  org.teherba.checkdig.blz.BlzCheckMap;
+import  org.teherba.checkdig.account.BlzCheckMap;
 import  java.io.BufferedReader;
 import  java.io.FileReader;
 import  java.lang.reflect.Method;
@@ -216,6 +217,8 @@ public class DeAccountChecker extends BaseChecker {
 
     //-------------------------------------------------------------------------
     /** Special method 24
+     *  @param account account number to be tested
+     *  @return corrected number
      */
     public String method_24_B(String account) {
         StringBuffer result = new StringBuffer(account);
@@ -262,6 +265,10 @@ public class DeAccountChecker extends BaseChecker {
     } // method_24_B
 
     /** Auxiliary method 52_53_common
+     *  @param method method to be used
+     *  @param account account number to be tested
+     *  @param blz Bankleitzahl
+     *  @return corrected number
      */
     public String method_52_53_common(int method, String account, String blz) {
         StringBuffer result = new StringBuffer(account);
@@ -323,18 +330,24 @@ public class DeAccountChecker extends BaseChecker {
     } // method_52_53_common
 
     /** Special method 52
+     *  @param account account number to be tested
+     *  @return corrected number
      */
     public String method_52_A(String account) {
         return method_52_53_common(52, account, getBLZ());
     } // method_52_A
 
     /** Special method 53
+     *  @param account account number to be tested
+     *  @return corrected number
      */
     public String method_53_A(String account) {
         return method_52_53_common(53, account, getBLZ());
     } // method_53_A
 
     /** Special method 87
+     *  @param account account number to be tested
+     *  @return corrected number
      */
     public String method_87_A(String account) {
         StringBuffer result = new StringBuffer(account);

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--äöüÄÖÜß
+    Specific data for a German Bankleitzahl
+    @(#)$Id: IBANDetailBean.xml 50 2008-09-26 15:18:32Z gfis $
+    2014-01-20, Georg Fischer
+-->
+<!--
+ * Copyright 2006 Dr. Georg Fischer <punctum at punctum dot kom>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<record name="BlzDetail" version="1.0"
+        xmlns="http://www.teherba.org/2006/xtrans/Record"
+        package="org.teherba.checkdig.account"
+        type="Bean" code="ASCII" length="18"
+        rem="Attribute einer deutschen Bankleitzahl"
+        sql="true" >
+    <field name="blz"           rem="Bankleitzahl"              type="String" key="1" />
+    <field name="fuehrend"      rem="1(2) = (nicht) führend"    type="String"     />
+    <field name="institut"      rem="Kreditinstitut"            type="String"     />
+    <field name="plz"           rem="Postleitzahl"              type="String"     />
+    <field name="ort"           rem="Ort"                       type="String"     />
+    <field name="inst"          rem="Institutskurzname"         type="String"     />
+    <field name="instNr"        rem="Institutsnummer"           type="String"     />
+    <field name="bic"           rem="Bank Identifier Code"      type="String"     />
+    <field name="pzMethode"     rem="Prüfziffernmethode"        type="String"     />
+    <field name="satzNr"        rem="seq  Satznummer"           type="String" key="2"    />
+    <field name="aendKnz"       rem="(A)dd,(D)el,(U)nch,(M)od"  type="String"     />
+    <field name="loeschung"     rem="1 (0) fuer zuk  Löschung"  type="String"     />
+    <field name="folgeBlz"      rem="Folge-BLZ (wenn Löschg=1)" type="String"     />
+    <field name="ibanRegel"     rem="Nummer der IBAN-Regel"     type="String"     />
+    <field name="ibanVersion"   rem="Version der Regel"         type="String"     />
+    <field name="okey"          rem="original access key"       type="String"     />
+</record>

@@ -1,6 +1,7 @@
 /*  ISSNChecker.java - check International Standard Serial Numbers
     either ISSN-10, or ISSN-13 starting with 977 ("serial land" code).
     @(#) $Id: ISSNChecker.java 77 2009-01-16 08:14:16Z gfis $
+    2016-10-12: less imports
     2009-01-09: result of 'check' is: new (formatted) number, space, [questionmark|exclamationmark]returnstring
     2008-11-03: Georg Fischer: copied from ISINChecker.java
 
@@ -28,8 +29,6 @@
 package org.teherba.checkdig;
 import  org.teherba.checkdig.BaseChecker;
 import  org.teherba.checkdig.EAN13Checker;
-import  java.io.BufferedReader;
-import  java.io.FileReader;
 
 /** Class for the checkdigit in International Standard Serial Numbers (ISSNs),
  *  either ISSN-10, or ISSN-13 starting with 977 ("serial land" code).

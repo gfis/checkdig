@@ -1,0 +1,3733 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!--
+ * Copyright 2006 Dr. Georg Fischer <punctum at punctum dot kom>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<methods>
+    <linklist>
+        <description>
+            Prüzifferberechnungsmethoden 
+            DEUTSCHE BUNDESBANK 
+            Z 11-5
+            Prüfzifferberechnungsmethoden
+            zur Prüfung von Kontonummern auf ihre Richtigkeit
+            (Stand: Juli 2003)
+            Methoden 
+            00, 
+            01, 
+            02, 
+            03, 
+            04, 
+            05, 
+            06, 
+            07, 
+            08, 
+            09, 
+            10, 
+            11, 
+            12, 
+            13, 
+            14, 
+            15, 
+            16, 
+            17, 
+            18, 
+            19, 
+            20, 
+            21, 
+            22, 
+            23, 
+            24, 
+            25, 
+            26, 
+            27, 
+            28, 
+            29, 
+            30, 
+            31, 
+            32, 
+            33, 
+            34, 
+            35, 
+            36, 
+            37, 
+            38, 
+            39, 
+            40, 
+            41, 
+            42, 
+            43, 
+            44, 
+            45, 
+            46, 
+            47, 
+            48, 
+            49, 
+            50, 
+            51, 
+            52, 
+            53, 
+            54, 
+            55, 
+            56, 
+            57, 
+            58, 
+            59, 
+            60, 
+            61, 
+            62, 
+            63, 
+            64, 
+            65, 
+            66, 
+            67, 
+            68, 
+            69, 
+            70, 
+            71, 
+            72, 
+            73, 
+            74, 
+            75, 
+            76, 
+            77, 
+            78, 
+            79, 
+            80, 
+            81, 
+            82, 
+            83, 
+            84, 
+            85, 
+            86, 
+            87, 
+            88, 
+            89, 
+            90, 
+            91, 
+            92, 
+            93, 
+            94, 
+            95, 
+            96, 
+            97, 
+            98, 
+            99, 
+            A0, 
+            A1, 
+            A2, 
+            A3, 
+            A4, 
+            A5, 
+            A6, 
+            A7, 
+            A8, 
+        </description>
+    </linklist>
+
+    <method id="00">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1" />
+        <description>
+            00
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2
+            Die Stellen der Kontonummer sind von rechts nach links mit
+            den Ziffern 2, 1, 2, 1, 2 usw. zu multiplizieren. Die jeweiligen
+            Produkte werden addiert, nachdem jeweils aus den
+            zweistelligen Produkten die Quersumme gebildet wurde
+            (z. B. Produkt 16 = Quersumme 7). Nach der Addition
+            bleiben außer der Einerstelle alle anderen Stellen
+            unberücksichtigt. Die Einerstelle wird von dem Wert 10
+            subtrahiert. Das Ergebnis ist die Prüfziffer (10. Stelle der
+            Kontonummer). Ergibt sich nach der Subtraktion der
+            Rest 10, ist die Prüfziffer 0.
+        </description>
+        <test id="00" account="9290701" result="true" />
+        <test id="00" account="539290858"   result="true" />
+        <test id="00" account="1501824" result="true" />
+        <test id="00" account="1501832" result="true" />
+    </method>
+
+    <method id="01">
+        <modulus base="10" />
+        <weights list="3 7 1 3 7 1 3 7" />
+        <description>
+            01
+            Modulus 10, Gewichtung 3, 7, 1, 3, 7, 1, 3, 7, 1
+            Die Stellen der Kontonummer sind von rechts nach links mit
+            den Ziffern 3, 7, 1, 3, 7, 1 usw. zu multiplizieren. Die jeweiligen
+            Produkte werden addiert. Nach der Addition bleiben
+            außer der Einerstelle alle anderen Stellen unberücksichtigt.
+            Die Einerstelle wird von dem Wert 10 subtrahiert. Das
+            Ergebnis ist die Prüfziffer (10. Stelle der Kontonummer).
+            Ergibt sich nach der Subtraktion der Rest 10, ist die
+            Prüfziffer 0.
+        </description>
+    </method>
+
+    <method id="02">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 8 9" />
+        <description>
+            02
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8, 9, 2
+            Die Stellen der Kontonummer sind von rechts nach links mit
+            den Ziffern 2, 3, 4, 5, 6, 7, 8, 9, 2 zu multiplizieren. Die jeweiligen
+            Produkte werden addiert. Die Summe ist durch 11 zu
+            dividieren. Der verbleibende Rest wird vom Divisor (11) subtrahiert.
+            Das Ergebnis ist die Prüfziffer. Verbleibt nach der
+            Division durch 11 kein Rest, ist die Prüfziffer 0. Ergibt sich
+            als Rest 1, ist die Prüfziffer zweistellig und kann nicht
+            verwendet werden. Die Kontonummer ist dann nicht
+            verwendbar.
+        </description>
+    </method>
+
+    <method id="03">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1" />
+        <like method="01" />
+        <description>
+            03
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2
+            Die Berechnung erfolgt wie bei Verfahren 01.
+        </description>
+    </method>
+
+    <method id="04">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 2 3" />
+        <like method="02" />
+        <description>
+            04
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 2, 3, 4
+            Die Berechnung erfolgt wie bei Verfahren 02.
+        </description>
+    </method>
+
+    <method id="05">
+        <modulus base="10" />
+        <weights list="7 3 1 7 3 1 7 3" />
+        <like method="01" />
+        <description>
+            05
+            Modulus 10, Gewichtung 7, 3, 1, 7, 3, 1, 7, 3, 1
+            Die Berechnung erfolgt wie bei Verfahren 01.
+        </description>
+    </method>
+
+    <method id="06">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7" />
+        <description>
+            06
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7 (modifiziert)
+            Die einzelnen Stellen der Kontonummer sind von rechts
+            nach links mit den Ziffern 2, 3, 4, 5, 6, 7, 2, 3 ff. zu
+            multiplizieren. Die jeweiligen Produkte werden addiert. Die
+            Summe ist durch 11 zu dividieren. Der verbleibende Rest
+            wird vom Divisor (11) subtrahiert. Das Ergebnis ist die
+            Prüfziffer. Ergibt sich als Rest 1, findet von dem
+            Rechenergebnis 10 nur die Einerstelle (0) als Prüfziffer
+            Verwendung. Verbleibt nach der Division durch 11 kein
+            Rest, dann ist auch die Prüfziffer 0. Die Stelle 10 der
+            Kontonummer ist die Prüfziffer.
+        </description>
+        <test id="06" account="94012341"    result="true" />
+        <test id="06" account="5073321010"  result="true" />
+    </method>
+
+    <method id="07">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 8 9 1" />
+        <like method="02" />
+        <description>
+            07
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8, 9, 10
+            Die Berechnung erfolgt wie bei Verfahren 02.
+        </description>
+    </method>
+
+    <method id="08">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1 2" />
+        <like method="00" />
+        <description>
+            08
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2 (modifiziert)
+            Die Berechnung erfolgt wie bei Verfahren 00, jedoch erst ab
+            der Kontonummer 60 000.
+        </description>
+    </method>
+
+    <method id="09">
+        <description>
+            09
+            Keine Prüfzifferberechnung
+        </description>
+    </method>
+
+    <method id="10">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 8 9 10" />
+        <like method="06" />
+        <description>
+            10
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8, 9, 10 (modifiziert)
+            Die Berechnung erfolgt wie bei Verfahren 06.
+        </description>
+        <test id="10" account="12345008"    result="true" />
+        <test id="10" account="87654008"    result="true" />
+    </method>
+
+    <method id="11">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 8 9 10" />
+        <like method="06" />
+        <description>
+            11
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8, 9, 10 (modifiziert)
+            Die Berechnung erfolgt wie bei Verfahren 06. Beim Rechenergebnis
+            10 wird die Null jedoch durch eine 9 ersetzt.
+        </description>
+    </method>
+
+    <method id="12">
+        <description>
+            12
+            frei
+        </description>
+    </method>
+
+    <method id="13">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2" />
+        <like method="00" />
+        <description>
+            13
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1
+            Die Berechnung erfolgt wie bei Verfahren 00. Die für die Berechnung
+            relevante sechsstellige Grundnummer befindet
+            sich in den Stellen 2 bis 7, die Prüfziffer in Stelle 8 (von links
+            nach rechts gezählt). Die zweistellige Unterkontonummer
+            (Stellen 9 und 10) darf nicht in das Prüfzifferberechnungsverfahren
+            einbezogen werden. Ist die Unterkontonummer
+            »00», kommt es vor, dass sie nicht angegeben ist. Ergibt
+            die erste Berechnung einen Prüfzifferfehler, wird empfohlen,
+            die Prüfzifferberechnung ein zweites Mal durchzuführen und
+            dabei die »gedachte« Unterkontonummer 00 an die Stellen
+            9 und 10 zu setzen und die vorhandene Kontonummer
+            vorher um zwei Stellen nach links zu verschieben.
+        </description>
+    </method>
+
+    <method id="14">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6" />
+        <like method="02" />
+        <description>
+            14
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Die Berechnung erfolgt wie bei Verfahren 02. Es ist jedoch
+            zu beachten, dass die zweistellige Kontoart nicht in das
+            Prüfzifferberechnungsverfahren mit einbezogen wird. Die
+            Kontoart belegt die Stellen 2 und 3, die zu berechnende
+            Grundnummer die Stellen 4 bis 9. Die Prüfziffer befindet
+            sich in Stelle 10.
+        </description>
+    </method>
+
+    <method id="15">
+        <modulus base="11" />
+        <weights list="2 3 4" />
+        <like method="06" />
+        <description>
+            15
+            Modulus 11, Gewichtung 2, 3, 4, 5
+            Die Kontonummer ist 10-stellig. Die Berechnung erfolgt wie
+            bei Verfahren 06; es ist jedoch zu beachten, dass nur die
+            Stellen 6 bis 9 in das Prüfzifferberechnungsverfahren einbezogen
+            werden. Die Stelle 10 der Kontonummer ist die Prüfziffer.
+        </description>
+    </method>
+
+    <method id="16">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 2 3" />
+        <like method="06" />
+        <description>
+            16
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 2, 3, 4
+            Die Berechnung erfolgt wie bei Verfahren 06. Sollte sich jedoch
+            nach der Division der Rest 1 ergeben, so ist die Kontonummer
+            unabhängig vom eigentlichen
+            Berechnungsergebnis richtig, wenn die Ziffern an 10. und 9.
+            Stelle identisch sind.
+        </description>
+    </method>
+
+    <method id="17">
+        <modulus base="11" />
+        <weights list="1 2 1 2 1" />
+        <example id="17">
+            Beispiel:
+            Stellennr.: K S S S S S S P U U
+            Kontonummer: 0 4 4 6 7 8 6 0 4 0
+            Gewichtung: 1 2 1 2 1 2
+            4+ 8+ 6+ 5+ 8+ 3 = 34
+            Q Q
+            Q = Quersumme nur der jeweiligen Stellen lt. Beschreibung
+            34 - 1 = 33
+            33 : 11 = 3, Rest 0
+            0 = Prüfziffer
+        </example>
+        <description>
+            17
+            Modulus 11, Gewichtung 1, 2, 1, 2, 1, 2
+            Die Kontonummer ist 10-stellig mit folgendem Aufbau;
+            KSSSSSSPUU
+            K = Kontoartziffer
+            S = Stammnummer
+            P = Prüfziffer
+            U = Unterkontonummer
+            Die für die Berechnung relevante 6-stellige Stammnummer
+            (Kundennummer) befindet sich in den Stellen 2 bis 7 der
+            Kontonummer, die Prüfziffer in der Stelle 8. Die einzelnen
+            Stellen der Stammnummer (S) sind von links nach rechts
+            mit den Ziffern 1, 2, 1, 2, 1, 2 zu multiplizieren. Die jeweiligen
+            Produkte sind zu addieren, nachdem aus eventuell zweistelligen
+            Produkten der 2., 4. und 6. Stelle der Stammnummer
+            die Quersumme gebildet wurde. Von der Summe
+            ist der Wert "1" zu subtrahieren. Das Ergebnis ist dann
+            durch 11 zu dividieren. Der verbleibende Rest wird von 10
+            subtrahiert. Das Ergebnis ist die Prüfziffer. Verbleibt nach
+            der Division durch 11 kein Rest, ist die Prüfziffer 0.
+        </description>
+        <test id="17" account="0446786040"  result="true" />
+    </method>
+
+    <method id="18">
+        <modulus base="10" />
+        <weights list="3 9 7 1 3 9 7 1" />
+        <like method="01" />
+        <description>
+            18
+            Modulus 10, Gewichtung 3, 9, 7, 1, 3, 9, 7, 1, 3
+            Die Berechnung erfolgt wie bei Verfahren 01.
+        </description>
+    </method>
+
+    <method id="19">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 8 9" />
+        <like method="06" />
+        <description>
+            19
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8, 9, 1
+            Die Berechnung und mögliche Ergebnisse entsprechen
+            dem Verfahren 06.
+        </description>
+        <test id="19" account="0240334000"  result="true" />
+        <test id="19" account="0200520016"  result="true" />
+    </method>
+
+    <method id="20">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 8 9 3" />
+        <like method="06" />
+        <description>
+            20
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8, 9, 3 (modifiziert)
+            Die Berechnung und mögliche Ergebnisse entsprechen
+            dem Verfahren 06.
+        </description>
+    </method>
+
+    <method id="21">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1 2" />
+        <like method="00" />
+        <description>
+            21
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2 (modifiziert)
+            Die Berechnung erfolgt wie bei Verfahren 00. Nach der
+            Addition der Produkte werden neben der Einerstelle jedoch
+            alle Stellen berücksichtigt, indem solange Quersummen
+            gebildet werden, bis ein einstelliger Wert verbleibt. Die
+            Differenz zwischen diesem Wert und dem Wert 10 ist die
+            Prüfziffer.
+        </description>
+    </method>
+
+    <method id="22">
+        <modulus base="10" />
+        <weights list="3 1 3 1 3 1 3 1" />
+        <description>
+            22
+            Modulus 10, Gewichtung 3, 1, 3, 1, 3, 1, 3, 1, 3
+            Die einzelnen Stellen der Kontonummer sind von rechts
+            nach links mit den Ziffern 3, 1, 3, 1 usw. zu multiplizieren.
+            Von den jeweiligen Produkten bleiben die Zehnerstellen
+            unberücksichtigt. Die verbleibenden Zahlen (Einerstellen)
+            werden addiert. Die Differenz bis zum nächsten Zehner ist
+            die Prüfziffer.
+        </description>
+    </method>
+
+    <method id="23">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6" />
+        <like method="16" />
+        <description>
+            23
+            (geändert
+            zum
+            03.09.2001)
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Das Berechnungsverfahren entspricht dem der Kennziffer
+            16, wird jedoch nur auf die ersten sechs Ziffern der
+            Kontonummer angewandt.
+            Die Prüfziffer befindet sich an der 7. Stelle der Kontonummer.
+            Die Stellen 8 bis 10 bleiben ungeprüft.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 10
+            Kontonummer: x x x x x x P x x x
+            Gewichtung: 7 6 5 4 3 2Summe geteilt durch 11 = x, Rest
+            Rest = 0 Prüfziffer = 0
+            Rest = 1 Prüfziffer = 6. und 7. Stelle
+            der Kontonummer
+            müssen identisch
+            sein
+            Rest = 2 bis 10 Prüfziffer = 11 minus Rest
+        </description>
+    </method>
+
+    <method id="24">
+        <modulus base="11" />
+        <weights list="1 2 3 1 2 3 1 2" />
+        <except>
+        </except>
+        <example id="24">
+            Beispiele:
+             PStellennr.: 1 2 3 4 5 6 7 8 9 10
+            Kontonr.: 1 3 8 3 0 1
+            Ktonr.
+            umgesetzt:
+            0 0 0 0 1 3 8 3 0
+            Gewichtung: 1 2 3 1 2
+            1 6 24 3 0
+            Gewich- 1 2 3 1 2
+            tungsfaktor 2+8+27+4+2 = 21
+            11 1 = Prüfziffer
+            R5
+            Stellennr.: 1 2 3 4 5 6 7 8 9 10
+            Kontonr.: 1 3 0 6 1 1 8 6 0 5
+            Gewichtung: 1 2 3 1 2 3 1 2 3
+            1 6 0 6 2 3 8 12 0
+            Gewich- 1 2 3 1 2 3 1 2 3
+            tungsfaktor 2+8+3+7+4+6+9+14+3 = 45
+            11 5 = Prüfziffer
+            R3
+             Stellennr.: 1 2 3 4 5 6 7 8 9 10
+            Kontonr.: 3 3 0 7 1 1 8 6 0 8
+            Ktonr.
+            umgesetzt:
+            0 3 0 7 1 1 8 6 0
+            Gewichtung: 1 2 3 1 2 3 1 2
+            3 0 21 1 2 24 6 0
+            Gewich- 1 2 3 1 2 3 1 2
+            tungsfaktor 4+2+24+2+4+27+7+2 = 28
+            11 11 8 = Prüfziffer
+            R2 R5
+            Stellennr.: 1 2 3 4 5 6 7 8 9 10
+            Kontonr.: 9 3 0 7 1 1 8 6 0 3
+            Ktonr.
+            umgesetzt:
+            0 0 0 7 1 1 8 6 0
+            Gewichtung: 1 2 3 1 2 3
+            7 2 3 8 12 0
+            Gewich- 1 2 3 1 2 3
+            tungsfaktor 8+4+6+9+14+3 = 33
+            11 3 = Prüfziffer
+            R3
+        </example>
+        <description>
+            24
+            Modulus 11, Gewichtung 1, 2, 3, 1, 2, 3, 1, 2, 3
+            Die für die Berechnung relevanten Stellen der Kontonummer
+            befinden sich - von links nach rechts gelesen - in
+            den Stellen 1 - 9; die Prüfziffer in Stelle 10. Die Kontonummer
+            ist rechtsbündig zu interpretieren und ggf. mit
+            Nullen aufzufüllen. Die einzelnen Ziffern der Kontonummer
+            sind, beginnend mit der ersten Ziffer ungleich 0, von links
+            nach rechts bis einschließlich Stelle 9 mit den o. g.
+            Gewichtungsfaktoren zu multiplizieren. Zum jeweiligen
+            Produkt ist der zugehörige Gewichtungsfaktor zu addieren
+            (zum ersten Produkt +1, zum zweiten +2, zum dritten +3,
+            zum Vierten +1 usw.). Das jeweilige Ergebnis ist durch 11
+            zu dividieren (5 : 11 = 0 Rest 5). Die sich aus der Division
+            ergebenden Reste sind zu summieren. Die letzte Ziffer
+            dieser Summe ist die Prüfziffer.
+            Ausnahmen:
+            1) Eine ggf. in Stelle 1 vorhandene Ziffer 3, 4, 5 oder 6 wird
+            als 0 gewertet. Der o. g. Prüfalgorithmus greift erst ab
+            der ersten Stelle ungleich 0.
+            2) Eine ggf. in Stelle 1 vorhandene Ziffer 9 wird als 0 gewertet
+            und führt dazu, dass auch die beiden nachfolgenden
+            Ziffern in den Stellen 2 und 3 der Konto-
+            nummer als 0 gewertet werden müssen. Der o. g.
+            Prüfalgorithmus greift in diesem Fall also erst ab Stelle
+            4 der 10stelligen Kontonummer. Die Stelle 4 ist
+            ungleich 0.
+        </description>
+    </method>
+
+    <method id="25">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 8 9" />
+        <description>
+            25
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8, 9 ohne
+            Quersumme
+            Die einzelnen Stellen der Kontonummer sind von rechts
+            nach links mit den Ziffern 2, 3, 4, 5, 6, 7, 8 und 9 zu
+            multiplizieren. Die jeweiligen Produkte werden addiert. Die
+            Summe ist durch 11 zu dividieren. Der verbleibende Rest
+            wird vom Divisor subtrahiert. Das Ergebnis ist die
+            Prüfziffer. Verbleibt nach der Division durch 11 kein Rest,
+            ist die Prüfziffer = 0. Ergibt sich als Rest 1, so ist die
+            Prüfziffer
+            immer 0 und kann nur für die Arbeitsziffern 8 und 9
+            verwendet werden. Die Kontonummer ist für die Arbeitsziffern
+            0, 1, 2, 3, 4, 5, 6 und 7 dann nicht verwendbar.
+            Die Arbeitsziffer (Geschäftsbereich oder Kontoart) befindet
+            sich in der 2. Stelle (von links) des 10-stelligen Kontonummernfeldes.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 9 8 7 6 5 4 3 2
+            Die Kontonummer ist 9-stellig, wobei die 1. Stelle die
+            Arbeitsziffer und die letzte Stelle die Prüfziffer ist.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: 5 2 1 3 8 2 1 8 P
+            Gewichtung: 9 8 7 6 5 4 3 2
+            45 + 16 + 7 + 18 + 40 + 8 + 3 + 16 = 153
+            153 : 11 = 13, Rest 10
+            11 - 10 = 1, Prüfziffer = 1
+        </description>
+    </method>
+
+    <method id="26">
+        <like method="06" />
+        <description>
+            26
+            Modulus 11. Gewichtung 2, 3, 4, 5, 6, 7, 2
+            Die Kontonummer ist 10-stellig. Sind Stelle 1 und 2 mit
+            Nullen gefüllt ist die Kontonummer um 2 Stellen nach links
+            zu schieben und Stelle 9 und 10 mit Nullen zu füllen. Die
+            Berechnung erfolgt wie bei Verfahren 06 mit folgender
+            Modifizierung: für die Berechnung relevant sind die Stellen 1
+            - 7; die Prüfziffer steht in Stelle 8. Bei den Stellen 9 und 10
+            handelt es sich um eine Unterkontonummer, welche für die
+            Berechnung nicht berücksichtigt wird.
+        </description>
+        <test id="26" account="0520309001"  result="true" />
+        <test id="26" account="1111118111"  result="true" />
+        <test id="26" account="0005501024"  result="true" />
+    </method>
+
+    <method id="27">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1 2" />
+        <like method="00" />
+        <example id="27">
+            Beispiel:
+            Kontonummer
+            2 8 4 7 1 6 9 4 8 P (P = Prüfziffer)
+            1 4 3 2 1 4 3 2 1 (Transf.-Zeile)
+            Transformationstabelle:
+            Ziffer: 0 1 2 3 4 5 6 7 8 9
+            Zeile 1: 0 1 5 9 3 7 4 8 2 6
+            Zeile 2: 0 1 7 6 9 8 3 2 5 4
+            Zeile 3: 0 1 8 4 6 2 9 5 7 3
+            Zeile 4: 0 1 2 3 4 5 6 7 8 9
+            Von rechts nach links:
+            Ziffer 8 wird 2 aus Transformationszeile 1
+            Ziffer 4 wird 9 aus Zeile 2
+            Ziffer 9 wird 3 aus Zeile 3
+            Ziffer 6 wird 6 aus Zeile 4
+            Ziffer 1 wird 1 aus Zeile 1
+            Ziffer 7 wird 2 aus Zeile 2
+            Ziffer 4 wird 6 aus Zeile 3
+            Ziffer 8 wird 8 aus Zeile 4
+            Ziffer 2 wird 5 aus Zeile 1
+            ___
+            Summe 42
+            ===
+            Die Einerstelle wird vom Wert 10 subtrahiert. Das Ergebnis
+            ist die Prüfziffer, in unserem Beispiel also 10 – 2 =
+            Prüfziffer 8, die Kontonummer lautet somit 2847169488.
+        </example>
+        <description>
+            27
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2 (modifiziert)
+            Die Berechnung erfolgt wie bei Verfahren 00, jedoch nur für
+            die Kontonummern von 1 bis 999 999 999. Ab Konto
+            1 000 000 000 kommt das Prüfziffernverfahren M10H (iterierte
+            Transformation) zum Einsatz.
+            Es folgt die Beschreibung der iterierten Transformation:
+            Die Position der einzelnen Ziffern von rechts nach links
+            innerhalb der Kontonummer gibt die Zeile 1 bis 4 der
+            Transformationstabelle noch an. Aus ihr sind die
+            Übersetzungswerte zu summieren. Die Einerstelle wird von
+            10 subtrahiert. Die Differenz stellt die Prüfziffer dar.
+        </description>
+    </method>
+
+    <method id="28">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7" />
+        <like method="06" />
+        <description>
+            28
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8
+            Die Kontonummer ist 10-stellig. Die zweistellige
+            Unterkontonummer (Stellen 9 und 10) wird nicht in das
+            Berechnungsverfahren einbezogen. Die für die Berechnung
+            relevanten Stellen 1 bis 7 werden von rechts nach links mit
+            den Ziffern 2, 3, 4, 5, 6, 7, 8 multipliziert. Die 8. Stelle ist die
+            Prüfziffer. Die Berechnung und Ergebnisse entsprechen
+            dem Verfahren 06.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x P x x
+            Gewichtung: 8 7 6 5 4 3 2
+            Wird als Rest eine 0 oder eine 1 ermittelt, so lautet die Prüfziffer
+            0.
+        </description>
+        <test id="28" account="19999000"    result="true" />
+        <test id="28" account="9130000201"  result="true" />
+    </method>
+
+    <method id="29">
+        <example id="29">
+            Beispiel:
+            Kontonummer: 3 1 4 5 8 6 3 0 2 P (P = Prüfziffer)
+            Die Kontonummer ist 10-stellig. Die 10. Stelle ist die
+            Prüfziffer.
+            Zugeordnete Zeile der
+            Transformationstabelle: 1 4 3 2 1 4 3 2 1
+            Transformationstabelle:
+            Ziffer: 0 1 2 3 4 5 6 7 8 9
+            Zeile 1: 0 1 5 9 3 7 4 8 2 6
+            Zeile 2: 0 1 7 6 9 8 3 2 5 4
+            Zeile 3: 0 1 8 4 6 2 9 5 7 3
+            Zeile 4: 0 1 2 3 4 5 6 7 8 9
+            Transformation
+            von rechts nach
+            links: Ziffer 2 wird 5 (Tabelle: Zeile 1)
+            " 0 wird 0 (" " 2)
+            " 3 wird 4 (" " 3)
+            " 6 wird 6 (" " 4)
+            " 8 wird 2 (" " 1)
+            " 5 wird 8 (" " 2)
+            " 4 wird 6 (" " 3)
+            " 1 wird 1 (" " 4)
+            " 3 wird 9 (" " 1)
+            ___
+            Summe: 41 (Einerstelle = 1)
+            Subtraktion : (10 - 1) = 9 (= Prüfziffer)
+            Kontonummer mit Prüfziffer: 3 1 4 5 8 6 3 0 2 9
+        </example>
+        <description>
+            29
+            Modulus 10, iterierte Transformation
+            Die einzelnen Ziffern der Kontonummer werden über eine
+            Tabelle in andere Werte transformiert. Jeder einzelnen
+            Stelle der Kontonummer ist hierzu eine der Zeilen 1 bis 4
+            der Transformationstabelle fest zugeordnet. Die
+            Transformationswerte werden addiert. Die Einerstelle der
+            Summe wird von 10 subtrahiert.
+            Das Ergebnis ist die Prüfziffer. (Ist das Ergebnis = 10, ist die
+            Prüfziffer = 0).
+        </description>
+    </method>
+
+    <method id="30">
+        <modulus base="10" />
+        <weights list="2 0 0 0 0 1 2 1" />
+        <like method="00" />
+        <description>
+            30
+            Modulus 10, Gewichtung 2, 0, 0, 0, 0, 1, 2, 1, 2
+            Die letzte Stelle ist per Definition die Prüfziffer.
+            Die einzelnen Stellen der Kontonummer sind ab der ersten
+            Stelle von links nach rechts mit den Ziffern 2, 0, 0, 0, 0, 1, 2,
+            1, 2 zu multiplizieren. Die jeweiligen Produkte werden
+            addiert (ohne Quersummenbildung). Die weitere
+            Berechnung erfolgt wie bei Verfahren 00.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 2 0 0 0 0 1 2 1 2
+        </description>
+    </method>
+
+    <method id="31">
+        <modulus base="11" />
+        <weights list="9 8 7 6 5 4 3 2" />
+        <example id="31">
+            Beispiel:
+             P
+            Stellennr.: 1 2 3 4 5 6 7 8 9 10
+            Kontonr.: 0 2 6 3 1 6 0 1 6 5
+            Gewichtung: 1 2 3 4 5 6 7 8 9
+            0+ 4+ 18+ 12+ 5+ 36+ 0+ 8+ 54 = 137
+            137 : 11 = 12 Rest 5
+            5 = Prüfziffer
+        </example>
+        <description>
+            31
+            Modulus 11, Gewichtung 9, 8, 7, 6, 5, 4, 3, 2, 1
+            Die Kontonummer ist 10-stellig. Die Stellen 1 bis 9 der
+            Kontonummer sind von rechts nach links mit den Ziffern 9,
+            8, 7, 6, 5, 4, 3, 2, 1 zu multiplizieren. Die jeweiligen Produkte
+            werden addiert. Die Summe ist durch 11 zu dividieren. Der
+            verbleibende Rest ist die Prüfziffer. Verbleibt nach der
+            Division durch 11 kein Rest, ist die Prüfziffer 0. Ergibt sich
+            ein Rest 10, ist die Kontonummer falsch. Die Prüfziffer befindet
+            sich in der 10. Stelle der Kontonummer.
+        </description>
+        <test id="31" account="1000000524"  result="true" />
+        <test id="31" account="1000000583"  result="true" />
+    </method>
+
+    <method id="32">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6" />
+        <like method="06" />
+        <description>
+            32
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Die Kontonummer ist 10-stellig. Die Stellen 4 bis 9 der
+            Kontonummer werden von rechts nach links mit den Ziffern
+            2, 3, 4, 5, 6, 7 multipliziert. Die Berechnung und Ergebnisse
+            entsprechen dem Verfahren 06. Die Stelle 10 der
+            Kontonummer ist per Definition die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 7 6 5 4 3 2
+        </description>
+        <test id="32" account="9141405" result="true" />
+        <test id="32" account="1709107983"  result="true" />
+        <test id="32" account="0122116979"  result="true" />
+        <test id="32" account="0121114867"  result="true" />
+        <test id="32" account="9030101192"  result="true" />
+        <test id="32" account="9245500460"  result="true" />
+    </method>
+
+    <method id="33">
+        <modulus base="11" />
+        <weights list="2 3 4 5" />
+        <like method="06" />
+        <description>
+            33
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            Die Kontonummer ist 10-stellig. Die Stellen 5 bis 9 der
+            Kontonummer werden von rechts nach links mit den Ziffern
+            2, 3, 4, 5, 6 multipliziert. Die restliche Berechnung und
+            Ergebnisse entsprechen dem Verfahren 06. Die Stelle 10
+            der Kontonummer ist per Definition die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 6 5 4 3 2
+        </description>
+        <test id="33" account="48658"   result="true" />
+        <test id="33" account="84956"   result="true" />
+    </method>
+
+    <method id="34">
+        <modulus base="11" />
+        <weights list="2 4 8 5 10 9 7" />
+        <description>
+            34
+            Modulus 11, Gewichtung 2, 4, 8, 5, A, 9, 7 (A = 10)
+            Die Kontonummer ist 10-stellig. Es wird das
+            Berechnungsverfahren 28 mit modifizierter Gewichtung
+            angewendet. Die Gewichtung lautet 2, 4, 8, 5, A, 9, 7. Dabei
+            steht der Buchstabe A für den Wert 10.
+        </description>
+        <test id="34" account="9913000700"  result="true" />
+        <test id="34" account="9914001000"  result="true" />
+    </method>
+
+    <method id="35">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 8 9 1" />
+        <description>
+            35
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8, 9, 10
+            Die Kontonummer ist ggf. durch linksbündige
+            Nullenauffüllung 10-stellig darzustellen. Die 10. Stelle der
+            Kontonummer ist die Prüfziffer. Die Stellen 1 bis 9 der
+            Kontonummer werden von rechts nach links mit den Ziffern 2,
+            3, 4, ff. multipliziert. Die jeweiligen Produkte werden addiert.
+            Die Summe der Produkte ist durch 11 zu dividieren. Der
+            verbleibende Rest ist die Prüfziffer. Sollte jedoch der Rest 10
+            ergeben, so ist die Kontonummer unabhängig vom
+            eigentlichen Berechnungsergebnis richtig, wenn die Ziffern
+            an 10. und 9. Stelle identisch sind.
+            Beispiel 1: P
+            Stellennr.: 1 2 3 4 5 6 7 8 9 10
+            Kontonr.: 0 0 0 0 1 0 8 4 4 3
+            Gewichtung: 10 9 8 7 6 5 4 3 2
+            0+ 0+ 0+ 0+ 6+ 0+ 32+ 12+ 8 = 58
+            58 : 11 = 5 Rest 3
+            3 ist die Prüfziffer
+            Beispiel 2: P
+            Stellennr.: 1 2 3 4 5 6 7 8 9 10
+            Kontonr.: 0 0 0 0 1 0 1 5 9 9
+            Gewichtung: 10 9 8 7 6 5 4 3 2
+            0+ 0+ 0+ 0+ 6+ 0+ 4+ 15+ 18 = 43 : 11 Rest 10
+        </description>
+        <test id="35" account="0000108443"  result="true" />
+        <test id="35" account="0000107451"  result="true" />
+        <test id="35" account="0000102921"  result="true" />
+        <test id="35" account="0000102349"  result="true" />
+        <test id="35" account="0000101709"  result="true" />
+        <test id="35" account="0000101599"  result="true" />
+    </method>
+
+    <method id="36">
+        <modulus base="11" />
+        <weights list="2 4 8" />
+        <like method="06" />
+        <description>
+            36
+            Modulus 11, Gewichtung 2, 4, 8, 5
+            Die Kontonummer ist 10-stellig. Die Stellen 6 bis 9 der Kontonummer
+            werden von rechts nach links mit den Ziffern 2, 4, 8, 5
+            multipliziert. Die restliche Berechnung und Ergebnisse
+            entsprechen dem Verfahren 06. Die Stelle 10 der
+            Kontonummer ist per Definition die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 5 8 4 2
+        </description>
+        <test id="36" account="113178"  result="true" />
+        <test id="36" account="146666"  result="true" />
+    </method>
+
+    <method id="37">
+        <modulus base="11" />
+        <weights list="2 4 8 5 10" />
+        <like method="06" />
+        <description>
+            37
+            Modulus 11, Gewichtung 2, 4, 8, 5, A (A = 10)
+            Die Kontonummer ist 10-stellig. Die Stellen 5 bis 9 der Kontonummer
+            werden von rechts nach links mit den Faktoren 2, 4, 8,
+            5, A multipliziert. Dabei steht der Buchstabe A für den Wert 10.
+            Die restliche Berechnung und Ergebnisse entsprechen dem
+            Verfahren 06. Die Stelle 10 der Kontonummer ist per Definition
+            die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: A 5 8 4 2
+        </description>
+        <test id="37" account="624315"  result="true" />
+        <test id="37" account="632500"  result="true" />
+    </method>
+
+    <method id="38">
+        <modulus base="11" />
+        <weights list="2 4 8 5 10 9" />
+        <like method="06" />
+        <description>
+            38
+            Modulus 11, Gewichtung 2, 4, 8, 5, A, 9 (A = 10)
+            Die Kontonummer ist 10-stellig. Die Stellen 4 bis 9 der Kontonummer
+            werden von rechts nach links mit den Faktoren 2, 4, 8,
+            5, A, 9 multipliziert. Dabei steht der Buchstabe A für den
+            Wert 10. Die restliche Berechnung und Ergebnisse entsprechen
+            dem Verfahren 06. Die Stelle 10 der Kontonummer ist per
+            Definition die Prüfziffer.
+             Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 9 A 5 8 4 2
+        </description>
+        <test id="38" account="191919"  result="true" />
+        <test id="38" account="1100660" result="true" />
+    </method>
+
+    <method id="39">
+        <modulus base="11" />
+        <weights list="2 4 8 5 10 9 7" />
+        <like method="06" />
+        <description>
+            39
+            Modulus 11, Gewichtung 2, 4, 8, 5, A, 9, 7 (A = 10)
+            Die Kontonummer ist 10-stellig. Die Stellen 3 bis 9 der Kontonummer
+            werden von rechts nach links mit den Faktoren 2, 4, 8,
+            5, A, 9, 7 multipliziert. Dabei steht der Buchstabe A für den
+            Wert 10. Die restliche Berechnung und Ergebnisse
+            entsprechen dem Verfahren 06. Die Stelle 10 der
+            Kontonummer ist per Definition die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 7 9 A 5 8 4 2
+        </description>
+        <test id="39" account="200205"  result="true" />
+        <test id="39" account="10019400"    result="true" />
+    </method>
+
+    <method id="40">
+        <modulus base="11" />
+        <weights list="2 4 8 5 10 9 7 3 6" />
+        <like method="06" />
+        <description>
+            40
+            Modulus 11, Gewichtung 2, 4, 8, 5, A, 9, 7, 3, 6 (A = 10)
+            Die Kontonummer ist 10-stellig. Die Stellen 1 bis 9 der Kontonummer
+            werden von rechts nach links mit den Faktoren 2, 4, 8,
+            5, A, 9, 7, 3, 6. multipliziert. Dabei steht der Buchstabe A für den
+            Wert 10. Die restliche Berechnung und Ergebnisse
+            entsprechen dem Verfahren 06. Die Stelle 10 der
+            Kontonummer ist per Definition die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 6 3 7 9 A 5 8 4 2
+        </description>
+        <test id="40" account="1258345" result="true" />
+        <test id="40" account="3231963" result="true" />
+    </method>
+
+    <method id="41">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1 2" />
+        <like method="00" />
+        <except>
+        </except>
+        <description>
+            41
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2 (modifiziert)
+            Die Berechnung erfolgt wie bei Verfahren 00
+            Ausnahme:
+            Ist die 4. Stelle der Kontonummer (von links) = 9, so werden die
+            Stellen 1 bis 3 nicht in die Prüfzifferberechnung einbezogen.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 10
+            Kontonr.: 4 0 1 9 1 1 0 0 0 8
+            Ktonr.
+            umgesetzt
+            0 0 0 9 1 1 0 0 0 8
+            Gewichtung: 1 2 1 2 1 2
+            9 + 2 + 1 + 0 + 0 + 0 = 12
+            10 - 2 = 8
+            8 = Prüfziffer
+        </description>
+        <test id="41" account="4013410024"  result="true" />
+        <test id="41" account="4016660195"  result="true" />
+        <test id="41" account="0166805317"  result="true" />
+        <test id="41" account="4019310079"  result="true" />
+        <test id="41" account="4019340829"  result="true" />
+        <test id="41" account="4019151002"  result="true" />
+    </method>
+
+    <method id="42">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 8" />
+        <like method="06" />
+        <description>
+            42
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8, 9
+            Die Kontonummer ist 10-stellig. Die Stellen 2 bis 9 der Kontonummer
+            werden von rechts nach links mit den Ziffern 2, 3, 4, 5,
+            6, 7, 8, 9 multipliziert. Die restliche Berechnung und
+            Ergebnisse entsprechen dem Verfahren 06. Die Stelle 10 der
+            Kontonummer ist per Definition die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 9 8 7 6 5 4 3 2
+        </description>
+        <test id="42" account="59498"   result="true" />
+        <test id="42" account="59510"   result="true" />
+    </method>
+
+    <method id="43">
+        <modulus base="10" />
+        <weights list="1 2 3 4 5 6 7 8" />
+        <description>
+            43
+            Modulus 10, Gewichtung 1, 2, 3, 4, 5, 6, 7, 8, 9
+            Die Kontonummer ist 10-stellig. Die Stellen 1 bis 9 der
+            Kontonummer werden von rechts nach links mit den Faktoren
+            1, 2, 3, 4, 5, 6, 7, 8, 9 multipliziert. Die Summe der Produkte
+            wird durch den Wert 10 dividiert. Der Rest der Division wird vom
+            Divisor subtrahiert. Die Differenz ist die Prüfziffer. Ergibt die
+            Berechnung eine Differenz von 10, lautet die Prüfziffer 0. Die
+            Stelle 10 der Kontonummer ist per Definition die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 9 8 7 6 5 4 3 2 1
+        </description>
+        <test id="43" account="6135244" result="true" />
+        <test id="43" account="9516893476"  result="true" />
+    </method>
+
+    <method id="44">
+        <modulus base="11" />
+        <weights list="2 4 8 5 10 0 0 0 0" />
+        <like method="33" />
+        <description>
+            44
+            Modulus 11, Gewichtung 2, 4, 8, 5, A, 0, 0, 0, 0 (A = 10)
+            Die Berechnung erfolgt wie bei Verfahren 33.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 10
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 0 0 0 0 A 5 8 4 2 (A = 10)
+        </description>
+        <test id="44" account="889006"  result="true" />
+        <test id="44" account="2618040504"  result="true" />
+    </method>
+
+    <method id="45">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1" />
+        <like method="00" />
+        <except>
+        </except>
+        <description>
+            45
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2
+            Die Berechnung erfolgt wie bei Verfahren 00
+            Ausnahme:
+            Kontonummern, die an Stelle 1 (von links) eine 0 enthalten,
+            und Kontonummern, die an Stelle 5 eine 1 enthalten,
+            beinhalten keine Prüfziffer.
+            Keine Prüfziffer enthalten:
+            0994681254, 0000012340 (da 1. Stelle = 0)
+            1000199999, 0100114240 (da 5. Stelle = 1)
+        </description>
+        <test id="45" account="3545343232"  result="true" />
+        <test id="45" account="4013410024"  result="true" />
+    </method>
+
+    <method id="46">
+        <modulus base="11" />
+        <weights list="2 3 4 5" />
+        <like method="06" />
+        <description>
+            46
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            Die Kontonummer ist 10-stellig. Die Stellen 3 bis 7 der
+            Kontonummer werden von rechts nach links mit den Ziffern 2,
+            3, 4, 5, 6 multipliziert. Die restliche Berechnung und
+            Ergebnisse entsprechen dem Verfahren 06. Die Stelle 8 der
+            Kontonummer ist per Definition die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x P x x
+            Gewichtung: 6 5 4 3 2
+        </description>
+        <test id="46" account="0235468612"  result="true" />
+        <test id="46" account="0837890901"  result="true" />
+        <test id="46" account="1041447600"  result="true" />
+    </method>
+
+    <method id="47">
+        <modulus base="11" />
+        <weights list="2 3 4 5" />
+        <like method="06" />
+        <description>
+            47
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            Die Kontonummer ist 10-stellig. Die Stellen 4 bis 8 der Kontonummer
+            werden von rechts nach links mit den Ziffern 2, 3, 4, 5,
+            6 multipliziert. Die restliche Berechnung und Ergebnisse
+            entsprechen dem Verfahren 06. Die Stelle 9 der Kontonummer
+            ist per Definition die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x P x
+            Gewichtung: 6 5 4 3 2
+        </description>
+        <test id="47" account="1018000" result="true" />
+        <test id="47" account="1003554450"  result="true" />
+    </method>
+
+    <method id="48">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6" />
+        <like method="06" />
+        <description>
+            48
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Die Kontonummer ist 10-stellig. Die Stellen 3 bis 8 der Kontonummer
+            werden von rechts nach links mit den Ziffern 2, 3, 4, 5,
+            6, 7 multipliziert. Die restliche Berechnung und Ergebnisse
+            entsprechen dem Verfahren 06. Die Stelle 9 der Kontonummer
+            ist per Definition die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x P x
+            Gewichtung: 7 6 5 4 3 2
+        </description>
+    </method>
+
+    <method id="49">
+        <variant id="var1">
+            <like method="00" />
+        </variant>
+        <variant id="var2">
+            <like method="01" />
+        </variant>
+        <description>
+            49
+            Variante 1:
+            Die Prüfzifferberechnung ist nach Kennziffer 00 durchzuführen.
+            Führt die Berechnung nach Variante 1 zu einem Prüfzifferfehler,
+            so ist die Berechnung nach Variante 2 vorzunehmen.
+            Variante 2:
+            Die Prüfzifferberechnung ist nach Kennziffer 01 durchzuführen.
+        </description>
+    </method>
+
+    <method id="50">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6" />
+        <like method="06" />
+        <description>
+            50
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Die für die Berechnung relevante Grundnummer befindet
+            sich in den Stellen 1 bis 6, die Prüfziffer in Stelle 7 (von links
+            nach rechts gezählt). Die Stellen 1 bis 6 werden mit den
+            Ziffern 7, 6, 5, 4, 3, 2 multipliziert. Die restliche Berechnung
+            und Ergebnisse entsprechen dem Verfahren 06. Die
+            dreistellige Unternummer (Stellen 8 bis 10) darf nicht in das
+            Prüfzifferberechnungsverfahren einbezogen werden. Ist die
+            Unternummer »000«, so kommt es vor, dass diese nicht
+            angegeben ist. Ergibt die erste Berechnung einen Prüfzifferfehler,
+            wird empfohlen, die Prüfzifferberechnung ein zweites
+            Mal durchzuführen und dabei die »gedachte« Unternummer
+            000 an die Stellen 8 bis 10 zu setzen und die vorhandene
+            Kontonummer vorher um drei Stellen nach links zu
+            verschieben.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x P x x x
+            Gewichtung: 7 6 5 4 3 2
+        </description>
+        <test id="50" account="4000005001"  result="true" />
+        <test id="50" account="4444442001"  result="true" />
+    </method>
+
+    <method id="51">
+        <variant id="varA">
+            <modulus base="11" />
+            <weights list="2 3 4 5 6" />
+            <like method="06" />
+        </variant>
+        <variant id="varB">
+            <modulus base="11" />
+            <weights list="2 3 4 5" />
+            <like method="33" />
+        </variant>
+        <variant id="varC">
+            <modulus base="7" />
+            <weights list="2 3 4 5" />
+        </variant>
+        <except>
+            <like method="10" />
+        </except>
+        <description>
+            51
+            Die Kontonummer ist immer 10-stellig. Die für die Berechnung
+            relevante Kundennummer (K) befindet sich bei der
+            Methode A in den Stellen 4 bis 9 der Kontonummer und bei
+            den Methoden B + C in den Stellen 5 bis 9, die Prüfziffer in
+            Stelle 10 der Kontonummer.
+            Methode A:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Die Berechnung und mögliche Ergebnisse entsprechen
+            dem Verfahren 06.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x K K K K K K P
+            Gewichtung: 7 6 5 4 3 2
+            Ergibt die Berechnung der Prüfziffer nach der Methode A
+            einen Prüfzifferfehler, ist eine weitere Berechnung mit der
+            Methode B vorzunehmen.
+            Methode B:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            Die Berechnung und mögliche Ergebnisse entsprechen
+            dem Verfahren 33.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x K K K K K P
+            Gewichtung: 6 5 4 3 2
+            Ergibt auch die Berechnung der Prüfziffer nach Methode B
+            einen Prüfzifferfehler, ist eine weitere Berechnung mit der
+            Methode C vorzunehmen.
+            Methode C:
+            Kontonummern, die bis zur Methode C gelangen und in der
+            10. Stelle eine 7, 8 oder 9 haben, sind ungültig.
+            Modulus 7, Gewichtung 2, 3, 4, 5, 6
+            Das Berechnungsverfahren entspricht Methode B.
+            Die Summe der Produkte ist jedoch durch 7 zu dividieren.
+            Der verbleibende Rest wird vom Divisor (7) subtrahiert. Das
+            Ergebnis ist die Prüfziffer. Verbleibt kein Rest, ist die
+            Prüfziffer 0.
+            Ausnahme:
+            Sind die 3. und 4. Stelle der Kontonummer = 99, so erfolgt
+            die Berechnung nach Verfahren 10.
+        </description>
+        <test id="51" account="0001156071"  result="true" />
+        <test id="51" account="0001156136"  result="true" />
+        <test id="51" account="0000156078"  result="true" />
+        <test id="51" account="3199500501"  result="true" />
+    </method>
+
+    <method id="52">
+        <modulus base="11" />
+        <weights list="2 4 8 5 10 9 7 3 6 1 2" />
+        <example id="52">
+            Beispiel:
+            BLZ Konto-Nr.
+            13051172 4P001500
+            Konto-Nr. Altsystem (Multiplikation mit Gewichten)
+            1 1 7 2 - 4 P - 1 5 0 0
+            * * * * * * * * * *
+            1 6 3 7 9 1 0 5 8 4 2
+            = 1 + 6 + 21 + 14 + 36 + 0 + 5 + 40 + 0 + 0 =123
+            123 : 11 = 11 Rest 2
+            2 + 0 x 10 = 2 : 11 = 0 Rest 2 (10 = Gewicht
+            2 + 1 x 10 = 12 : 11 = 1 Rest 1 über der Prüf-
+            2 + 2 x 10 = 22 : 11 = 2 Rest 0 ziffer)
+            2 + 3 x 10 = 32 : 11 = 2 Rest 10
+            Die Prüfziffer lautet 3.
+            Bei 10-stelligen, mit 9 beginnenden Kontonummern ist die
+            <like method="20" />
+            Prüfziffer nach Verfahren 20 zu berechnen.
+        </example>
+        <description>
+            52
+            Modulus 11, Gewichtung 2, 4, 8, 5, 10, 9, 7, 3, 6, 1, 2, 4
+            Zur Berechnung der Prüfziffer muss zunächst aus der angegebenen
+            Bankleitzahl und der angegebenen achtstelligen
+            Kontonummer die zugehörige Kontonummer des ESER-Altsystems
+            (maximal 12-stellig) ermittelt werden. Die
+            einzelnen Stellen dieser Alt-Kontonummer sind von rechts
+            nach links mit den Ziffern 2, 4, 8, 5, 10, 9, 7, 3, 6, 1, 2, 4 zu
+            multiplizieren. Dabei ist für die Prüfziffer, die sich immer an
+            der 6. Stelle von links der Alt-Kontonummer befindet, 0 zu
+            setzen. Die jeweiligen Produkte werden addiert und die
+            Summe durch 11 dividiert. Zum Divisionsrest (ggf. auch 0)
+            ist das Gewicht oder ein Vielfaches des Gewichtes über der
+            Prüfziffer zu addieren. Die Summe wird durch 11 dividiert;
+            der Divisionsrest muss 10 lauten. Die Prüfziffer ist der
+            verwendete Faktor des Gewichtes. Kann bei der Division
+            kein Rest 10 erreicht werden, ist die Konto-Nr. nicht
+            verwendbar.
+            Bildung der Konto-Nr. des ESER-Altsystems aus
+            angegebener Bankleitzahl und Konto-Nr.:
+            BLZ Konto-Nr.
+            XXX5XXXX XPXXXXXX (P = Prüfziffer)
+            Kontonummer des Altsystems:
+            XXXX-XP-XXXXX (XXXX = variable Länge, da
+            evtl. vorlaufende Nullen
+            eliminiert werden)
+        </description>
+    </method>
+
+    <method id="53">
+        <like method="52" />
+        <example id="53">
+            Beispiel:
+            BLZ Konto-Nr.
+            16052072 38P432256
+            Konto-Nr. Altsystem (Multiplikation mit Gewichten)
+            2 0 8 2 - 3 P 4 3 2 2 5 6
+            * * * * * * * * * * * *
+            4 2 1 6 3 7 9 10 5 8 4 2
+            8 + 0 + 8 + 12 + 9
+            +
+            0 + 36 + 30 + 10 + 16 + 20 + 12 = 161
+            161 : 11 = 14 Rest 7
+            7 + 0 x 7 = 7; 7 : 11 = 0 Rest 7 (Faktor 7: Gewicht
+            über der
+            Prüfziffer)
+            7 + 1 x 7 = 14; 14 : 11 = 1 Rest 3
+            7 + 2 x 7 = 21; 21 : 11 = 1 Rest 10
+            Die Prüfziffer lautet 2.
+            Bei 10-stelligen, mit 9 beginnenden Kontonummern ist die
+            <like method="20" />
+            Prüfziffer nach Verfahren 20 zu berechnen.
+        </example>
+        <description>
+            53
+            Die Berechnung entspricht dem Verfahren 52, jedoch für
+            neunstellige Kontonummern.
+            Bildung der Kontonummern des ESER-Altsystems aus
+            angegebener Bankleitzahl und angegebener neunstelliger
+            Kontonummer:
+            BLZ Konto-Nr.
+            XXX5XXXX XTPXXXXXX (P = Prüfziffer, T)
+            Kontonummer des ESER-Altsystems:
+            XXTX-XP-XXXXXX (XXXXXX = variable Länge,
+            da evtl. vorlaufende Nullen
+            eliminiert werden)
+        </description>
+    </method>
+
+    <method id="54">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7" />
+        <description>
+            54
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7,2
+            Die Kontonummer ist 10-stellig, wobei die Stellen 1 u. 2 generell
+            mit 49 belegt sind. Die einzelnen Stellen der Kontonummer
+            sind von rechts nach links mit den Ziffern 2, 3, 4, 5,
+            6, 7, 2 zu multiplizieren. Die jeweiligen Produkte werden addiert.
+            Die Summe ist durch 11 zu dividieren. Der verbleibende
+            Rest wird vom Divisor (11) subtrahiert. Das Ergebnis ist die
+            Prüfziffer. Ergibt sich als Rest 0 oder 1, ist die Prüfziffer
+            zweistellig und kann nicht verwendet werden. Die Kontonummer
+            ist dann nicht verwendbar.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: 4 9 K K K K K K K P
+            Gewichtung: 2 7 6 5 4 3 2
+        </description>
+        <test id="54" account="4964137395"  result="true" />
+        <test id="54" account="4900010987"  result="true" />
+    </method>
+
+    <method id="55">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 8 7 8" />
+        <like method="06" />
+        <description>
+            55
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8, 7, 8 (modifiziert)
+            Die Berechnung und Ergebnisse entsprechen dem Verfahren
+            06.
+            Kontonummer: x x x x x x x x x P
+        </description>
+    </method>
+
+    <method id="56">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 2 3" />
+        <description>
+            56
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 2, 3, 4
+            Die Stellen 1 bis 9 der Kontonummer werden von rechts nach
+            links mit den Ziffern 2, 3, 4, 5, 6, 7, 2, 3, 4 multipliziert. Die
+            jeweiligen Produkte werden addiert und die Summe durch 11
+            dividiert. Der Rest wird von 11 abgezogen, das Ergebnis ist
+            die Prüfziffer. Prüfziffer ist die 10. Stelle der Kontonummer.
+            Beispiel 1)
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: 0 2 9 0 5 4 5 0 0 P
+            Gewichtung: 4 3 2 7 6 5 4 3 2
+            0 + 6 + 18 + 0 + 30 + 20 + 20 + 0 + 0 =
+            94 : 11 = 8, Rest 6
+            11 - 6 = 5Die Prüfziffer ist 5
+            Bei dem Ergebnis 10 oder 11 ist die Kontonummer ungültig.
+            Beispiel 2)
+            Beginnt eine 10-stellige Kontonummer mit 9, so wird beim
+            Ergebnis 10 die Prüfziffer = 7 und beim Ergebnis 11 die
+            Prüfziffer = 8 gesetzt.
+            Stellennr.:
+            Kontonr.: 19 27 31 48 53 60 74 80 93 AP
+            (A = 10)
+            Gewichtung: 4 3 2 7 6 5 4 3 2
+            36 + 21 + 2 + 56 + 18 + 0 + 16 + 0 + 6 =
+            155 : 11 = 14, Rest 1
+            11 - 1 = 10
+            Die Prüfziffer ist 7.
+        </description>
+    </method>
+
+    <method id="57">
+        <modulus base="10" />
+        <weights list="1 2 1 2 1 2 1 2" />
+        <description>
+            57
+            (geändert
+            ab
+            04.03.2002)
+            Modulus 10, Gewichtung 1, 2, 1, 2, 1, 2, 1, 2, 1
+            Die Kontonummern sind zur Berechnung der Prüfziffer
+            durch linksbündige Auffüllung mit Nullen immer 10stellig
+            darzustellen. Die ersten 9 Stellen sind von links
+            entsprechend Modulus 10 zu multiplizieren. Ergeben sich
+            zweistellige Produkte, ist die Quersumme zu bilden. Alle
+            Werte werden addiert, vom Ergebnis wird dann nur die
+            Einerstelle berücksichtigt und von dem Wert 10 subtrahiert.
+            Ergibt sich nach der Subtraktion der Wert 10, so ist die
+            Prüfziffer = 0. Die 10. Stelle der Kontonummer ist dann die
+            entsprechende Prüfziffer.
+            Ausnahmen zu diesem Verfahren stellen die Kontonummern
+            dar, die – ggf. nach der linksbündigen Auffüllung mit Nullen -
+            mit einer Zahl zwischen 00 und 50, 91 oder 96 bis 99
+            beginnen bzw. linksbündig von der ersten bis zur sechsten
+            Stelle durchgehend eine 7 oder 8 aufweisen. Für diese
+            Kontonummern gibt es keine Prüfziffernkontrolle, die
+            Kontonummern sind aber als richtig anzusehen.
+            Testkontonummern (richtig, ohne Prüfziffernkontrolle):
+            7777778800, 5001050352, 5045090090, 1909700805
+        </description>
+        <test id="57" account="7500021766"  result="true" />
+        <test id="57" account="9400001734"  result="true" />
+        <test id="57" account="7800028282"  result="true" />
+        <test id="57" account="8100244186"  result="true" />
+    </method>
+
+    <method id="58">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 0 0 0" />
+        <like method="02" />
+        <example id="58">
+            Beispiel:
+            Stellennr.: 1 2 3 4 5 6 7 8 9 P
+            Kontonr.: 1 8 0 0 2 9 3 3 7 7
+            Wichtung: 0 0 0 0 6 5 4 3 2
+            0 +0 +0 +0 +12 +45 +12 +9 +14 =92
+            92: 11 = 8, Rest 4 11-4=7 P= 7
+            Ergibt die Division einen Rest von 0, so ist die Prüfziffer = 0.
+            Bei einem Rest von 1 ist die Kontonummer falsch.
+        </example>
+        <description>
+            58
+            (geändert
+            ab
+            04.03.2002)
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 0, 0, 0, 0
+            Die Kontonummer (mindestens 6-stellig) ist durch
+            linksbündige Nullenauffüllung 10-stellig darzustellen. Danach
+            ist die 10. Stelle die Prüfziffer. Die Stellen 5 bis 9 werden von
+            rechts nach links mit den Ziffern 2, 3, 4, 5, 6 multipliziert. Die
+            restliche Berechnung und die Ergebnisse entsprechen dem
+            Verfahren 02.
+        </description>
+        <test id="58" account="1800881120"  result="true" />
+        <test id="58" account="9200654108"  result="true" />
+        <test id="58" account="1015222224"  result="true" />
+        <test id="58" account="3703169668"  result="true" />
+    </method>
+
+    <method id="59">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1" />
+        <like method="00" />
+        <description>
+            59
+            (geändert
+            ab
+            03.12.2001)
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2
+            Die Berechnung erfolgt wie bei Verfahren 00; es ist jedoch zu
+            beachten, dass Kontonummern, die kleiner als 9-stellig sind,
+            nicht in die Prüfzifferberechnung einbezogen und als richtig
+            behandelt werden.
+        </description>
+    </method>
+
+    <method id="60">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1" />
+        <like method="00" />
+        <description>
+            60
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2
+            Die Berechnung erfolgt wie bei Verfahren 00. Es ist jedoch zu
+            beachten, dass die zweistellige Unterkontonummer
+            (Stellen 1 und 2) nicht in das Prüfziffernverfahren mit
+            einbezogen werden darf. Die für die Berechnung relevante
+            siebenstellige Grundnummer befindet sich in den Stellen 3
+            bis 9, die Prüfziffer in der Stelle 10.
+        </description>
+    </method>
+
+    <method id="61">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1" />
+        <except>
+        </except>
+        <description>
+            61
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2
+            Darstellung der Kontonummer:
+            B B B S S S S P A U (10-stellig)
+            B = Betriebsstellennummer
+            S = Stammnummer
+            P = Prüfziffer
+            A = Artziffer
+            U = Unternummer
+            Ausnahme:
+            Ist die Artziffer (neunte Stelle der Kontonummer) eine 8, so
+            werden die neunte und zehnte Stelle der Kontonummer in die
+            Prüfzifferermittlung einbezogen.
+            Die Berechnung erfolgt dann über Betriebsstellennummer,
+            Stammnummer, Artziffer und Unternummer mit der Gewichtung
+            2, 1, 2, 1, 2, 1, 2, 1, 2.
+            Beispiel 1:
+            Stellennr.: B B B S S S S P A U
+            Kontonr.:   2 0 6 3 0 9 9   0 0
+            Gewichtung: 2 1 2 1 2 1 2
+            4 + 0 + 3 + 3 + 0 + 9 + 9 = 28
+            (Q) (Q)
+            (Q = Quersumme)
+            Die Einerstelle wird vom Wert 10 subtrahiert (10 - 8 = 2).
+            Die Prüfziffer ist in diesem Fall die 2 und die vollständige
+            Kontonummer lautet: 2 0 6 3 0 9 9 2 0 0
+            Beispiel 2:
+            Stellennr.: B B B S S S S P A U
+            Kontonr.:   0 2 6 0 7 6 0   8 1
+            Gewichtung: 2 1 2 1 2 1 2   1 2
+            0 + 2 + 3 + 0 + 5 + 6 + 0 + 8 + 2 = 26
+            (Q) (Q)
+            (Q = Quersumme)
+            Die Einerstelle wird vom Wert 10 subtrahiert (10 - 6 = 4). Die
+            Prüfziffer ist in diesem Fall die 4 und die vollständige
+            Kontonummer lautet: 0 2 6 0 7 6 0 4 8 1
+        </description>
+    </method>
+
+    <method id="62">
+        <modulus base="10" />
+        <weights list="2 1 2 1" />
+        <description>
+            62
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2
+            Die beiden ersten und die beiden letzten Stellen sind nicht zu
+            berücksichtigen. Die Stellen drei bis sieben sind von rechts
+            nach links mit den Ziffern 2, 1, 2, 1, 2 zu multiplizieren. Aus
+            zweistelligen Einzelergebnissen ist eine Quersumme zu bilden.
+            Alle Ergebnisse sind dann zu addieren. Die Differenz
+            zum nächsten Zehner ergibt die Prüfziffer auf Stelle acht. Ist
+            die Differenz 10, ist die Prüfziffer 0.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: 5 0 2 9 0 7 6 P 0 1
+            Gewichtung: 2 1 2 1 2
+            4 + 9 + 0 + 7 + 3 = 23
+            (Q)
+            (Q = Quersumme)
+            Die Einerstelle wird vom Wert 10 subtrahiert 10 - 3 = 7.
+            Die Prüfziffer ist in diesem Fall die 7 und die vollständige
+            Kontonummer lautet: 5 0 2 9 0 7 6 7 0 1
+        </description>
+    </method>
+
+    <method id="63">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2" />
+        <except>
+        </except>
+        <description>
+            63
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1
+            Aufbau der 9-stelligen Kontonummer (innerhalb des
+            zwischenbetrieblichen 10-stelligen Feldes)
+            Stelle 1 = gehört nicht zur Kontonummer, muss
+            daher »0« oder »blank« sein
+            2-7 = Grundnummer (Kundennummer; kann
+            auch führende Nullen enthalten)
+            8 = Prüfziffer
+            9-10 = Unterkontonummer
+            Die für die Berechnung relevante 6-stellige Grundnummer
+            (Kundennummer) befindet sich in den Stellen 2 bis 7, die
+            Prüfziffer in Stelle 8 der Kontonummer. Die zweistellige Unterkontonummer
+            (Stellen 9 und 10) ist nicht in das Prüfzifferverfahren
+            mit einzubeziehen. Die einzelnen Stellen der
+            Grundnummer sind von rechts nach links mit den Ziffern 2, 1,
+            2, 1, 2, 1 zu multiplizieren. Die jeweiligen Produkte werden
+            addiert, nachdem jeweils aus den zweistelligen Produkten
+            die Quersumme gebildet wurde (z. B. Produkt 16 = Quersumme
+            7). Nach der Addition bleiben außer der Einerstelle
+            alle anderen Stellen unberücksichtigt. Die Einerstelle wird
+            von dem Wert 10 subtrahiert. Das Ergebnis ist die Prüfziffer
+            (Stelle 8). Hat die Einerstelle den Wert »0«, ist die
+            Prüfziffer »0«.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: 0 1 2 3 4 5 6 P 0 0
+            Gewichtung: 1 2 1 2 1 2
+            1 + 4 + 3 + 8 + 5 + 3 = 24
+            (Q)
+            (Q = Quersumme)
+            Die Einerstelle wird vom Wert 10 subtrahiert (10 - 4 = 6).
+            Die Prüfziffer ist in dem Beispiel die 6 und die vollständige
+            Kontonummer lautet: 1 2 3 4 5 6 6 0 0
+            Ausnahmen:
+            Ist die Ziffer in Stelle 1 vor der sechsstelligen Grundnummer
+            nicht »0« (oder »blank«), ist das Ergebnis als falsch zu werten.
+            Ist die Unterkontonummer »00«, kann es vorkommen, dass
+            sie auf den Zahlungsverkehrsbelegen nicht angegeben ist,
+            die Kontonummer jedoch um führende Nullen ergänzt
+            wurde. In diesem Fall sind z. B. die Stellen 1 bis 3 »000«
+            (oder »blank«), die Prüfziffer ist an der Stelle 10 und die
+            Berechnung ist wie folgt durchzuführen:
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: 0 0 0 1 2 3 4 5 6 6
+            Gewichtung: 0 0 0 1 2 1 2 1 2
+            1 + 4 + 3 + 8 + 5 + 3 = 24
+            (Q)
+            (Q = Quersumme)
+            10 - 4 = 6 Prüfziffer richtig
+        </description>
+    </method>
+
+    <method id="64">
+        <modulus base="11" />
+        <weights list="9 10 5 8 4 2" />
+        <like method="06" />
+        <description>
+            64
+            Modulus 11, Gewichtung 9, 10, 5, 8, 4, 2.
+            Die Kontonummer ist 10-stellig. Die für die Berechnung
+            relevanten Stellen der Kontonummer befinden sich in den
+            Stellen 1 bis 6 und werden von links nach rechts mit den
+            Ziffern 9, 10, 5, 8, 4, 2 multipliziert. Die weitere Berechnung
+            und Ergebnisse entsprechen dem Verfahren 06. Die Prüfziffer
+            befindet sich in Stelle 7 der Kontonummer.
+        </description>
+        <test id="64" account="1206473010"  result="true" />
+        <test id="64" account="5016511020"  result="true" />
+    </method>
+
+    <method id="65">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1" />
+        <like method="00" />
+        <except>
+        </except>
+        <description>
+            65
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2
+            Die Kontonummer ist zehnstellig.
+            Darstellung der Kontonummer:
+            G G G S S S S P K U
+            G = Geschäftsstellennummer
+            S = Stammnummer
+            P = Prüfziffer
+            K = Kontenartziffer
+            U = Unterkontonummer
+            Die Berechnung erfolgt wie bei Verfahren 00 über Geschäftsstellennummer
+            und Stammnummer mit der Gewichtung 2, 1,
+            2, 1, 2, 1, 2.
+            Stellen: G G G S S S S P K U
+            Kontonr.: 1 2 3 4 5 6 7 0 0
+            Gewichtung: 2 1 2 1 2 1 2
+            2 + 2 + 6 + 4 + 1 + 6 + 5 = 26
+            (Q) (Q)
+            (Q = Quersumme)
+            Die Einerstelle wird vom Wert 10 subtrahiert (10 - 6 = 4).
+            Die Prüfziffer ist in diesem Fall die 4 und die vollständige
+            Kontonummer lautet: 1 2 3 4 5 6 7 4 0 0
+            Ausnahme:
+            Ist die Kontenartziffer (neunte Stelle der Kontonummer) eine
+            9, so werden die neunte und zehnte Stelle der Kontonummer
+            in die Prüfzifferermittlung einbezogen.
+            Die Berechnung erfolgt dann über Geschäftsstellennummer,
+            Stammnummer, Kontenartziffer und Unterkontonummer mit
+            der Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2.
+             Stellen: G G G S S S S P K U
+            Kontonr.: 1 2 3 4 5 6 7 9 0
+            Gewichtung: 2 1 2 1 2 1 2 1 2
+            2 + 2 + 6 + 4 + 1 + 6 + 5 + 9 + 0 = 35
+            (Q) (Q)
+            (Q = Quersumme)
+            Die Einerstelle wird vom Wert 10 subtrahiert (10 - 5 = 5).
+            Die Prüfziffer ist in diesem Fall die 5 und die vollständige
+            Kontonummer lautet: 1 2 3 4 5 6 7 5 9 0
+        </description>
+    </method>
+
+    <method id="66">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 0 0 7" />
+        <description>
+            66
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 0, 0, 7
+            Aufbau der 9-stelligen Kontonummer (innerhalb des
+            zwischenbetrieblich 10-stelligen Feldes)
+            Stelle 1 = gehört nicht zur Kontonummer, muss
+            daher 0 sein
+            2 = Stammnummer
+            3 - 4 = Unterkontonummer, wird bei der Prüfzifferberechnung
+            nicht berücksichtigt
+            5 - 9 = Stammnummer
+            10 = Prüfziffer
+            Der 9-stelligen Kontonummer wird für die
+            Prüfzifferberechnung eine 0 vorangestellt. Die Prüfziffer steht
+            in Stelle 10. Die für die Berechnung relevante 6-stellige
+            Stammnummer (Kundenummer) befindet sich in den
+            Stellen 2 und 5 bis 9. Die zweistellige Unterkontonummer
+            (Stellen 3 und 4) wird nicht in das Prüfzifferberechnungsverfahren
+            mit einbezogen und daher mit 0 gewichtet. Die
+            einzelnen Stellen der Stammnummer sind von rechts nach
+            links mit den Ziffern 2, 3, 4, 5, 6, 0, 0, 7 zu multiplizieren. Die
+            jeweiligen Produkte werden addiert. Die Summe ist durch
+            11 zu dividieren. Bei einem verbleibenden Rest von 0 ist die
+            Prüfziffer 1. Bei einem Rest von 1 ist die Prüfziffer 0.
+            Verbleibt ein Rest von 2 bis 10, so wird dieser vom Divisor
+            (11) subtrahiert. Die Differenz ist dann die Prüfziffer.
+            Zusammengefasst:
+            Summe dividiert durch 11 = x, Rest
+            Rest = 0 Prüfziffer = 1
+            Rest = 1 Prüfziffer = 0
+            Rest = 2 bis 10 Prüfziffer = 11 minus Rest
+            Stellennr.: 1 2 3 4 5 6 7 8 9 10
+            Kontonr.:   0 1 0 0 1 5 0 5 0 P
+            Gewichtung: 0 7 0 0 6 5 4 3 2
+            0 + 7 + 0 + 0 + 6 +25 + 0 +15 + 0 = 53
+            53 : 11 = 4, Rest 9, 11-9=2, Prüfziffer = 2
+            Die vollständige Kontonummer lautet: 100150502
+        </description>
+        <test id="66" account="100154508"   result="true" />
+        <test id="66" account="101154508"   result="true" />
+        <test id="66" account="100154516"   result="true" />
+        <test id="66" account="101154516"   result="true" />
+    </method>
+
+    <method id="67">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1" />
+        <like method="00" />
+        <description>
+            67
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2
+            Die Kontonummer ist 10-stellig. Die Berechnung erfolgt wie
+            bei Verfahren 00. Es ist jedoch zu beachten, dass die zweistellige
+            Unterkontonummer (Stellen 9 und 10) nicht in das
+            Prüfzifferberechnungsverfahren mit einbezogen werden darf.
+            Die für die Berechnung relevante siebenstellige
+            Stammnummer befindet sich in den Stellen 1 bis 7, die
+            Prüfziffer in der Stelle 8.
+        </description>
+    </method>
+
+    <method id="68">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1" />
+        <like method="00" />
+        <variant id="var1">
+        </variant>
+        <variant id="var2">
+        </variant>
+        <description>
+            68
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2
+            Die Kontonummern sind 6- bis 10-stellig und enthalten
+            keine führenden Nullen. Die erste Stelle von rechts ist die
+            Prüfziffer. Die Berechnung erfolgt wie bei Verfahren 00,
+            hierbei sind jedoch folgende Besonderheiten zu beachten:
+            Bei 10-stelligen Kontonummern erfolgt die Berechnung für
+            die 2. bis 7. Stelle. Stelle 7 muss eine »9« sein.
+            Stellennr.: A 9 8 7 6 5 4 3 2 1 (A = 10)
+            Kontonr.:   8 8 8 9 6 5 4 3 2 P
+            Gewichtung:   1 2 1 2 1 2
+            9 + 3 + 5 + 8 + 3 + 4 = 32
+            (Q)
+            (Q = Quersumme)
+            Die Einerstelle der Summe wird vom Wert 10 subtrahiert
+            (10 - 2 = 8).
+            Die Prüfziffer ist in diesem Fall die 8 und die vollständige
+            Kontonummer lautet: 8 8 8 9 6 5 4 3 2 8
+            6- bis 9-stellige Kontonummern sind in zwei Varianten prüfbar.
+            Variante 1:
+             voll prüfbar
+            Kontonr.: 9 8 7 6 5 4 3 2 P
+            Gewichtung: 1 2 1 2 1 2 1 2
+            9 + 7 + 7 + 3 + 5 + 8 + 3 + 4 = 46
+            (Q) (Q)
+            (Q = Quersumme)
+            Die Einerstelle der Summe wird vom Wert 10 subtrahiert
+            (10 - 6 = 4).
+            Die Prüfziffer ist in diesem Fall die 4 und die vollständige
+            Kontonummer lautet: 9 8 7 6 5 4 3 2 4
+            Ergibt die Berechnung nach Variante 1 einen Prüfzifferfehler,
+            muss Variante 2 zu einer korrekten Prüfziffer führen.
+            Variante 2:
+             Stellen 7 und 8 werden nicht geprüft.
+            Kontonr.: 9 8 7 6 5 4 3 2 P
+            Gewichtung: 1 2 1 2 1 2
+            9 + 3 + 5 + 8 + 3 + 4 = 32
+            (Q)
+            (Q = Quersumme)
+            Die Einerstelle der Summe wird vom Wert 10 subtrahiert
+            (10 - 2 = 8).
+            Die Prüfziffer ist in diesem Fall die 8 und die vollständige
+            Kontonummer lautet: 9 8 7 6 5 4 3 2 8
+            9-stellige Kontonummern im Nummernbereich 400 000 000
+            bis 499 999 999 sind nicht prüfbar, da diese Nummern
+            keine Prüfziffer enthalten.
+        </description>
+    </method>
+
+    <method id="69">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7" />
+        <like method="09" />
+        <variant id="var1">
+            <like method="28" />
+        </variant>
+        <variant id="var2">
+        </variant>
+        <example id="69">
+            Beispiel:
+            Kontonr.: 9 7 2 1 1 3 4 8 6 P
+            Gewichtung: 1 4 3 2 1 4 3 2 1
+            (P = Prüfziffer)
+            (Transf.-Zeile)
+            Transformationstabelle:
+            Ziffer : 0 1 2 3 4 5 6 7 8 9
+            Zeile 1 : 0 1 5 9 3 7 4 8 2 6
+            Zeile 2 : 0 1 7 6 9 8 3 2 5 4
+            Zeile 3 : 0 1 8 4 6 2 9 5 7 3
+            Zeile 4 : 0 1 2 3 4 5 6 7 8 9
+            Von rechts nach links:
+            Ziffer 6 wird 4 aus Transformationszeile 1
+            Ziffer 8 wird 5 aus Zeile 2
+            Ziffer 4 wird 6 aus Zeile 3
+            Ziffer 3 wird 3 aus Zeile 4
+            Ziffer 1 wird 1 aus Zeile 1
+            Ziffer 1 wird 1 aus Zeile 2
+            Ziffer 2 wird 8 aus Zeile 3
+            Ziffer 7 wird 7 aus Zeile 4
+            Ziffer 9 wird 6 aus Zeile 1
+            __
+            Summe 41
+            ==
+            Die Einerstelle wird vom Wert 10 subtrahiert. Das Ergebnis
+            ist die Prüfziffer, in unserem Beispiel also 10 - 1 =
+            Prüfziffer 9, die Kontonummer lautet: 9 7 2 1 1 3 4 8 6 9.
+        </example>
+        <description>
+            69
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8
+            Für den Kontonummernkreis 9 300 000 000 bis
+            9 399 999 999 ist keine Prüfzifferberechnung möglich =
+            Kennziffer 09.
+            Für den Kontonummernkreis 9 700 000 000 bis
+            9 799 999 999 ist die Prüfzifferberechnung nach Variante 2
+            vorzunehmen:
+            Für alle anderen Kontonummern ist die Prüfziffer nach Variante
+            1 zu ermitteln. Ergab die Berechnung nach Variante 1
+            einen Prüfzifferfehler, ist die Prüfziffer nach Variante 2 zu
+            ermitteln.
+            Variante 1:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8
+            Die Berechnung erfolgt wie bei Verfahren 28.
+            Variante 2:
+            Die Position der einzelnen Ziffern von rechts nach links
+            innerhalb der Kontonummer gibt die Zeile 1 bis 4 der
+            Transformationstabelle an. Aus ihr sind die
+            Übersetzungswerte zu summieren. Die Einerstelle wird von
+            10 subtrahiert und stellt die Prüfziffer dar.
+        </description>
+    </method>
+
+    <method id="70">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6" />
+        <like method="06" />
+        <except>
+        </except>
+        <description>
+            70
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Die Kontonummer ist 10-stellig. Die einzelnen Stellen der
+            Kontonummer sind von rechts nach links mit den Ziffern 2,
+            3, 4, 5, 6, 7, 2, 3, 4 zu multiplizieren.
+            Die Berechnung erfolgt wie bei Verfahren 06.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 4 3 2 7 6 5 4 3 2
+            Ausnahme:
+            Ist die 4. Stelle der Kontonummer = 5 oder die 4. bis
+            5. Stelle der Kontonummer = 69, so werden die Stellen 1 bis
+            3 nicht in die Prüfzifferermittlung einbezogen.
+             Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x 5 x x x x x P
+            Kontonr.: x x x 6 9 x x x x P
+            Gewichtung: 7 6 5 4 3 2
+        </description>
+    </method>
+
+    <method id="71">
+        <modulus base="11" />
+        <weights list="6 5 4 3 2" />
+        <except>
+        </except>
+        <description>
+            71
+            Modulus 11, Gewichtung 6, 5, 4, 3, 2, 1
+            Die Kontonummer ist immer 10-stellig. Die Stellen 2 bis 7
+            sind von links nach rechts mit den Ziffern 6, 5, 4, 3, 2, 1 zu
+            multiplizieren. Die Summe ist durch 11 zu dividieren. Der
+            verbleibende Rest wird vom Divisor (11) subtrahiert. Das
+            Ergebnis ist die Prüfziffer.
+            Ausnahmen:
+            Verbleibt nach der Division durch 11 kein Rest, ist die
+            Prüfziffer 0. Ergibt sich als Rest 1, entsteht bei der
+            Subtraktion
+            11 - 1 = 10; die Zehnerstelle (1) ist dann die Prüfziffer.
+            Darstellung der Kontonummer:
+            S G G K K K K U U P
+            S = Sachgebiet
+            G = Geschäftsstelle
+            K = Kundennummer
+            U = Unternummer
+            P = Prüfziffer
+            Prüfzifferberechnung:
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: 7 1 0 1 2 3 4 0 0 P
+            Gewichtung: 6 5 4 3 2 1
+            6 + 0 + 4 + 6 + 6 + 4 = 26
+            26 : 11 = 2, Rest 4
+            11 - 4 = 7
+            Die Prüfziffer ist in diesem Fall die 7 und die vollständige
+            Kontonummer lautet: 7 1 0 1 2 3 4 0 0 7
+        </description>
+    </method>
+
+    <method id="72">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2" />
+        <like method="00" />
+        <description>
+            72
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1
+            Die Kontonummer ist 10-stellig. Die Stellen 4 bis 9 der Kundennummer
+            (K) werden von rechts nach links mit den Gewichten
+            2, 1, 2, 1, 2, 1 multipliziert. Die Berechnung und Ergebnisse
+            entsprechen dem Verfahren 00. Die 10. Stelle der
+            Kontonummer ist die Prüfziffer. Es ist jedoch zu beachten,
+            dass die zweistellige Unterkontonummer (U = Stellen 1 und
+            2) und die Artziffer (A = Stelle 3) nicht in das Prüfzifferverfahren
+            mit einbezogen werden.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: U U A K K K K K K P
+            Gewichtung: 1 2 1 2 1 2
+        </description>
+    </method>
+
+    <method id="73">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2" />
+        <like method="00" />
+        <except>
+            <like method="06" />
+            <modulus base="11" />
+            <weights list="2 3 4 5 6 7 8 9 10" />
+        </except>
+        <description>
+            73
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1
+            Die Kontonummer ist 10-stellig. Die Stellen 4 bis 9 der
+            Kontonummer werden von rechts nach links mit den Ziffern
+            2, 1, 2, 1, 2, 1 multipliziert. Die Berechnung und Ergebnisse
+            entsprechen dem Verfahren 00. Die 10. Stelle der
+            Kontonummer ist per Definition die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: X X X X X X X X X P
+            Gewichtung: 1 2 1 2 1 2
+            Ausnahme:
+            Ist die 3. Stelle der Kontonummer = 9, werden die Stellen 1
+            bis 9 in die Prüfzifferberechnung einbezogen.
+            Die Berechnung erfolgt dann entsprechend Verfahren 06 mit
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8, 9, A (A = 10)
+             Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: X X 9 X X X X X X P
+            Gewichtung: A 9 8 7 6 5 4 3 2
+        </description>
+        <test id="73" account="3503398" result="true" />
+        <test id="73" account="7899100003"  result="true" />
+    </method>
+
+    <method id="74">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1 2 1" />
+        <like method="00" />
+        <except>
+            <like method="00" />
+        </except>
+        <example id="74">
+            Beispiel:
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: 2 3 9 3 1 P
+            Gewichtung: 2 1 2 1 2
+            4 + 3 + 9 + 3 + 2 = 21
+            (Q)
+            (Q = Quersumme)
+            <like method="00" />
+            1. Berechnung (Verfahren 00) 10 - 1 = 9
+            2. Berechnung 21 + 4 = 25 (nächste
+            Halbdekade)
+            In diesem Fall kann die Prüfziffer 4 oder 9 lauten.
+        </example>
+        <description>
+            74
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2 ff.
+            Die Kontonummer (6- bis 10-stellig) ist durch linksbündige
+            Nullenauffüllung 10-stellig darzustellen. Die 10. Stelle ist
+            per Definition die Prüfziffer. Die für die Berechnung
+            relevanten Stellen werden von rechts nach links mit den
+            Ziffern 2, 1, 2, 1, 2 ff. multipliziert. Die weitere Berechnung
+            und die Ergebnisse entsprechen dem Verfahren 00.
+            Zusammensetzung der Kontonummer:
+            A = Artziffer
+            B = Betriebsstellennummer
+            S = Stammnummer
+            P = Prüfziffer
+            Darstellung der Kontonummer:
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            6stell. Kontonr.: 0 0 0 0 S S S S S P
+            7stell. Kontonr.: 0 0 0 B S S S S S P
+            8stell. Kontonr.: 0 0 B B S S S S S P
+            9stell. Kontonr.: 0 A B B S S S S S P
+            10stell. Kontonr.: A A B B S S S S S P
+            Ausnahme:
+            Bei 6-stelligen Kontonummern ist folgende Besonderheit zu
+            beachten.
+            Ergibt die erste Berechnung der Prüfziffer nach dem Verfahren
+            00 einen Prüfzifferfehler, so ist eine weitere Berechnung
+            vorzunehmen. Hierbei ist die Summe der Produkte auf die
+            nächste Halbdekade hochzurechnen. Die Differenz ist die
+            Prüfziffer.
+        </description>
+    </method>
+
+    <method id="75">
+        <modulus base="10" />
+        <weights list="2 1 2 1" />
+        <like method="00" />
+        <description>
+            75
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2
+            Die Kontonummer (6-, 7- oder 9-stellig) ist durch linksbündige
+            Nullenauffüllung 10-stellig darzustellen. Die für die Berechnung
+            relevante 5-stellige Stammnummer (S) wird von
+            links nach rechts mit den Ziffern 2, 1, 2, 1, 2 multipliziert. Die
+            weitere Berechnung und die Ergebnisse entsprechen dem
+            Verfahren 00.
+            Zusammensetzung der Kontonummer:
+            S = Stammnummer
+            X = Weitere Ziffern der Kontonummer, die jedoch nicht in
+            die Prüfzifferberechnung mit einbezogen werden
+            P = Prüfziffer
+             Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            6stell. Kontonr.: 0 0 0 0 S S S S S P
+            7stell. Kontonr.: 0 0 0 X S S S S S P
+            9stell. Kontonr.: 0 9 S S S S S P X X
+            10stell. Kontonr.: 0 S S S S S P X X X
+            Anmerkungen:
+            Bei 6- und 7-stelligen Kontonummern befindet sich die für
+            die Berechnung relevante Stammnummer in den Stellen 5
+            bis 9, die Prüfziffer in Stelle 10 der Kontonummer.
+            Bei 9-stelligen Kontonummern befindet sich die für die Berechnung
+            relevante Stammnummer in den Stellen 2 bis 6,
+            die Prüfziffer in der 7. Stelle der Kontonummer. Ist die erste
+            Stelle der 9-stelligen Kontonummer = 9 (2. Stelle der
+            »gedachten« Kontonummer), so befindet sich die für die
+            Berechnung relevante Stammnummer in den Stellen 3 bis
+            7, die Prüfziffer in der 8. Stelle der Kontonummer.
+        </description>
+    </method>
+
+    <method id="76">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 8 9 10" />
+        <example id="76">
+            Beispiel:
+            Prüfzifferberechnung für eine 6-stellige Kontonummer,
+            Kontoart ist "0".
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: 0 0 1 2 3 4 5 6 0 0
+            Gewichtung: 6 5 4 3 2
+            6 + 10 + 12 + 12 + 10 = 50
+            50 : 11 = 4
+            Rest 6 = Prüfziffer
+        </example>
+        <except>
+        </except>
+        <example id="76">
+            Beispiel:
+             (Kontoart = 0)
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: 0 0 0 0 1 2 3 4 5 6
+            Gewichtung: 6 5 4 3 2
+            6 + 10 + 12 + 12 + 10 = 50
+            50 : 11 = 4
+            Rest 6 = Prüfziffer
+        </example>
+        <description>
+            76
+            Modulus 11, Gewichtung 2, 3, 4, 5 ff.
+            Die einzelnen Stellen der für die Berechnung der Prüfziffer
+            relevanten 5-, 6- oder 7-stelligen Stammnummer sind von
+            rechts nach links mit den Ziffern 2, 3, 4, 5 ff. zu multiplizieren.
+            Die jeweiligen Produkte werden addiert. Die Summe ist
+            durch 11 zu dividieren. Der verbleibende Rest ist die
+            Prüfziffer. Ist der Rest 10, kann die Kontonummer nicht
+            geprüft werden.
+            Zusammensetzung der Kontonummer:
+            S = Stammnummer (5-, 6- oder 7-stellig; die letzte Stelle
+            dieser Nummer ist die Prüfziffer, sie wird jedoch nicht
+            in die Prüfzifferberechnung einbezogen)
+            A = Kontoart (1-stellig)*) werden nicht in die
+            P = Prüfziffer Prüfzifferberech-
+            U = Unterkontonummer (2-stellig) nung einbezogen
+            *) Die Kontoart kann den Wert 0, 4, 6, 7, 8 oder 9 haben.
+            Darstellung der Kontonummer:
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            5stell. Stammnr.: A 0 0 S S S S P U U
+            6stell. Stammnr.: A 0 S S S S S P U U
+            7stell. Stammnr.: A S S S S S S P U U
+            Ausnahme:
+            Ist die Unterkontonummer "00" kann es vorkommen, dass
+            sie auf den Zahlungsverkehrsbelegen oder in beleglosen
+            Datensätzen nicht angegeben ist, die Kontonummer jedoch
+            um führende Nullen ergänzt wurde. Die Prüfziffer ist dann an
+            die 10. Stelle gerückt. Die Berechnung der Prüfziffer ist wie
+            folgt durchzuführen:
+        </description>
+        <test id="76" account="0006543200"  result="true" />
+        <test id="76" account="9012345600"  result="true" />
+        <test id="76" account="7876543100"  result="true" />
+    </method>
+
+    <method id="77">
+        <modulus base="11" />
+        <weights list="1 2 3 4" />
+        <modulus base="11" />
+        <weights list="5 4 3 4 5" />
+        <example id="77">
+            Beispiel:
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x 4 7 6 7 1
+            Gewichtung: 5 4 3 4 5
+            20 + 28 + 18 + 28 + 5 = 99
+            99 : 11 = 9 Rest 0
+            Ergibt sich bei der erneuten Berechnung wiederum ein
+            Rest, dann ist die Kontonummer falsch.
+            Erläuterung:
+            x = weitere Ziffern der Kontonummer, die jedoch nicht in
+            die Berechnung einbezogen werden.
+        </example>
+        <description>
+            77
+            Modulus 11, Gewichtung 1, 2, 3, 4, 5
+            Die Kontonummer ist 10-stellig. Die für die Berechnung
+            relevanten Stellen 6 bis 10 werden von rechts nach links mit
+            den Ziffern 1, 2, 3, 4, 5 multipliziert. Die Produkte werden
+            addiert. Die Summe ist durch 11 zu dividieren.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x 4 7 6 7 8
+            Gewichtung: 5 4 3 2 1
+            20 + 28 + 18 + 14 + 8 = 88
+            88 : 11 = 8 Rest 0
+            Verbleibt nach der Division der Summe durch 11 ein Rest,
+            ist folgende neue Berechnung durchzuführen:
+            Modulus 11, Gewichtung 5, 4, 3, 4, 5
+        </description>
+        <test id="77" account="10338"   result="true" />
+        <test id="77" account="13844"   result="true" />
+        <test id="77" account="65354"   result="true" />
+        <test id="77" account="69258"   result="true" />
+    </method>
+
+    <method id="78">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1" />
+        <like method="00" />
+        <except>
+        </except>
+        <description>
+            78
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2
+            Die Berechnung erfolgt wie bei Verfahren 00
+            Ausnahme:
+            8-stellige Kontonummern sind nicht prüfbar, da diese Nummern
+            keine Prüfziffer enthalten.
+        </description>
+        <test id="78" account="7581499" result="true" />
+        <test id="78" account="9999999981"  result="true" />
+    </method>
+
+    <method id="79">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1 2 1" />
+        <like method="00" />
+        <variant id="var1">
+        </variant>
+        <variant id="var2">
+        </variant>
+        <description>
+            79
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2 ff.
+            Die Kontonummer ist 10-stellig. Die Berechnung und
+            Ergebnisse entsprechen dem Verfahren 00. Es ist jedoch zu
+            beachten, dass die Berechnung vom Wert der 1. Stelle der
+            Kontonummer abhängig ist.
+            Variante 1:
+            Die 1. Stelle der Kontonummer hat die Ziffer 3, 4, 5, 6, 7
+            oder 8
+            Die für die Berechnung relevanten Stellen der
+            Kontonummer befinden sich in den Stellen 1 bis 9. Die
+            10. Stelle ist per Definition die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: 3 2 3 0 0 1 2 6 8 8
+            Gewichtung: 2 1 2 1 2 1 2 1 2
+            Variante 2:
+            Die 1. Stelle der Kontonummer hat die Ziffer 1, 2 oder 9
+            Die für die Berechnung relevanten Stellen der
+            Kontonummer befinden sich in den Stellen 1 bis 8. Die
+            9. Stelle ist die Prüfziffer der 10-stelligen Kontonummer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: 9 0 1 1 2 0 0 1 4 0
+            Gewichtung: 1 2 1 2 1 2 1 2
+            Kontonummern, die in der 1. Stelle eine 0 haben, wurden
+            nicht vergeben und gelten deshalb als falsch.
+        </description>
+        <test id="79" account="3230012688"  result="true" />
+        <test id="79" account="4230028872"  result="true" />
+        <test id="79" account="5440001898"  result="true" />
+        <test id="79" account="6330001063"  result="true" />
+        <test id="79" account="7000149349"  result="true" />
+        <test id="79" account="8000003577"  result="true" />
+        <test id="79" account="1550167850"  result="true" />
+        <test id="79" account="9011200140"  result="true" />
+    </method>
+
+    <method id="80">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2" />
+        <variant id="var1">
+            <like method="00" />
+        </variant>
+        <variant id="var2">
+        </variant>
+        <except>
+            <like method="10" />
+        </except>
+        <description>
+            80
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2
+            Variante 1:
+            Die Kontonummer ist durch linksbündige Nullenauffüllung
+            10-stellig darzustellen. Die Berechnung und die möglichen
+            Ergebnisse entsprechen dem Verfahren 00; es ist jedoch zu
+            beachten, dass nur die Stellen 5 bis 9 in das Prüfzifferberechnungsverfahren
+            einbezogen werden. Die Stelle 10 der
+            Kontonummer ist die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 2 1 2 1 2
+            Führt die Berechnung nach Variante 1 zu einem Prüfzifferfehler,
+            ist die Berechnung nach Variante 2 vorzunehmen.
+            Variante 2:
+            Modulus 7, Gewichtung 2, 1, 2, 1, 2
+            Das Berechnungsverfahren entspricht Variante 1. Die
+            Summe der Produkt-Quersummen ist jedoch durch 7 zu
+            dividieren. Der verbleibende Rest wird vom Divisor (7)
+            subtrahiert. Das Ergebnis ist die Prüfziffer. Verbleibt nach
+            der Division kein Rest, ist die Prüfziffer = 0
+            Ausnahme:
+            Sind die 3. und 4. Stelle der Kontonummer = 99, so erfolgt
+            die Berechnung nach Verfahren 10.
+        </description>
+        <test id="80" account="340968"  result="true" />
+        <test id="80" account="3199500501"  result="true" />
+    </method>
+
+    <method id="81">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6" />
+        <like method="32" />
+        <except>
+            <like method="10" />
+        </except>
+        <description>
+            81
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Die Kontonummer ist durch linksbündige Nullenauffüllung
+            10-stellig darzustellen. Die 10. Stelle ist per Definition die
+            Prüfziffer. Die für die Berechnung relevanten Stellen werden
+            von rechts nach links mit den Ziffern 2, 3, 4, 5, 6, 7
+            multipliziert. Die weitere Berechnung und die möglichen
+            Ergebnisse entsprechen dem Verfahren 32.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 7 6 5 4 3 2
+            Ausnahme:
+            Ist die 3. Stelle der Kontonummer = 9, so erfolgt die Berechnung
+            nach Verfahren 10.
+        </description>
+        <test id="81" account="0646440" result="true" />
+        <test id="81" account="1359100" result="true" />
+        <test id="81" account="3199500501"  result="true" />
+    </method>
+
+    <method id="82">
+        <modulus base="11" />
+        <weights list="2 3 4 5" />
+        <like method="33" />
+        <except>
+            <like method="10" />
+        </except>
+        <description>
+            82
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            Die Kontonummer ist durch linksbündige Nullenauffüllung
+            10-stellig darzustellen. Die 10. Stelle ist per Definition die
+            Prüfziffer. Die für die Berechnung relevanten Stellen werden
+            von rechts nach links mit den Ziffern 2, 3, 4, 5, 6 multipliziert.
+            Die weitere Berechnung und die möglichen Ergebnisse
+            entsprechen dem Verfahren 33.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 6 5 4 3 2
+            Ausnahme:
+            Sind die 3. und 4. Stelle der Kontonummer = 99, so erfolgt
+            die Berechnung nach Verfahren 10.
+        </description>
+        <test id="82" account="123897"  result="true" />
+        <test id="82" account="3199500501"  result="true" />
+    </method>
+
+    <method id="83">
+        <variant id="varA">
+            <modulus base="11" />
+            <weights list="2 3 4 5 6" />
+            <like method="32" />
+        </variant>
+        <variant id="varB">
+            <modulus base="11" />
+            <weights list="2 3 4 5" />
+            <like method="33" />
+        </variant>
+        <variant id="varC">
+            <modulus base="7" />
+            <weights list="2 3 4 5" />
+        </variant>
+        <variant id="varA">
+            <modulus base="11" />
+            <weights list="2 3 4 5 6 7" />
+        </variant>
+        <description>
+            83
+            1. Kundenkonten
+            A. Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            B. Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            C. Modulus 7, Gewichtung 2, 3, 4, 5, 6
+            Gemeinsame Anmerkungen für die Berechnungsverfahren
+            Die Kontonummer ist immer 10-stellig. Die für die Berechnung
+            relevante Kundennummer (K) befindet sich bei
+            der Methode A in den Stellen 4 bis 9 der Kontonummer und
+            bei den Methoden B + C in den Stellen 5 - 9, die Prüfziffer in
+            Stelle 10 der Kontonummer.
+            Ergibt die erste Berechnung der Prüfziffer nach dem Verfahren
+            A einen Prüfzifferfehler, so sind weitere Berechnungen
+            mit den anderen Methoden vorzunehmen. Kontonummern,
+            die nach Durchführung aller 3 Berechnungsmethoden nicht
+            zu einem richtigen Ergebnis führen, sind nicht prüfbar.
+            Methode A:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Die Berechnung und möglichen Ergebnisse entsprechen
+            dem Verfahren 32.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x K K K K K K P
+            Gewichtung: 7 6 5 4 3 2
+            Methode B:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            Die Berechnung und möglichen Ergebnisse entsprechen
+            dem Verfahren 33.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x K K K K K P
+            Gewichtung: 6 5 4 3 2
+            Methode C:
+            Kontonummern, die bis zur Methode C gelangen und in der
+            10. Stelle eine 7, 8 oder 9 haben, sind ungültig.
+            Modulus 7, Gewichtung 2, 3, 4, 5, 6
+            Das Berechnungsverfahren entspricht Methode B.
+            Die Summe der Produkte ist jedoch durch 7 zu dividieren.
+            Der verbleibende Rest wird vom Divisor (7) subtrahiert. Das
+            Ergebnis ist die Prüfziffer. Verbleibt kein Rest, ist die Prüfziffer
+            0.
+            Berechnungsmethode:
+            A. Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8
+            Die Sachkontonummer ist immer 10-stellig.
+            Die für die Berechnung relevante Sachkontenstammnummer
+            (S) befindet sich in den Stellen 3 bis 9 der Kontonummer,
+            wobei die 3. und 4. Stelle immer jeweils 9 sein
+            müssen; die Prüfziffer ist in Stelle 10 der
+            Sachkontonummer.
+            Führt die Berechnung nicht zu einem richtigen Ergebnis, ist
+            die Nummer nicht prüfbar.
+            Methode A:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8
+            Berechnung:
+            Die einzelnen Stellen der Sachkontonummern sind von
+            rechts nach links mit den Ziffern 2, 3, 4, 5, 6, 7, 8 zu
+            multiplizieren.
+            Die jeweiligen Produkte werden addiert.
+            Die Summe ist durch 11 zu dividieren. Der verbleibende
+            Rest wird vom Divisor (11) subtrahiert. Das Ergebnis ist die
+            Prüfziffer.
+            Verbleibt nach der Division durch die 11 kein Rest, ist die
+            Prüfziffer "0".
+            Das Rechenergebnis "10" ist nicht verwendbar und muss
+            auf eine Stelle reduziert werden. Die rechte Stelle Null findet
+            als Prüfziffer Verwendung.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x S S S S S S S P
+            Gewichtung: 8 7 6 5 4 3 2
+        </description>
+        <test id="83" account="0000156071"  result="true" />
+        <test id="83" account="0099100002"  result="true" />
+    </method>
+
+    <method id="84">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6" />
+        <variant id="var1">
+            <like method="33" />
+        </variant>
+        <variant id="var2">
+        </variant>
+        <except>
+            <like method="10" />
+        </except>
+        <description>
+            84
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            Variante 1:
+            Die Kontonummer ist durch linksbündige Nullenauffüllung
+            10-stellig darzustellen. Die 10. Stelle ist per Definition die
+            Prüfziffer. Die für die Berechnung relevanten Stellen werden
+            von rechts nach links mit den Ziffern 2, 3, 4, 5, 6 multipliziert.
+            Die weitere Berechnung und die möglichen Ergebnisse
+            entsprechen dem Verfahren 33.
+             Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 6 5 4 3 2
+            Führt die Berechnung nach Variante 1 zu einem Prüfzifferfehler,
+            ist die Berechnung nach Variante 2 vorzunehmen.
+            Variante 2:
+            Modulus 7, Gewichtung 2, 3, 4, 5, 6
+            Die Stellen 5 bis 9 der Kontonummer werden von rechts
+            nach links mit den Gewichten multipliziert. Die jeweiligen
+            Produkte werden addiert. Die Summe ist durch 7 zu
+            dividieren. Der verbleibende Rest wird vom Divisor (7)
+            subtrahiert. Das Ergebnis ist die Prüfziffer. Verbleibt nach
+            der Division kein Rest, ist die Prüfziffer = 0.
+            Ausnahme:
+            Sind die 3. und 4. Stelle der Kontonummer = 99, so erfolgt
+            die Berechnung nach Verfahren 10.
+        </description>
+        <test id="84" account="100005"  result="true" />
+        <test id="84" account="393814"  result="true" />
+        <test id="84" account="950360"  result="true" />
+        <test id="84" account="3199500501"  result="true" />
+    </method>
+
+    <method id="85">
+        <variant id="varA">
+            <modulus base="11" />
+            <weights list="2 3 4 5 6" />
+            <like method="06" />
+        </variant>
+        <variant id="varB">
+            <modulus base="11" />
+            <weights list="2 3 4 5" />
+            <like method="33" />
+        </variant>
+        <variant id="varC">
+            <modulus base="7" />
+            <weights list="2 3 4 5" />
+        </variant>
+        <except>
+            <like method="02" />
+        </except>
+        <description>
+            85
+            Die Kontonummer ist immer 10-stellig. Die für die Berechnung
+            relevante Kundennummer (K) befindet sich bei der
+            Methode A in den Stellen 4 bis 9 der Kontonummer und bei
+            den Methoden B + C in den Stellen 5 bis 9, die Prüfziffer in
+            Stelle 10 der Kontonummer.
+            Methode A:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Die Berechnung und mögliche Ergebnisse entsprechen
+            dem Verfahren 06.
+             Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x K K K K K K P
+            Gewichtung: 7 6 5 4 3 2
+            Ergibt die Berechnung der Prüfziffer nach der Methode A
+            einen Prüfzifferfehler, ist eine weitere Berechnung mit der
+            Methode B vorzunehmen.
+            Methode B:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            Die Berechnung und mögliche Ergebnisse entsprechen
+            dem Verfahren 33.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x K K K K K P
+            Gewichtung: 6 5 4 3 2
+            Ergibt auch die Berechnung der Prüfziffer nach Methode B
+            einen Prüfzifferfehler, ist eine weitere Berechnung mit der
+            Methode C vorzunehmen.
+            Methode C:
+            Kontonummern, die bis zur Methode C gelangen und in der
+            10. Stelle eine 7, 8 oder 9 haben, sind ungültig.
+            Modulus 7, Gewichtung 2, 3, 4, 5, 6
+            Das Berechnungsverfahren entspricht Methode B.
+            Die Summe der Produkte ist jedoch durch 7 zu dividieren.
+            Der verbleibende Rest wird vom Divisor (7) subtrahiert. Das
+            Ergebnis ist die Prüfziffer. Verbleibt kein Rest, ist die
+            Prüfziffer 0.
+            Ausnahme:
+            Sind die 3. und 4. Stelle der Kontonummer = 99, so ist
+            folgende Prüfzifferberechnung maßgebend:
+            Modulus: 11, Gewichtung 2, 3, 4, 5, 6, 7, 8
+            Die für die Berechnung relevanten Stellen 3 bis 9 der
+            Kontonummer werden von rechts nach links mit den Ziffern
+            2, 3, 4, 5, 6, 7, 8 multipliziert. Die weitere Berechnung und
+            möglichen Ergebnisse entsprechen dem Verfahren 02.
+        </description>
+        <test id="85" account="0001156071"  result="true" />
+        <test id="85" account="0001156136"  result="true" />
+        <test id="85" account="0000156078"  result="true" />
+        <test id="85" account="3199100002"  result="true" />
+    </method>
+
+    <method id="86">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1" />
+        <variant id="var1">
+            <like method="00" />
+        </variant>
+        <variant id="var2">
+            <like method="32" />
+        </variant>
+        <except>
+            <like method="10" />
+        </except>
+        <description>
+            86
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1
+            Variante 1:
+            Die Kontonummer ist durch linksbündige Nullenauffüllung
+            10-stellig darzustellen. Die Berechnung und die möglichen
+            Ergebnisse entsprechen dem Verfahren 00; es ist jedoch zu
+            beachten, dass nur die Stellen 4 bis 9 in das Prüfzifferberechnungsverfahren
+            einbezogen werden. Die Stelle 10
+            der Kontonummer ist die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 1 2 1 2 1 2
+            Führt die Berechnung nach Variante 1 zu einem Prüfzifferfehler,
+            so ist die Berechnung nach Variante 2 vorzunehmen.
+            Variante 2:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Die Kontonummer ist durch linksbündige Nullenauffüllung
+            10-stellig darzustellen. Die Stellen 4 bis 9 der
+            Kontonummer werden von rechts nach links mit den
+            Ziffern 2, 3, 4, 5, 6, 7 multipliziert. Die weitere Berechnung
+            und die möglichen Ergebnisse entsprechen dem
+            Verfahren 32. Die Stelle 10 ist die Prüfziffer.
+             Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 7 6 5 4 3 2
+            Ausnahme:
+            Ist die 3. Stelle der Kontonummer = 9, so erfolgt die Berechnung
+            nach Verfahren 10.
+        </description>
+        <test id="86" account="123897"  result="true" />
+        <test id="86" account="340968"  result="true" />
+        <test id="86" account="1001171" result="true" />
+        <test id="86" account="1009588" result="true" />
+        <test id="86" account="3199500501"  result="true" />
+    </method>
+
+    <method id="87">
+        <except>
+            <like method="10" />
+        </except>
+        <variant id="varA">
+        </variant>
+        <variant id="varA">
+        </variant>
+        <variant id="varB">
+            <modulus base="11" />
+            <weights list="2 3 4 5" />
+            <like method="33" />
+        </variant>
+        <variant id="varC">
+            <modulus base="7" />
+            <weights list="2 3 4 5" />
+        </variant>
+        <description>
+            87
+            Die Kontonummer ist durch linksbündige Nullenauffüllung
+            10-stellig darzustellen. Der zur Prüfzifferberechnung
+            heranzuziehende Teil befindet sich bei der Methode A in den
+            Stellen 4 bis 9 der Kontonummer und bei den Methoden B
+            und C in Stellen 5 - 9, die Prüfziffer in Stelle 10 der
+            Kontonummer. Ergibt die erste Berechnung der Prüfziffer
+            nach Verfahren A einen Prüfzifferfehler, so sind weitere
+            Berechnungen mit den anderen Methoden vorzunehmen.
+            Prüfziffer):
+            Ausnahme:
+            Ist die 3. Stelle der Kontonummer = 9, so erfolgt die
+            Berechnung nach Verfahren 10.
+            Methode A:
+             0000000406, 0000051768,
+            0010701590, 0010720185
+            Methode B u. C. 0000100005, 0000393814,
+            0000950360, 3199500501
+            Methode A:
+            Für die Berechnung werden folgende Felder verwendet:
+            i = Hilfsvariable (Laufvariable)
+            C2 = Hilfsvariable (Kennung, ob gerade oder
+            ungerade Stelle bearbeitet wird)
+            D2 = Hilfsvariable
+            A5 = Hilfsvariable (Summenfeld), kann negativ
+            werden
+            P = Hilfsvariable (zur Zwischenspeicherung
+            der Prüfziffer)
+            KONTO = 10-stelliges Kontonummernfeld mit
+            KONTO (i) = in Bearbeitung befindliche
+            Stelle; der Wert an jeder Stelle kann
+            zweistellig werden
+            TAB1; TAB2 = Tabellen mit Prüfziffern:
+            Tabelle TAB1 Tabelle TAB2
+            Stelle Inhalt Stelle Inhalt
+            0 0 0 7
+            1 4 1 1
+            2 3 2 5
+            3 2 3 9
+            4 6 4 8
+            i : = 4;
+            DO WHILE KONTO (i) = 0
+            i : = i + 1;
+            END;
+            C2 : = i mod 2;
+            D2 : = 0;
+            A5 : = 0;
+            DO WHILE i &gt; 10
+            CASE KONTO (i) OF
+            0:
+            KONTO (i) : = 5;
+            1:
+            KONTO (i) : = 6;
+            5:
+            KONTO (i) : = 10;
+            6:
+            KONTO (i) : = 1;
+            END;
+            IF C2 = D2 THEN
+            BEGIN
+            IF KONTO (i) > 5 THEN
+            BEGIN
+            IF C2 = 0 AND D2 = 0 THEN
+            BEGIN
+            C2 : = 1;
+            D2 : = 1;
+            A5 : = A5 + 6 - (KONTO (i) - 6);
+            END ELSE
+            BEGIN
+            C2 : = 0;
+            D2 : = 0;
+            A5 : = A5 + KONTO (i);
+            END
+            END ELSE
+            BEGIN
+            IF C2 = 0 AND D2 = 0 THEN
+            BEGIN
+            C2 : = 1;
+            A5 : = A5 + KONTO (i);
+            END ELSE
+            BEGIN
+            C2 : = 0
+            A5 : = A5 + KONTO (i);
+            END
+            END;
+            END ELSE
+            BEGIN
+            IF KONTO (i) > 5 THEN
+            BEGIN
+            IF C2 = 0 THEN
+            BEGIN
+            C2 : = 1;
+            D2 : = 0;
+            A5 : = A5 - 6 + (KONTO (i) - 6);
+            END ELSE
+            BEGIN
+            C2 : = 0;
+            D2 : = 1;
+            A5 : = A5 - KONTO (i);
+            END
+            END ELSE
+            BEGIN
+            IF C2 = 0 THEN
+            BEGIN
+            C2 : = 1;
+            A5 : = A5 - KONTO (i);
+            END ELSE
+            BEGIN
+            C2 := 0;
+            A5 := A5 - KONTO (i);
+            END
+            END;
+            END;
+            i := i + 1;
+            END
+            DO WHILE A5 &gt; 0 OR A5 > 4
+            IF A5 > 4 THEN
+            BEGIN
+            A5 := A5 - 5;
+            END ELSE
+            BEGIN
+            A5 := A5 + 5;
+            END
+            END;
+            IF D2 = 0 THEN
+            BEGIN
+            P := TAB1 (A5);
+            END ELSE
+            BEGIN
+            P := TAB2 (A5);
+            END
+            IF P = KONTO (10) THEN
+            BEGIN
+            Prüfziffer OK;
+            END ELSE
+            BEGIN
+            IF KONTO (4) = 0 THEN
+            BEGIN
+            IF P > 4 THEN
+            BEGIN
+            P := P - 5;
+            END ELSE
+            BEGIN
+            P := P + 5;
+            END
+            IF P = KONTO (10) THEN
+            BEGIN
+            Prüfziffer OK;
+            END
+            END;
+            END,
+            Führt die Berechnung nach Methode A zu einem Prüfzifferfehler,
+            ist die Berechnung nach Methode B vorzunehmen.
+            Methode B:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            Die für die Berechnung relevanten Stellen werden von
+            rechts nach links mit den Ziffern 2, 3, 4, 5, 6 multipliziert. Die
+            weitere Berechnung und die möglichen Ergebnisse
+            entsprechen dem Verfahren 33.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 6 5 4 3 2Führt die Berechnung nach Methode B wiederum zu einem
+            Prüfzifferfehlen, ist eine weitere Berechnung nach Methode
+            C vorzunehmen.
+            Methode C:
+            Modulus 7, Gewichtung 2, 3, 4, 5, 6
+            Die Stellen 5 bis 9 der Kontonummer werden von rechts
+            nach links mit den Gewichten multipliziert. Die jeweiligen
+            Produkte werden addiert. Die Summe ist durch 7 zu
+            dividieren. Der verbleibende Rest wird vom Divisor (7)
+            subtrahiert. Das Ergebnis ist die Prüfziffer. Verbleibt nach
+            der Division kein Rest, ist die Prüfziffer = 0.
+        </description>
+    </method>
+
+    <method id="88">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6" />
+        <like method="06" />
+        <except>
+            <modulus base="11" />
+            <weights list="2 3 4 5 6 7" />
+            <like method="06" />
+        </except>
+        <description>
+            88
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Die Kontonummer ist durch linksbündige Nullenauffüllung
+            10-stellig darzustellen. Die Stellen 4 bis 9 werden von
+            rechts nach links mit den Gewichten 2, 3, 4, 5, 6, 7
+            multipliziert. Die
+            restliche Berechnung und mögliche Ergebnisse
+            entsprechen dem Verfahren 06. Die Stelle 10 der
+            Kontonummer ist per Definition die Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 7 6 5 4 3 2
+            Ausnahme:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8
+            Ist die 3. Stelle der Kontonummer = 9, so werden die Stellen
+            3 bis 9 von rechts nach links mit den Gewichten 2, 3, 4,
+            5, 6, 7, 8 multipliziert. Die weitere Berechnung erfolgt wie bei
+            Verfahren 06.
+        </description>
+        <test id="88" account="2525259" result="true" />
+        <test id="88" account="1000500" result="true" />
+        <test id="88" account="90013000"    result="true" />
+        <test id="88" account="92525253"    result="true" />
+        <test id="88" account="99913003"    result="true" />
+    </method>
+
+    <method id="89">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6" />
+        <like method="06" />
+        <description>
+            89
+            8- und 9-stellige Kontonummern sind mit dem
+            Berechnungsverfahren 10 zu prüfen.
+            7-stellige Kontonummern sind wie folgt zu prüfen:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Die Kontonummer ist durch linksbündige Nullenauffüllung
+            10-stellig darzustellen. Die für die Berechnung relevante 6-
+            stellige Stammnummer (x) befindet sich in den Stellen 4 bis
+            9, die Prüfziffer in Stelle 10 der Kontonummer. Die einzelnen
+            Stellen der Stammnummer sind von rechts nach links mit
+            den Ziffern 2, 3, 4, 5, 6, 7 zu multiplizieren. Die jeweiligen
+            Produkte werden addiert, nachdem jeweils aus den 2-
+            stelligen Produkten Quersummen gebildet wurden. Die
+            Summe ist durch 11 zu dividieren. Die weiteren
+            Berechnungen und Ergebnisse entsprechen dem
+            Verfahren 06.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            7-stell. Kontonr.: 0 0 0 x x x x x x P
+            Gewichtung: 7 6 5 4 3 2
+            1- bis 6- und 10-stellige Kontonummern sind nicht zu
+            prüfen, da diese keine Prüfziffer enthalten.
+        </description>
+        <test id="89" account="1098506" result="true" />
+        <test id="89" account="32028008"    result="true" />
+        <test id="89" account="218433000"   result="true" />
+    </method>
+
+    <method id="90">
+        <variant id="varA">
+            <modulus base="11" />
+            <weights list="2 3 4 5 6" />
+            <like method="32" />
+        </variant>
+        <variant id="varB">
+            <modulus base="11" />
+            <weights list="2 3 4 5" />
+            <like method="33" />
+        </variant>
+        <variant id="varC">
+            <modulus base="7" />
+            <weights list="2 3 4 5" />
+        </variant>
+        <variant id="varD">
+            <modulus base="9" />
+            <weights list="2 3 4 5" />
+        </variant>
+        <variant id="varE">
+            <modulus base="10" />
+            <weights list="2 1 2 1" />
+        </variant>
+        <variant id="varA">
+            <modulus base="11" />
+            <weights list="2 3 4 5 6 7" />
+            <modulus base="11" />
+            <weights list="2 3 4 5 6 7" />
+        </variant>
+        <description>
+            90
+            1. Kundenkonten
+            A. Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            B. Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            C. Modulus 7, Gewichtung 2,3,4,5,6
+            D. Modulus 9, Gewichtung 2, 3, 4, 5, 6
+            E. Modulus 10, Gewichtung 2, 1, 2, 1, 2
+            Gemeinsame Hinweise für die Berechnungsverfahren
+            Die Kontonummer ist immer 10-stellig. Die für die Berechnung
+            relevante Kundennummer (K) befindet sich bei der
+            Methode A in den Stellen 4 bis 9 der Kontonummer und bei
+            den Methoden B - E in den Stellen 5 - 9, die Prüfziffer in
+            Stelle 10 der Kontonummer.
+            Ergibt die erste Berechnung der Prüfziffer nach dem Verfahren
+            A einen Prüfzifferfehler, so sind weitere Berechnungen
+            mit den anderen Methoden vorzunehmen. Kontonummern,
+            die nach Durchführung aller 5 Berechnungsmethoden nicht
+            zu einem richtigen Ergebnis führen, sind nicht prüfbar.
+            Methode A:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Die Berechnung und möglichen Ergebnisse entsprechen
+            dem Verfahren 32.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x K K K K K K P
+            Gewichtung: 7 6 5 4 3 2
+            Methode B:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            Die Berechnung und möglichen Ergebnisse entsprechen
+            dem Verfahren 33.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x K K K K K P
+            Gewichtung: 6 5 4 3 2
+            Methode C:
+            Modulus 7, Gewichtung 2, 3, 4, 5, 6
+            Das Berechnungsverfahren entspricht Methode B.
+            Die Summe der Produkte ist jedoch durch 7 zu dividieren.
+            Der verbleibende Rest wird vom Divisor (7) subtrahiert. Das
+            Ergebnis ist die Prüfziffer. Verbleibt kein Rest, ist die Prüfziffer
+            0.
+            Kontonummern, die in der Stelle 10 die Werte 7, 8 oder 9
+            haben, sind mit dieser Methode nicht prüfbar.
+            Methode D:
+            Modulus 9, Gewichtung 2, 3, 4, 5, 6
+            Das Berechnungsverfahren entspricht Methode B.
+            Die Summe der Produkte ist jedoch durch 9 zu dividieren.
+            Der verbleibende Rest wird vom Divisor (9) subtrahiert. Das
+            Ergebnis ist die Prüfziffer. Verbleibt kein Rest, ist die Prüfziffer
+            0.
+            Methode E:
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2
+            Das Berechnungsverfahren entspricht Methode B.
+            Die Summe der Produkte ist jedoch durch 10 zu dividieren.
+            Der verbleibende Rest wird vom Divisor (10) subtrahiert.
+            Das Ergebnis ist die Prüfziffer. Verbleibt kein Rest, dann ist
+            auch die Prüfziffer 0.
+            A. Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8
+            Die Sachkontonummer ist immer 10-stellig.
+            Die für die Berechnung relevante
+            Sachkontenstammnummer (S) befindet sich in den
+            Stellen 3 bis 9 der Kontonummer, wobei die 3. und 4. Stelle
+            immer jeweils 9 sein müssen; die Prüfziffer ist in Stelle 10
+            der Sachkontonummer.
+            Führt die Berechnung nicht zu einem richtigen Ergebnis, ist
+            die Nummer nicht prüfbar.
+            Methode A:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8
+            Berechnung:
+            Die einzelnen Stellen der Sachkontonummern sind von
+            rechts nach links mit den Ziffern 2, 3, 4, 5, 6, 7, 8 zu
+            multiplizieren.
+            Die jeweiligen Produkte werden addiert.
+            Die Summe ist durch 11 zu dividieren. Der verbleibende
+            Rest wird vom Divisor (11) subtrahiert. Das Ergebnis ist die
+            Prüfziffer.
+            Verbleibt nach der Division durch 11 kein Rest, ist die Prüfziffer
+            "0".
+            Das Rechenergebnis "10" ist nicht verwendbar und muss
+            auf eine Stelle reduziert werden. Die rechte Stelle Null findet
+            als Prüfziffer Verwendung.
+            Zu Methode A:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8
+             Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x S S S S S S S P
+            Gewichtung: 8 7 6 5 4 3 2
+        </description>
+        <test id="90" account="0000156077"  result="true" />
+        <test id="90" account="0099100002"  result="true" />
+    </method>
+
+    <method id="91">
+        <like method="06" />
+        <variant id="varA">
+            <modulus base="11" />
+            <weights list="2 3 4 5 6" />
+        </variant>
+        <variant id="varB">
+            <modulus base="11" />
+            <weights list="7 6 5 4 3" />
+        </variant>
+        <variant id="varC">
+            <modulus base="11" />
+            <weights list="2 3 4 0 5 6 7 8 9 10" />
+        </variant>
+        <description>
+            91
+            A. Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            B. Modulus 11, Gewichtung 7, 6, 5, 4, 3, 2
+            C. Modulus 11, Gewichtung 2, 3, 4, 0, 5, 6, 7, 8, 9, A
+            (A = 10)
+            Gemeinsame Hinweise für die Berechnungsmethoden A
+            bis C.
+            Die Kontonummer ist immer 10-stellig. Die einzelnen
+            Stellen der Kontonummer werden von links nach rechts von
+            1 bis 10 durchnummeriert. Die Stelle 7 der Kontonummer
+            ist die Prüfziffer. Die für die Berechnung relevanten Kundennummern
+            (K) sind von rechts nach links mit den jeweiligen
+            Gewichten zu multiplizieren. Die restliche Berechnung und
+            möglichen Ergebnisse entsprechen dem Verfahren 06.
+            Ergibt die erste Berechnung nach einer der beschriebenen
+            Methoden einen Prüfzifferfehler, so sind weitere Berechnungen
+            mit den anderen Methoden vorzunehmen. Kontonummern,
+            die endgültig nicht zu einem richtigen Ergebnis
+            führen, sind nicht prüfbar.
+            Methode A:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7
+            Die Stellen 8 bis 10 werden nicht in die Berechnung
+            einbezogen.
+             Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: K K K K K K P x x x
+            Gewichtung: 7 6 5 4 3 2
+            Methode B:
+            Modulus 11, Gewichtung 7, 6, 5, 4, 3, 2
+            Die Stellen 8 bis 10 werden nicht in die Berechnung einbezogen.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: K K K K K K P x x x
+            Gewichtung: 2 3 4 5 6 7
+            Methode C:
+            Modulus 11, Gewichtung 2, 3, 4, 0, 5, 6, 7, 8, 9, A (A = 10)
+            Die Stellen 1 bis 10 werden in die Berechnung einbezogen.
+        </description>
+        <test id="91" account="2974118000"  result="true" />
+        <test id="91" account="5281741000"  result="true" />
+        <test id="91" account="2974117000"  result="true" />
+        <test id="91" account="5281770000"  result="true" />
+    </method>
+
+    <method id="92">
+        <modulus base="10" />
+        <weights list="3 7 1 3 7" />
+        <like method="01" />
+        <description>
+            92
+            Modulus 10, Gewichtung 3, 7, 1, 3, 7, 1
+            Die Kontonummer ist 10-stellig. Die Berechnung erfolgt wie
+            bei Verfahren 01. Es ist jedoch zu beachten, dass nur die
+            Stellen 4 bis 9 in das Prüfzifferberechnungsverfahren einbezogen
+            werden. Die Stelle 10 der Kontonummer ist die
+            Prüfziffer.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 1 7 3 1 7 3
+        </description>
+    </method>
+
+    <method id="93">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6" />
+        <variant id="var1">
+            <like method="06" />
+        </variant>
+        <variant id="var2">
+        </variant>
+        <description>
+            93
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            Variante 1:
+            Die Kontonummer ist 10-stellig. Die für die Berechnung
+            relevante Kundennummer (K) befindet sich entweder
+            a) in den Stellen 1 bis 5, die Prüfziffer in Stelle 6 der Kontonummer
+            oder
+            b) in den Stellen 5 bis 9, die Prüfziffer in Stelle 10 der
+            Kontonummer.
+            Die 2-stellige Unternummer (U) und die 2-stellige Kontoartnummer
+            (A) werden nicht in die Berechnung einbezogen.
+            Sie befinden sich im Fall a) an Stelle 7 bis 10 (UUAA). Im
+            Fall b) befinden sie sich an Stelle 1 bis 4 und müssen
+            "0000" lauten. Die 5-stellige Kundennummer wird von
+            rechts nach links mit den Gewichten multipliziert. Die
+            weitere Berechnung und die möglichen Ergebnisse
+            entsprechen dem Verfahren 06.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: Fall a) K K K K K P U U A A
+            Gewichtung: 6 5 4 3 2
+            Kontonr.: Fall b) 0 0 0 0 K K K K K P
+            Gewichtung: 6 5 4 3 2
+            Führt die Berechnung nach Variante 1 zu einem Prüfzifferfehler,
+            so ist die Berechnung nach Variante 2 vorzunehmen.
+            Variante 2:
+            Modulus 7, Gewichtung 2, 3, 4, 5, 6
+            Das Berechnungsverfahren entspricht Variante 1. Die
+            Summe der Produkte ist jedoch durch 7 zu dividieren. Der
+            verbleibende Rest wird vom Divisor (7) subtrahiert. Das Ergebnis
+            ist dann die Prüfziffer. Verbleibt nach der Division
+            durch 7 kein Rest, lautet die Prüfziffer 0.
+            Modulus 11: 6714790000 bzw. 0000671479
+            Modulus 7: 1277830000 bzw. 0000127783
+            1277910000 bzw. 0000127791
+            Modulus 11 und 7: 3067540000 bzw. 0000306754
+        </description>
+    </method>
+
+    <method id="94">
+        <modulus base="10" />
+        <weights list="1 2 1 2 1 2 1 2" />
+        <like method="00" />
+        <description>
+            94
+            Modulus 10, Gewichtung 1, 2, 1, 2, 1, 2, 1, 2, 1
+            Die Stellen 1 bis 9 der Kontonummer sind von rechts nach
+            links mit den Gewichten zu multiplizieren. Die weitere Berechnung
+            erfolgt wie bei Verfahren 00.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 A (A = 10)
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 1 2 1 2 1 2 1 2 1
+        </description>
+        <test id="94" account="6782533003"  result="true" />
+    </method>
+
+    <method id="95">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 2 3" />
+        <like method="06" />
+        <except>
+        </except>
+        <description>
+            95
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 2, 3, 4
+            Die Berechnung erfolgt wie bei Verfahren 06.
+            Ausnahmen:
+            Kontonr.: 0000000001 bis 0001999999
+            Kontonr.: 0009000000 bis 0025999999
+            Kontonr.: 0396000000 bis 0499999999
+            Kontonr.: 0700000000 bis 0799999999
+            Für diese Kontonummernkreise ist keine Prüfzifferberechnung
+            möglich. Sie sind als richtig anzusehen.
+        </description>
+        <test id="95" account="0068007003"  result="true" />
+        <test id="95" account="0847321750"  result="true" />
+        <test id="95" account="6450060494"  result="true" />
+        <test id="95" account="6454000003"  result="true" />
+    </method>
+
+    <method id="96">
+        <variant id="var1">
+            <like method="19" />
+        </variant>
+        <variant id="var2">
+            <like method="00" />
+        </variant>
+        <variant id="var3">
+        </variant>
+        <description>
+            96
+            Variante 1:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8, 9, 1
+            Die Prüfziffernrechnung ist nach Kennziffer 19 durchzuführen.
+            Führt die Berechnung nach Variante 1 zu einem Prüfzifferfehler,
+            so ist die Berechnung nach Variante 2 vorzunehmen.
+            Gültige Kontonummern (Darstellung 10-stellig, einschl.
+            Prüfziffer):
+            0000254100, 9421000009
+            Variante 2:
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2
+            Die Prüfziffernrechnung ist nach Kennziffer 00 durchzuführen.
+            Gültige Kontonummern (Darstellung 10-stellig, einschl.
+            Prüfziffer):
+            0000000208, 0101115152, 0301204301
+            Variante 3:
+            Führen die Berechnungen nach Variante 1 und 2 zu Prüfzifferfehlern,
+            so ist zu prüfen, ob die Kontonummer zwischen
+            0001300000 und 0099399999 liegt.
+            Trifft dies zu, so gilt die Prüfziffer als richtig; trifft dies nicht zu,
+            so ist die Prüfziffer falsch.
+        </description>
+    </method>
+
+    <method id="97">
+        <example id="97">
+            Beispiel:
+            2 4 0 1 0 0 1 9 (8-stellige Kontonummer)
+            1) 2 401 001 : 11 = 218 272,81
+            2) 218 272 x 11 = 2 400 992
+            3) 2 401 001 - 2 400 992 = 9
+        </example>
+        <description>
+            97
+            Modulus 11:
+            Die Kontonummer (5, 6, 7, 8, 9 o. 10-stellig) ist durch linksbündige
+            Nullenauffüllung 10-stellig darzustellen. Danach ist
+            die 10. Stelle die Prüfziffer.
+            Die Kontonummer ist unter Weglassung der Prüfziffer
+            (= Wert X) durch 11 zu teilen. Das Ergebnis der Division ist
+            ohne die Nachkomma-Stellen mit 11 zu multiplizieren. Das
+            Produkt ist vom 'Wert X' zu subtrahieren.
+            Ist das Ergebnis &gt; 10, so entspricht das Ergebnis der Prüfziffer.
+            Ist das Ergebnis = 10, so ist die Prüfziffer = 0
+        </description>
+    </method>
+
+    <method id="98">
+        <modulus base="10" />
+        <weights list="3 1 7 3 1 7" />
+        <like method="01" />
+        <like method="32" />
+        <example id="98">
+            Beispiel:
+             P
+            Kontonr.: 9 6 1 9 6 0 8 1 1 8
+            Gewichtung: 3 7 1 3 7 1 3
+            3 + 63 + 6 + 0 + 56 + 1 + 3 = 132
+            10 - 2 = 8
+            8 = Prüfziffer
+        </example>
+        <description>
+            98
+            Modulus 10, Gewichtung 3, 1, 7, 3, 1, 7, 3
+            Die Kontonummer ist 10-stellig. Die Berechnung erfolgt wie
+            bei Verfahren 01. Es ist jedoch zu beachten, dass nur die
+            Stellen 3 bis 9 in die Prüfzifferberechnung einbezogen
+            werden. Die Stelle 10 der Kontonummer ist die Prüfziffer.
+            Führt die Berechnung zu einem falschen Ergebnis, so ist
+            alternativ das Verfahren 32 anzuwenden.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 10
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 3 7 1 3 7 1 3
+        </description>
+        <test id="98" account="9619439213"  result="true" />
+        <test id="98" account="3009800016"  result="true" />
+        <test id="98" account="9619509976"  result="true" />
+        <test id="98" account="5989800173"  result="true" />
+        <test id="98" account="9619319999"  result="true" />
+        <test id="98" account="6719430018"  result="true" />
+    </method>
+
+    <method id="99">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 2 3" />
+        <like method="06" />
+        <except>
+        </except>
+        <description>
+            99
+            (gültig seit
+            04.03.2002)
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 2, 3, 4
+            Die Berechnung erfolgt wie bei Verfahren 06.
+            Ausnahmen:
+            Kontonr.: 0396000000 bis 0499999999
+            Für diese Kontonummern ist keine Prüfzifferberechnung
+            möglich. Sie sind als richtig anzusehen.
+        </description>
+        <test id="99" account="0068007003"  result="true" />
+        <test id="99" account="0847321750"  result="true" />
+    </method>
+
+    <method id="A0">
+        <modulus base="11" />
+        <weights list="2 4 8 5 10 0 0 0" />
+        <except>
+        </except>
+        <example id="A0">
+            Beispiel:
+            Kontonr.: 0 5 2 1 0 0 3 2 8 7
+            Gewichtung: 0 0 0 0 10 5 8 4 2 P
+            Produkt: 0+ 0+ 0+ 0+ 0+ 0+ 24+ 8+ 16 =48
+            48 : 11 = 4, Rest 4
+            11 - 4 = 7 = P
+        </example>
+        <description>
+            A0
+            (0=null)
+            Modulus 11, Gewichtung 2, 4, 8, 5, 10, 0, 0, 0, 0
+            Die Kontonummer ist einschließlich der Prüfziffer 10-stellig,
+            ggf. ist die Kontonummer für die Prüfzifferberechnung durch
+            linksbündige Auffüllung mit Nullen 10-stellig darzustellen.
+            Die Stelle 10 ist die Prüfziffer. Die einzelnen Stellen der
+            Kontonummer (ohne Prüfziffer) sind von rechts nach links
+            mit dem zugehörigen Gewicht (2, 4, 8, 5, 10, 0, 0, 0, 0) zumultiplizieren. Die Produkte werden addiert. Das Ergebnis
+            ist durch 11 zu dividieren. Ergibt sich nach der Division ein
+            Rest von 0 oder 1, so ist die Prüfziffer 0. Ansonsten ist der
+            Rest vom Divisor (11) zu subtrahieren. Das Ergebnis ist die
+            Prüfziffer.
+            Ausnahme:
+             3-stellige Kontonummern bzw.
+            Kontonummern, deren Stellen 1 bis 7 = 0 sind, enthalten
+            keine Prüfziffer und sind als richtig anzusehen.
+            Stellennr.: 1 2 3 4 5 6 7 8 9 10
+            Kontonr.: x x x x x x x x x P
+            Gewichtung: 0 0 0 0 10 5 8 4 2
+            Summe der Produkte dividiert durch 11 = x, Rest
+            Rest = 0 oder 1 Prüfziffer = 0
+            Rest = 2 bis 10 Prüfziffer = 11 – Rest
+        </description>
+        <test id="A0" account="521003287"   result="true" />
+        <test id="A0" account="54500"   result="true" />
+        <test id="A0" account="3287"    result="true" />
+        <test id="A0" account="18761"   result="true" />
+        <test id="A0" account="28290"   result="true" />
+    </method>
+
+    <method id="A1">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 0" />
+        <like method="00" />
+        <example id="A1">
+            Beispiel:
+            Kontonr.: 0 0 1 0 0 3 0 9 9 7
+            Gewichtung: 0 0 2 1 2 1 2 1 2 P
+            Produkte: 0 0 2 0 0 3 0 9 18
+            Quersummen:0+ 0+ 2+ 0+ 0+ 3+ 0+ 9+ 9= 23
+            10-3 = 7 = P
+            Testkontonummern (falsch): 0110030005, 0010030998,
+            0000030005
+        </example>
+        <description>
+            A1
+            (geändert
+            zum
+            09.06.2003)
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 0, 0
+            Die Kontonummern sind 8- oder 10-stellig. Kontonummern
+            (ohne führende Nullen gezählt) mit 9 oder weniger als 8
+            Stellen sind falsch. 8-stellige Kontonummern sind für die
+            Prüfzifferberechnung durch linksbündige Auffüllung mit
+            Nullen 10-stellig darzustellen. Die Berechnung erfolgt wie
+            beim Verfahren 00.
+        </description>
+        <test id="A1" account="0010030005"  result="true" />
+        <test id="A1" account="0010030997"  result="true" />
+        <test id="A1" account="1010030054"  result="true" />
+    </method>
+
+    <method id="A2">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1" />
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 2 3" />
+        <variant id="var1">
+            <like method="00" />
+        </variant>
+        <variant id="var2">
+            <like method="04" />
+        </variant>
+        <description>
+            A2
+            (gültig seit
+            09.06.2003)
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 2, 3, 4
+            Die Kontonummer ist einschließlich der Prüfziffer 10-stellig,
+            ggf. ist die Kontonummer für die Prüfzifferberechnung durch
+            linksbündige Auffüllung mit Nullen 10-stellig darzustellen.
+            Variante 1:
+            Gewichtung und Berechnung erfolgen nach der Methode 00.
+            Führt die Berechnung nach Variante 1 zu einem Prüfzifferfehler,
+            so ist nach Variante 2 zu prüfen.
+            Testkontonummer (falsch): 3456789012, 1234567890
+            Variante 2:
+            Gewichtung und Berechnung erfolgen nach der Methode 04.
+            Testkontonummern (falsch) 1234567890, 0123456789
+        </description>
+        <test id="A2" account="3456789019"  result="true" />
+        <test id="A2" account="5678901231"  result="true" />
+        <test id="A2" account="6789012348"  result="true" />
+        <test id="A2" account="3456789012"  result="true" />
+    </method>
+
+    <method id="A3">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1" />
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 8 9 1" />
+        <variant id="var1">
+            <like method="00" />
+        </variant>
+        <variant id="var2">
+            <like method="10" />
+        </variant>
+        <description>
+            A3
+            neu zum
+            08.09.2003
+            (! Termin
+            früher)
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8, 9, 10
+            Die Kontonummer ist einschließlich der Prüfziffer 10-stellig,
+            ggf. ist die Kontonummer für die Prüfzifferberechnung durch
+            linksbündige Auffüllung mit Nullen 10-stellig darzustellen.
+            Variante 1:
+            Gewichtung und Berechnung erfolgen nach der Methode 00.
+            Führt die Berechnung nach Variante 1 zu einem Prüfzifferfehler,
+            so ist nach Variante 2 zu prüfen.
+            Testkontonummern (falsch): 9876543210, 1234567890,
+            6543217890, 0543216789
+            Variante 2:
+            Gewichtung und Berechnung erfolgen nach der Methode 10.
+            Testkontonummern (falsch): 6543217890, 0543216789
+        </description>
+        <test id="A3" account="1234567897"  result="true" />
+        <test id="A3" account="0123456782"  result="true" />
+        <test id="A3" account="9876543210"  result="true" />
+        <test id="A3" account="1234567890"  result="true" />
+        <test id="A3" account="0123456789"  result="true" />
+    </method>
+
+    <method id="A4">
+        <modulus base="7" />
+        <weights list="2 3 4 5" />
+        <variant id="var1">
+            <modulus base="11" />
+            <weights list="2 3 4 5 6 7 0 0" />
+            <like method="06" />
+        </variant>
+        <example id="A4">
+            Beispiel:
+            Kontonr.: 0 0 0 4 7 1 1 1 7 3
+            Gewichtung: 0 0 0 7 6 5 4 3 2 P
+            Produkt: 0+ 0+ 0+28+42+ 5+ 4+ 3+14=96
+            96 : 11 = 8, Rest 8
+            11 - 8 = 3 = P
+            Testkontonummern (falsch): 0004711172, 8623420004,
+            0001123458
+            Führt die Berechnung zu einem Fehler, ist nach Variante 2
+            zu prüfen.
+        </example>
+        <variant id="var2">
+            <modulus base="7" />
+            <weights list="2 3 4 5 6 7 0 0" />
+        </variant>
+        <example id="A4">
+            Beispiel:
+            Kontonr.: 0 0 0 4 7 1 1 1 7 2
+            Gewichtung: 0 0 0 7 6 5 4 3 2 P
+            Produkt: 0+ 0+ 0+28+42+ 5+ 4+ 3+ 14 =96
+            96 : 7 = 13, Rest 5
+            7 - 5 = 2 = PTestkontonummern (richtig): 0004711172, 0007093335
+            Führt die Berechnung zu einem Fehler, ist nach Variante 4
+            zu prüfen.
+        </example>
+        <variant id="var3">
+            <modulus base="11" />
+            <weights list="2 3 4 5 6 0 0 0" />
+            <like method="06" />
+        </variant>
+        <example id="A4">
+            Beispiel:
+            1 1 9 9 5 0 3 0 1 0
+            Gewichtung: 0 0 0 0 6 5 4 3 2 P
+            Produkt: 0+ 0+ 0+ 0+30+0+12+ 0+ 2 =44
+            44: 11 = 4, Rest 0 = P
+            Testkontonummern (falsch): 1299503117, 6099702031
+            Führt die Berechnung zu einem Fehler, ist nach Variante 4
+            zu prüfen.
+        </example>
+        <variant id="var4">
+            <modulus base="11" />
+            <weights list="2 3 4 5" />
+            <modulus base="7" />
+            <weights list="2 3 4 5" />
+            <like method="93" />
+        </variant>
+        <description>
+            A4
+            (gültig seit
+            09.06.2003,
+            redaktionelle
+            Änderung
+            zum
+            08.09.03)
+            1. Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 0, 0, 0
+            2. Modulus 7, Gewichtung 2, 3, 4, 5, 6, 7, 0, 0, 0
+            3. Modulus 11, Gewichtung 2, 3, 4, 5, 6, 0, 0, 0, 0
+            4. Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            Modulus 7, Gewichtung 2, 3, 4, 5, 6
+            Die Kontonummer ist einschließlich der Prüfziffer 10-stellig,
+            ggf. ist die Kontonummer für die Prüfzifferberechnung durch
+            linksbündige Auffüllung mit Nullen 10-stellig darzustellen.
+            Zur Prüfung einer Kontonummer sind die folgenden
+            Varianten zu rechnen. Dabei ist zu beachten, dass
+            Kontonummern mit der Ziffernfolge 99 an den Stellen 3 und
+            4 (XX99XXXXXX) nur nach Variante 3 und ggf. 4 zu prüfen
+            sind. Alle anderen Kontonummern sind nacheinander nach
+            den Varianten 1, ggf. 2 und ggf. 4 zu prüfen.
+            Variante 1:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 0, 0, 0
+            In die Prüfzifferberechnung werden nur die Stellen 4 bis 9
+            einbezogen. Die Stelle 10 ist die Prüfziffer. Die weitere
+            Berechnung erfolgt nach dem Verfahren 06.
+            Variante 2:
+            Modulus 7, Gewichtung 2, 3, 4, 5, 6, 7, 0, 0, 0
+            Die Stellen 4 bis 9 der Kontonummer werden von rechts
+            nach links mit den Gewichten multipliziert. Die jeweiligen
+            Produkte werden addiert. Die Summe ist durch 7 zu
+            dividieren. Der verbleibende Rest wird vom Divisor (7)
+            subtrahiert. Das Ergebnis ist die Prüfziffer (Stelle 10).
+            Verbleibt nach der Division kein Rest, ist die Prüfziffer 0.
+            Variante 3:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 0, 0, 0, 0
+            In die Prüfzifferberechnung werden nur die Stellen 5 bis 9
+            einbezogen. Die Stelle 10 ist die Prüfziffer. Die weitere
+            Berechnung erfolgt nach dem Verfahren 06.
+            Variante 4:
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6
+            Modulus 7, Gewichtung 2, 3, 4, 5, 6
+            Die Gewichtung und Berechnung erfolgen nach Methode
+            93.
+            Testkontonummern (falsch): 0000399443, 0000553313
+        </description>
+        <test id="A4" account="0004711173"  result="true" />
+        <test id="A4" account="0007093330"  result="true" />
+        <test id="A4" account="8623420000"  result="false" />
+        <test id="A4" account="0001123458"  result="false" />
+        <test id="A4" account="1199503010"  result="true" />
+        <test id="A4" account="8499421235"  result="true" />
+        <test id="A4" account="0001123458"  result="true" />
+        <test id="A4" account="1299503117"  result="true" />
+    </method>
+
+    <method id="A5">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1" />
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7 8 9 1" />
+        <variant id="var1">
+            <like method="00" />
+        </variant>
+        <variant id="var2">
+            <like method="10" />
+        </variant>
+        <description>
+            A5
+            (gültig seit
+            09.06.2003)
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7, 8, 9, 10
+            Die Kontonummer ist einschließlich der Prüfziffer 10-stellig,
+            ggf. ist die Kontonummer für die Prüfzifferberechnung durch
+            linksbündige Auffüllung mit Nullen 10-stellig darzustellen.
+            Variante 1:
+            Gewichtung und Berechnung erfolgen nach der Methode 00.
+            Führt die Berechnung nach Variante 1 zu einem Prüfzifferfehler,
+            so sind 10-stellige Konten mit einer 9 an Stelle 1
+            falsch, alle anderen Konten sind nach Variante 2 zu prüfen.
+            Testkontonummern (falsch): 9941510002, 9961230020
+            Variante 2:
+            Gewichtung und Berechnung erfolgen nach der Methode 10.
+            Testkontonummern (falsch): 0000251438, 0007948345
+        </description>
+        <test id="A5" account="9941510001"  result="true" />
+        <test id="A5" account="9961230019"  result="true" />
+        <test id="A5" account="9380027210"  result="true" />
+        <test id="A5" account="9932290910"  result="true" />
+        <test id="A5" account="0000251437"  result="true" />
+        <test id="A5" account="0007948344"  result="true" />
+        <test id="A5" account="0000159590"  result="true" />
+        <test id="A5" account="0000051640"  result="true" />
+    </method>
+
+    <method id="A6">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1" />
+        <modulus base="10" />
+        <weights list="3 7 1 3 7 1 3 7" />
+        <like method="00" />
+        <like method="01" />
+        <description>
+            A6
+            (neu zum
+            08.12.2003)
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2
+            Modulus 10, Gewichtung 3, 7, 1, 3, 7, 1, 3, 7, 1
+            Die Kontonummer ist einschließlich der Prüfziffer 10-
+            stellig, ggf. ist die Kontonummer für die
+            Prüfzifferberechnung durch linksbündige Auffüllung mit
+            Nullen 10-stellig darzustellen. Die Stelle 10 ist die
+            Prüfziffer.
+            Sofern dann an der zweiten Stelle der Kontonummer eine
+            8 steht, erfolgen Gewichtung und Berechnung wie beim
+            Verfahren 00.
+            Testkontonummern falsch: 860000817, 810033652
+            Bei allen Kontonummern, die keine 8 an der zweiten Stelle
+            haben, erfolgen Gewichtung und Berechnung wie beim
+            Verfahren 01.
+            Testkontonummern (falsch): 305888, 200071280
+        </description>
+        <test id="A6" account="800048548"   result="true" />
+        <test id="A6" account="0855000014"  result="true" />
+        <test id="A6" account="17"  result="true" />
+        <test id="A6" account="55300030"    result="true" />
+        <test id="A6" account="150178033"   result="true" />
+        <test id="A6" account="600003555"   result="true" />
+        <test id="A6" account="900291823"   result="true" />
+    </method>
+
+    <method id="A7">
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1 2 1" />
+        <variant id="var1">
+            <like method="00" />
+        </variant>
+        <variant id="var2">
+            <like method="03" />
+        </variant>
+        <description>
+            A7
+            (neu ab
+            08.09.2003)
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1, 2, 1, 2
+            Die Kontonummer ist einschließlich der Prüfziffer 10-
+            stellig, ggf. ist die Kontonummer für die
+            Prüfzifferberechnung durch linksbündige Auffüllung mit
+            Nullen 10-stellig darzustellen.
+            Variante 1:
+            Gewichtung und Berechnung erfolgen nach der Methode
+            00. Führt die Berechnung nach Variante 1 zu einem
+            Prüfzifferfehler, ist nach Variante 2 zu prüfen.
+            Testkontonummern (falsch): 19010660, 19010876,
+            209010892, 209010893
+            Variante 2:
+            Gewichtung und Berechnung erfolgen nach der Methode
+            03.
+            Testkontonummer (falsch): 209010893
+        </description>
+        <test id="A7" account="19010008"    result="true" />
+        <test id="A7" account="19010438"    result="true" />
+        <test id="A7" account="19010660"    result="true" />
+        <test id="A7" account="19010876"    result="true" />
+        <test id="A7" account="209010892"   result="true" />
+    </method>
+
+    <method id="A8">
+        <modulus base="11" />
+        <weights list="2 3 4 5 6 7" />
+        <modulus base="10" />
+        <weights list="2 1 2 1 2 1" />
+        <variant id="var1">
+            <like method="81" />
+        </variant>
+        <variant id="var2">
+            <like method="73" />
+            <like method="73" />
+        </variant>
+        <description>
+            A8
+            (neu ab
+            08.09.2003)
+            Modulus 11, Gewichtung 2, 3, 4, 5, 6, 7,
+            Modulus 10, Gewichtung 2, 1, 2, 1, 2, 1
+            Variante 1:
+            Gewichtung und Berechnung erfolgen nach der Methode
+            81. Führt die Berechnung nach Variante 1 zu einem
+            Prüfzifferfehler, so sind Konten mit einer 9 an Stelle 3 (in
+            der 10-stelligen Darstellung) falsch, alle anderen Konten
+            sind nach Variante 2 zu prüfen.
+            Testkontonummern (falsch): 7436660, 7436678,
+            7436666, 7436677,
+            3199500502
+            Variante 2:
+            Gewichtung und Berechnung erfolgen nach der Methode
+            73.
+            (Hinweis: Die Ausnahmeregelung der Methode 73 für
+            Kontonummern mit einer 9 an Stelle 3 wird nicht wirksam,
+            da diese Kontonummern nur nach Variante 1 geprüft
+            werden.)
+            Testkontonummern (falsch): 7436666, 7436677
+            Ende
+        </description>
+        <test id="A8" account="7436661" result="true" />
+        <test id="A8" account="7436670" result="true" />
+        <test id="A8" account="3199500501"  result="true" />
+        <test id="A8" account="7436660" result="true" />
+        <test id="A8" account="7436678" result="true" />
+    </method>
+
+</methods>

@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<IBAN-Registry xmlns ="http://www.teherba.org/2013/checkiban">
+  <country id="1">
+    <Name-of-country>Albania</Name-of-country>
+    <Country-code>AL</Country-code>
+    <BBAN-length>24</BBAN-length>
+    <IBAN-structure>AL([0-9]{2})([0-9]{8})([A-Za-z0-9]{16})</IBAN-structure>
+    <IBAN-length>28</IBAN-length>
+    <IBAN-electronic-format-example>AL47212110090000000235698741</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="2">
+    <Name-of-country>Andorra</Name-of-country>
+    <Country-code>AD</Country-code>
+    <BBAN-length>20</BBAN-length>
+    <IBAN-structure>AD([0-9]{2})([0-9]{4})([0-9]{4})([A-Za-z0-9]{12})</IBAN-structure>
+    <IBAN-length>24</IBAN-length>
+    <IBAN-electronic-format-example>AD1200012030200359100100</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="3">
+    <Name-of-country>Austria</Name-of-country>
+    <Country-code>AT</Country-code>
+    <BBAN-length>16</BBAN-length>
+    <IBAN-structure>AT([0-9]{2})([0-9]{5})([0-9]{11})</IBAN-structure>
+    <IBAN-length>20</IBAN-length>
+    <IBAN-electronic-format-example>AT611904300234573201</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="4">
+    <Name-of-country>Republic of Azerbaijan</Name-of-country>
+    <Country-code>AZ</Country-code>
+    <BBAN-length>24</BBAN-length>
+    <IBAN-structure>AZ([0-9]{2})([A-Z]{4})([A-Za-z0-9]{20})</IBAN-structure>
+    <IBAN-length>28</IBAN-length>
+    <IBAN-electronic-format-example>AZ21NABZ00000000137010001944</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="5">
+    <Name-of-country>Kingdom of Bahrain</Name-of-country>
+    <Country-code>BH</Country-code>
+    <BBAN-length>18</BBAN-length>
+    <IBAN-structure>BH([0-9]{2})([A-Z]{4})([A-Za-z0-9]{14})</IBAN-structure>
+    <IBAN-length>22</IBAN-length>
+    <IBAN-electronic-format-example>BH67BMAG00001299123456</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="6">
+    <Name-of-country>Belgium</Name-of-country>
+    <Country-code>BE</Country-code>
+    <BBAN-length>12</BBAN-length>
+    <IBAN-structure>BE([0-9]{2})([0-9]{3})([0-9]{7})([0-9]{2})</IBAN-structure>
+    <IBAN-length>16</IBAN-length>
+    <IBAN-electronic-format-example>BE68539007547034</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="7">
+    <Name-of-country>Bosnia and Herzegovina</Name-of-country>
+    <Country-code>BA</Country-code>
+    <BBAN-length>16</BBAN-length>
+    <IBAN-structure>BA([0-9]{2})([0-9]{3})([0-9]{3})([0-9]{8})([0-9]{2})</IBAN-structure>
+    <IBAN-length>20</IBAN-length>
+    <IBAN-electronic-format-example>BA391290079401028494</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="8">
+    <Name-of-country>BRAZIL</Name-of-country>
+    <Country-code>BR</Country-code>
+    <BBAN-length>25</BBAN-length>
+    <IBAN-structure>BR([0-9]{2})([0-9]{8})([0-9]{5})([0-9]{10})([A-Z]{1})([A-Za-z0-9]{1})</IBAN-structure>
+    <IBAN-length>29</IBAN-length>
+    <IBAN-electronic-format-example>BR9700360305000010009795493P1</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="9">
+    <Name-of-country>Bulgaria</Name-of-country>
+    <Country-code>BG</Country-code>
+    <BBAN-length>18</BBAN-length>
+    <IBAN-structure>BG([0-9]{2})([A-Z]{4})([0-9]{4})([0-9]{2})([A-Za-z0-9]{8})</IBAN-structure>
+    <IBAN-length>22</IBAN-length>
+    <IBAN-electronic-format-example>BG80BNBG96611020345678</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="10">
+    <Name-of-country>Costa Rica</Name-of-country>
+    <Country-code>CR</Country-code>
+    <BBAN-length>17</BBAN-length>
+    <IBAN-structure>CR([0-9]{2})([0-9]{3})([0-9]{14})</IBAN-structure>
+    <IBAN-length>21</IBAN-length>
+    <IBAN-electronic-format-example>CR0515202001026284066</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="11">
+    <Name-of-country>Croatia</Name-of-country>
+    <Country-code>HR</Country-code>
+    <BBAN-length>17</BBAN-length>
+    <IBAN-structure>HR([0-9]{2})([0-9]{7})([0-9]{10})</IBAN-structure>
+    <IBAN-length>21</IBAN-length>
+    <IBAN-electronic-format-example>HR1210010051863000160</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="12">
+    <Name-of-country>Cyprus</Name-of-country>
+    <Country-code>CY</Country-code>
+    <BBAN-length>24</BBAN-length>
+    <IBAN-structure>CY([0-9]{2})([0-9]{3})([0-9]{5})([A-Za-z0-9]{16})</IBAN-structure>
+    <IBAN-length>28</IBAN-length>
+    <IBAN-electronic-format-example>CY17002001280000001200527600</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="13">
+    <Name-of-country>Czech Republic</Name-of-country>
+    <Country-code>CZ</Country-code>
+    <BBAN-length>20</BBAN-length>
+    <IBAN-structure>CZ([0-9]{2})([0-9]{4})([0-9]{6})([0-9]{10})</IBAN-structure>
+    <IBAN-length>24</IBAN-length>
+    <IBAN-electronic-format-example>CZ6508000000192000145399</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="14">
+    <Name-of-country>Denmark</Name-of-country>
+    <Country-code>DK</Country-code>
+    <BBAN-length>14</BBAN-length>
+    <IBAN-structure>DK([0-9]{2})([0-9]{4})([0-9]{9})([0-9]{1})</IBAN-structure>
+    <IBAN-length>18</IBAN-length>
+    <IBAN-electronic-format-example>DK5000400440116243</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="15">
+    <Name-of-country>Faroe Islands</Name-of-country>
+    <Country-code>FO</Country-code>
+    <BBAN-length>14</BBAN-length>
+    <IBAN-structure>DK([0-9]{2})([0-9]{4})([0-9]{9})([0-9]{1})</IBAN-structure>
+    <IBAN-length>18</IBAN-length>
+    <IBAN-electronic-format-example>FO6264600001631634</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="16">
+    <Name-of-country>Greenland</Name-of-country>
+    <Country-code>GL</Country-code>
+    <BBAN-length>14</BBAN-length>
+    <IBAN-structure>DK([0-9]{2})([0-9]{4})([0-9]{9})([0-9]{1})</IBAN-structure>
+    <IBAN-length>18</IBAN-length>
+    <IBAN-electronic-format-example>GL8964710001000206</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="17">
+    <Name-of-country>Dominican Republic</Name-of-country>
+    <Country-code>DO</Country-code>
+    <BBAN-length>24</BBAN-length>
+    <IBAN-structure>DO([0-9]{2})([A-Za-z0-9]{4})([0-9]{20})</IBAN-structure>
+    <IBAN-length>28</IBAN-length>
+    <IBAN-electronic-format-example>DO28BAGR00000001212453611324</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="18">
+    <Name-of-country>Estonia</Name-of-country>
+    <Country-code>EE</Country-code>
+    <BBAN-length>16</BBAN-length>
+    <IBAN-structure>EE([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{11})([0-9]{1})</IBAN-structure>
+    <IBAN-length>20</IBAN-length>
+    <IBAN-electronic-format-example>EE382200221020145685</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="19">
+    <Name-of-country>Finland</Name-of-country>
+    <Country-code>FI</Country-code>
+    <BBAN-length>14</BBAN-length>
+    <IBAN-structure>FI([0-9]{2})([0-9]{6})([0-9]{7})([0-9]{1})</IBAN-structure>
+    <IBAN-length>18</IBAN-length>
+    <IBAN-electronic-format-example>FI2112345600000785</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="20">
+    <Name-of-country>France</Name-of-country>
+    <Country-code>FR</Country-code>
+    <BBAN-length>23</BBAN-length>
+    <IBAN-structure>FR([0-9]{2})([0-9]{5})([0-9]{5})([A-Za-z0-9]{11})([0-9]{2})</IBAN-structure>
+    <IBAN-length>27</IBAN-length>
+    <IBAN-electronic-format-example>FR1420041010050500013M02606</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="21">
+    <Name-of-country>Georgia</Name-of-country>
+    <Country-code>GE</Country-code>
+    <BBAN-length>18</BBAN-length>
+    <IBAN-structure>GE([0-9]{2})([A-Z]{2})([0-9]{16})</IBAN-structure>
+    <IBAN-length>22</IBAN-length>
+    <IBAN-electronic-format-example>GE29NB0000000101904917</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="22">
+    <Name-of-country>Germany</Name-of-country>
+    <Country-code>DE</Country-code>
+    <BBAN-length>18</BBAN-length>
+    <IBAN-structure>DE([0-9]{2})([0-9]{8})([0-9]{10})</IBAN-structure>
+    <IBAN-length>22</IBAN-length>
+    <IBAN-electronic-format-example>DE89370400440532013000</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="23">
+    <Name-of-country>Gibraltar</Name-of-country>
+    <Country-code>GI</Country-code>
+    <BBAN-length>19</BBAN-length>
+    <IBAN-structure>GI([0-9]{2})([A-Z]{4})([A-Za-z0-9]{15})</IBAN-structure>
+    <IBAN-length>23</IBAN-length>
+    <IBAN-electronic-format-example>GI75NWBK000000007099453</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="24">
+    <Name-of-country>Greece</Name-of-country>
+    <Country-code>GR</Country-code>
+    <BBAN-length>23</BBAN-length>
+    <IBAN-structure>GR([0-9]{2})([0-9]{3})([0-9]{4})([A-Za-z0-9]{16})</IBAN-structure>
+    <IBAN-length>27</IBAN-length>
+    <IBAN-electronic-format-example>GR1601101250000000012300695</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="25">
+    <Name-of-country>Guatemala</Name-of-country>
+    <Country-code>GT</Country-code>
+    <BBAN-length>24</BBAN-length>
+    <IBAN-structure>GT([0-9]{2})([A-Za-z0-9]{4})([A-Za-z0-9]{20})</IBAN-structure>
+    <IBAN-length>28</IBAN-length>
+    <IBAN-electronic-format-example>GT82TRAJ01020000001210029690</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="26">
+    <Name-of-country>Hungary</Name-of-country>
+    <Country-code>HU</Country-code>
+    <BBAN-length>24</BBAN-length>
+    <IBAN-structure>HU([0-9]{2})([0-9]{3})([0-9]{4})([0-9]{1})([0-9]{15})([0-9]{1})</IBAN-structure>
+    <IBAN-length>28</IBAN-length>
+    <IBAN-electronic-format-example>HU42117730161111101800000000</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="27">
+    <Name-of-country>Iceland</Name-of-country>
+    <Country-code>IS</Country-code>
+    <BBAN-length>22</BBAN-length>
+    <IBAN-structure>IS([0-9]{2})([0-9]{4})([0-9]{2})([0-9]{6})([0-9]{10})</IBAN-structure>
+    <IBAN-length>26</IBAN-length>
+    <IBAN-electronic-format-example>IS140159260076545510730339</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="28">
+    <Name-of-country>Ireland</Name-of-country>
+    <Country-code>IE</Country-code>
+    <BBAN-length>18</BBAN-length>
+    <IBAN-structure>IE([0-9]{2})([A-Z]{4})([0-9]{6})([0-9]{8})</IBAN-structure>
+    <IBAN-length>22</IBAN-length>
+    <IBAN-electronic-format-example>IE29AIBK93115212345678</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="29">
+    <Name-of-country>Israel</Name-of-country>
+    <Country-code>IL</Country-code>
+    <BBAN-length>19</BBAN-length>
+    <IBAN-structure>IL([0-9]{2})([0-9]{3})([0-9]{3})([0-9]{13})</IBAN-structure>
+    <IBAN-length>23</IBAN-length>
+    <IBAN-electronic-format-example>IL620108000000099999999</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="30">
+    <Name-of-country>Italy</Name-of-country>
+    <Country-code>IT</Country-code>
+    <BBAN-length>23</BBAN-length>
+    <IBAN-structure>IT([0-9]{2})([A-Z]{1})([0-9]{5})([0-9]{5})([A-Za-z0-9]{12})</IBAN-structure>
+    <IBAN-length>27</IBAN-length>
+    <IBAN-electronic-format-example>IT60X0542811101000000123456</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="31">
+    <Name-of-country>Kazakhstan</Name-of-country>
+    <Country-code>KZ</Country-code>
+    <BBAN-length>16</BBAN-length>
+    <IBAN-structure>KZ([0-9]{2})([0-9]{3})([A-Za-z0-9]{13})</IBAN-structure>
+    <IBAN-length>20</IBAN-length>
+    <IBAN-electronic-format-example>KZ86125KZT5004100100</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="32">
+    <Name-of-country>KUWAIT</Name-of-country>
+    <Country-code>KW</Country-code>
+    <BBAN-length>26</BBAN-length>
+    <IBAN-structure>KW([0-9]{2})([A-Z]{4})([A-Za-z0-9]{22})</IBAN-structure>
+    <IBAN-length>30</IBAN-length>
+    <IBAN-electronic-format-example>KW81CBKU0000000000001234560101</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="33">
+    <Name-of-country>Latvia</Name-of-country>
+    <Country-code>LV</Country-code>
+    <BBAN-length>17</BBAN-length>
+    <IBAN-structure>LV([0-9]{2})([A-Z]{4})([A-Za-z0-9]{13})</IBAN-structure>
+    <IBAN-length>21</IBAN-length>
+    <IBAN-electronic-format-example>LV80BANK0000435195001</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="34">
+    <Name-of-country>LEBANON</Name-of-country>
+    <Country-code>LB</Country-code>
+    <BBAN-length>24</BBAN-length>
+    <IBAN-structure>LB([0-9]{2})([0-9]{4})([A-Za-z0-9]{20})</IBAN-structure>
+    <IBAN-length>28</IBAN-length>
+    <IBAN-electronic-format-example>LB62099900000001001901229114</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="35">
+    <Name-of-country>Liechtenstein (Principality of)</Name-of-country>
+    <Country-code>LI</Country-code>
+    <BBAN-length>17</BBAN-length>
+    <IBAN-structure>LI([0-9]{2})([0-9]{5})([A-Za-z0-9]{12})</IBAN-structure>
+    <IBAN-length>21</IBAN-length>
+    <IBAN-electronic-format-example>LI21088100002324013AA</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="36">
+    <Name-of-country>Lithuania</Name-of-country>
+    <Country-code>LT</Country-code>
+    <BBAN-length>16</BBAN-length>
+    <IBAN-structure>LT([0-9]{2})([0-9]{5})([0-9]{11})</IBAN-structure>
+    <IBAN-length>20</IBAN-length>
+    <IBAN-electronic-format-example>LT121000011101001000</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="37">
+    <Name-of-country>Luxembourg</Name-of-country>
+    <Country-code>LU</Country-code>
+    <BBAN-length>16</BBAN-length>
+    <IBAN-structure>LU([0-9]{2})([0-9]{3})([A-Za-z0-9]{13})</IBAN-structure>
+    <IBAN-length>20</IBAN-length>
+    <IBAN-electronic-format-example>LU280019400644750000</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="38">
+    <Name-of-country>Macedonia</Name-of-country>
+    <Country-code>MK</Country-code>
+    <BBAN-length>15</BBAN-length>
+    <IBAN-structure>MK([0-9]{2})([0-9]{3})([A-Za-z0-9]{10})([0-9]{2})</IBAN-structure>
+    <IBAN-length>19</IBAN-length>
+    <IBAN-electronic-format-example>MK07250120000058984</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="39">
+    <Name-of-country>Malta</Name-of-country>
+    <Country-code>MT</Country-code>
+    <BBAN-length>27</BBAN-length>
+    <IBAN-structure>MT([0-9]{2})([A-Z]{4})([0-9]{5})([A-Za-z0-9]{18})</IBAN-structure>
+    <IBAN-length>31</IBAN-length>
+    <IBAN-electronic-format-example>MT84MALT011000012345MTLCAST001S</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="40">
+    <Name-of-country>Mauritania</Name-of-country>
+    <Country-code>MR</Country-code>
+    <BBAN-length>23</BBAN-length>
+    <IBAN-structure>MR([0-9]{2})([0-9]{5})([0-9]{5})([0-9]{11})([0-9]{2})</IBAN-structure>
+    <IBAN-length>27</IBAN-length>
+    <IBAN-electronic-format-example>MR1300020001010000123456753</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="41">
+    <Name-of-country>Mauritius</Name-of-country>
+    <Country-code>MU</Country-code>
+    <BBAN-length>26</BBAN-length>
+    <IBAN-structure>MU([0-9]{2})([A-Z]{4})([0-9]{2})([0-9]{2})([0-9]{12})([0-9]{3})([A-Z]{3})</IBAN-structure>
+    <IBAN-length>30</IBAN-length>
+    <IBAN-electronic-format-example>MU17BOMM0101101030300200000MUR</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="42">
+    <Name-of-country>Republic of Moldova</Name-of-country>
+    <Country-code>MD</Country-code>
+    <BBAN-length>20</BBAN-length>
+    <IBAN-structure>MD([0-9]{2})([A-Za-z0-9]{20})</IBAN-structure>
+    <IBAN-length>24</IBAN-length>
+    <IBAN-electronic-format-example>MD24AG000225100013104168</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="43">
+    <Name-of-country>Monaco</Name-of-country>
+    <Country-code>MC</Country-code>
+    <BBAN-length>23</BBAN-length>
+    <IBAN-structure>MC([0-9]{2})([0-9]{5})([0-9]{5})([A-Za-z0-9]{11})([0-9]{2})</IBAN-structure>
+    <IBAN-length>27</IBAN-length>
+    <IBAN-electronic-format-example>MC5811222000010123456789030</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="44">
+    <Name-of-country>Montenegro</Name-of-country>
+    <Country-code>ME</Country-code>
+    <BBAN-length>18</BBAN-length>
+    <IBAN-structure>ME([0-9]{2})([0-9]{3})([0-9]{13})([0-9]{2})</IBAN-structure>
+    <IBAN-length>22</IBAN-length>
+    <IBAN-electronic-format-example>ME25505000012345678951</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="45">
+    <Name-of-country>The Netherlands</Name-of-country>
+    <Country-code>NL</Country-code>
+    <BBAN-length>14</BBAN-length>
+    <IBAN-structure>NL([0-9]{2})([A-Z]{4})([0-9]{10})</IBAN-structure>
+    <IBAN-length>18</IBAN-length>
+    <IBAN-electronic-format-example>NL91ABNA0417164300</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="46">
+    <Name-of-country>Norway</Name-of-country>
+    <Country-code>NO</Country-code>
+    <BBAN-length>11</BBAN-length>
+    <IBAN-structure>NO([0-9]{2})([0-9]{4})([0-9]{6})([0-9]{1})</IBAN-structure>
+    <IBAN-length>15</IBAN-length>
+    <IBAN-electronic-format-example>NO9386011117947</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="47">
+    <Name-of-country>Pakistan</Name-of-country>
+    <Country-code>PK</Country-code>
+    <BBAN-length>20</BBAN-length>
+    <IBAN-structure>PK([0-9]{2})([A-Z]{4})([A-Za-z0-9]{16})</IBAN-structure>
+    <IBAN-length>24</IBAN-length>
+    <IBAN-electronic-format-example>PK36SCBL0000001123456702</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="48">
+    <Name-of-country>Palestine, State of</Name-of-country>
+    <Country-code>PS</Country-code>
+    <BBAN-length>25</BBAN-length>
+    <IBAN-structure>PS([0-9]{2})([A-Z]{4})([A-Za-z0-9]{21})</IBAN-structure>
+    <IBAN-length>29</IBAN-length>
+    <IBAN-electronic-format-example>PS92PALS000000000400123456702</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="49">
+    <Name-of-country>Poland</Name-of-country>
+    <Country-code>PL</Country-code>
+    <BBAN-length>24</BBAN-length>
+    <IBAN-structure>PL([0-9]{2})([0-9]{8})([0-9]{16})</IBAN-structure>
+    <IBAN-length>28</IBAN-length>
+    <IBAN-electronic-format-example>PL61109010140000071219812874</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="50">
+    <Name-of-country>Portugal</Name-of-country>
+    <Country-code>PT</Country-code>
+    <BBAN-length>21</BBAN-length>
+    <IBAN-structure>PT([0-9]{2})([0-9]{4})([0-9]{4})([0-9]{11})([0-9]{2})</IBAN-structure>
+    <IBAN-length>25</IBAN-length>
+    <IBAN-electronic-format-example>PT50000201231234567890154</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="51">
+    <Name-of-country>Romania</Name-of-country>
+    <Country-code>RO</Country-code>
+    <BBAN-length>20</BBAN-length>
+    <IBAN-structure>RO([0-9]{2})([A-Z]{4})([A-Za-z0-9]{16})</IBAN-structure>
+    <IBAN-length>24</IBAN-length>
+    <IBAN-electronic-format-example>RO49AAAA1B31007593840000</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="52">
+    <Name-of-country>Qatar</Name-of-country>
+    <Country-code>QA</Country-code>
+    <BBAN-length>25</BBAN-length>
+    <IBAN-structure>QA([0-9]{2})([A-Z]{4})([A-Za-z0-9]{21})</IBAN-structure>
+    <IBAN-length>29</IBAN-length>
+    <IBAN-electronic-format-example>QA58DOHB00001234567890ABCDEFG</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="53">
+    <Name-of-country>San Marino</Name-of-country>
+    <Country-code>SM</Country-code>
+    <BBAN-length>23</BBAN-length>
+    <IBAN-structure>SM([0-9]{2})([A-Z]{1})([0-9]{5})([0-9]{5})([A-Za-z0-9]{12})</IBAN-structure>
+    <IBAN-length>27</IBAN-length>
+    <IBAN-electronic-format-example>SM86U0322509800000000270100</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="54">
+    <Name-of-country>Saudi Arabia</Name-of-country>
+    <Country-code>SA</Country-code>
+    <BBAN-length>20</BBAN-length>
+    <IBAN-structure>SA([0-9]{2})([0-9]{2})([A-Za-z0-9]{18})</IBAN-structure>
+    <IBAN-length>24</IBAN-length>
+    <IBAN-electronic-format-example>SA0380000000608010167519</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="55">
+    <Name-of-country>Serbia</Name-of-country>
+    <Country-code>RS</Country-code>
+    <BBAN-length>18</BBAN-length>
+    <IBAN-structure>RS([0-9]{2})([0-9]{3})([0-9]{13})([0-9]{2})</IBAN-structure>
+    <IBAN-length>22</IBAN-length>
+    <IBAN-electronic-format-example>RS35260005601001611379</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="56">
+    <Name-of-country>Slovak Republic</Name-of-country>
+    <Country-code>SK</Country-code>
+    <BBAN-length>20</BBAN-length>
+    <IBAN-structure>SK([0-9]{2})([0-9]{4})([0-9]{6})([0-9]{10})</IBAN-structure>
+    <IBAN-length>24</IBAN-length>
+    <IBAN-electronic-format-example>SK3112000000198742637541</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="57">
+    <Name-of-country>Slovenia</Name-of-country>
+    <Country-code>SI</Country-code>
+    <BBAN-length>15</BBAN-length>
+    <IBAN-structure>SI([0-9]{2})([0-9]{5})([0-9]{8})([0-9]{2})</IBAN-structure>
+    <IBAN-length>19</IBAN-length>
+    <IBAN-electronic-format-example>SI56263300012039086</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="58">
+    <Name-of-country>Spain</Name-of-country>
+    <Country-code>ES</Country-code>
+    <BBAN-length>20</BBAN-length>
+    <IBAN-structure>ES([0-9]{2})([0-9]{4})([0-9]{4})([0-9]{1})([0-9]{1})([0-9]{10})</IBAN-structure>
+    <IBAN-length>24</IBAN-length>
+    <IBAN-electronic-format-example>ES9121000418450200051332</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="59">
+    <Name-of-country>Sweden</Name-of-country>
+    <Country-code>SE</Country-code>
+    <BBAN-length>20</BBAN-length>
+    <IBAN-structure>SE([0-9]{2})([0-9]{3})([0-9]{16})([0-9]{1})</IBAN-structure>
+    <IBAN-length>24</IBAN-length>
+    <IBAN-electronic-format-example>SE4550000000058398257466</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="60">
+    <Name-of-country>Switzerland</Name-of-country>
+    <Country-code>CH</Country-code>
+    <BBAN-length>17</BBAN-length>
+    <IBAN-structure>CH([0-9]{2})([0-9]{5})([A-Za-z0-9]{12})</IBAN-structure>
+    <IBAN-length>21</IBAN-length>
+    <IBAN-electronic-format-example>CH9300762011623852957</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="61">
+    <Name-of-country>Tunisia</Name-of-country>
+    <Country-code>TN</Country-code>
+    <BBAN-length>20</BBAN-length>
+    <IBAN-structure>TN([0-9]{2})([0-9]{2})([0-9]{3})([0-9]{13})([0-9]{2})</IBAN-structure>
+    <IBAN-length>24</IBAN-length>
+    <IBAN-electronic-format-example>TN5910006035183598478831</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="62">
+    <Name-of-country>Turkey</Name-of-country>
+    <Country-code>TR</Country-code>
+    <BBAN-length>22</BBAN-length>
+    <IBAN-structure>TR([0-9]{2})([0-9]{5})([A-Za-z0-9]{1})([A-Za-z0-9]{16})</IBAN-structure>
+    <IBAN-length>26</IBAN-length>
+    <IBAN-electronic-format-example>TR330006100519786457841326</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="63">
+    <Name-of-country>United Arab Emirates</Name-of-country>
+    <Country-code>AE</Country-code>
+    <BBAN-length>19</BBAN-length>
+    <IBAN-structure>AE([0-9]{2})([0-9]{3})([0-9]{16})</IBAN-structure>
+    <IBAN-length>23</IBAN-length>
+    <IBAN-electronic-format-example>AE070331234567890123456</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+  <country id="64">
+    <Name-of-country>United Kingdom</Name-of-country>
+    <Country-code>GB</Country-code>
+    <BBAN-length>18</BBAN-length>
+    <IBAN-structure>GB([0-9]{2})([A-Z]{4})([0-9]{6})([0-9]{8})</IBAN-structure>
+    <IBAN-length>22</IBAN-length>
+    <IBAN-electronic-format-example>GB29NWBK60161331926819</IBAN-electronic-format-example>
+    <SEPA-Country>Yes</SEPA-Country>
+  </country>
+  <country id="65">
+    <Name-of-country>Virgin Islands, British</Name-of-country>
+    <Country-code>VG</Country-code>
+    <BBAN-length>20</BBAN-length>
+    <IBAN-structure>VG([0-9]{2})([A-Z]{4})([0-9]{16})</IBAN-structure>
+    <IBAN-length>24</IBAN-length>
+    <IBAN-electronic-format-example>VG96VPVG0000012345678901</IBAN-electronic-format-example>
+    <SEPA-Country>No</SEPA-Country>
+  </country>
+</IBAN-Registry>

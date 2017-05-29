@@ -1,5 +1,6 @@
 /*  Check digits of various entities: account numbers, VAT ids, IBANs ...
     @(#) $Id: DigitChecker.java 519 2010-07-25 09:28:45Z gfis $
+    2017-05-29: javadoc 1.8
     2016-07-29: DeTaxIdChecker
     2014-01-20: account.IBANChecker
     2009-01-09: mode HTML, colored check digits
@@ -67,17 +68,17 @@ public class DigitChecker {
      *  @param args Arguments; if missing, print the following:
      *  <pre>
      *  usage:\tjava org.teherba.checkdig.DigitChecker [-m html]
-     *        \t                           -account <German account-number> <German BLZ>
-     *        \t                           -ean     <EAN-13 or EAN-8>
-     *        \t                           -iban    <IBAN>
-     *        \t                           -isbn    <ISBN>
-     *        \t                           -isin    <ISIN>
-     *        \t                           -ismn    <ISMN>
-     *        \t                           -issn    <ISSN>
-     *        \t                           -pnd     <PND-Id>
-     *        \t                           -taxid   <German Tax Identification Number>
-     *        \t                           -uci     <SEPA Unique Creditor Id>
-     *        \t                           -vatid   <VAT-Id Number>
+     *        \t                           -account &lt;German account-number&gt; &lt;German BLZ&gt;
+     *        \t                           -ean     &lt;EAN-13 or EAN-8&gt;
+     *        \t                           -iban    &lt;IBAN&gt;
+     *        \t                           -isbn    &lt;ISBN&gt;
+     *        \t                           -isin    &lt;ISIN&gt;
+     *        \t                           -ismn    &lt;ISMN&gt;
+     *        \t                           -issn    &lt;ISSN&gt;
+     *        \t                           -pnd     &lt;PND-Id&gt;
+     *        \t                           -taxid   &lt;German Tax Identification Number&gt;
+     *        \t                           -uci     &lt;SEPA Unique Creditor Id&gt;
+     *        \t                           -vatid   &lt;VAT-Id Number&gt;
      *  </pre>
      *  @return input parameter with correct(ed) check digit,
      *  or empty string if the input value is syntactically malformed

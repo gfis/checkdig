@@ -1,6 +1,7 @@
 /*  IndexPage.java - main web page for CheckDig
  *  @(#) $Id: 57d01d0860aef0c2f2783647be70c3c381710c86 $
  *  2017-05-29: javadoc 1.8
+ *  2016-10-12: less imports
  *  2016-08-31: Dr. Georg Fischer: copied from Xtool
  */
 /*
@@ -19,15 +20,12 @@
  * limitations under the License.
  */
 package org.teherba.checkdig.web;
-import  org.teherba.checkdig.BaseChecker;
 import  org.teherba.checkdig.DigitChecker;
 import  org.teherba.common.web.BasePage;
 import  java.io.PrintWriter;
 import  java.io.Serializable;
-import  java.util.Iterator;
 import  javax.servlet.http.HttpServletRequest;
 import  javax.servlet.http.HttpServletResponse;
-import  javax.servlet.http.HttpSession;
 import  org.apache.log4j.Logger;
 
 /** CheckDig main dialog page

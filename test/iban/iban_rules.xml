@@ -1,0 +1,1868 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    Uebersicht der IBAN-Regeln
+    @(#) \$Id\$
+    2014-01-21, Georg Fischer
+-->
+<!--
+ * Copyright 2014 Dr. Georg Fischer <punctum at punctum dot kom>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<!--
+    After registration for the Extranet of Deutsche Bundesbank, you can
+    obtain an account and download the document "Uebersicht der IBAN-Regeln".
+    The following XML description was manually developped from this document.
+
+    The corresponding W3C schema is in test/iban/iban_rules.xsd.
+    The attribute names have the following meaning:
+    orid    original (IBAN) rule id
+    nrid    next     (IBAN) rule id
+    okey    original key to be used for database access
+    nkey    next     key to be used for database access
+    oacct   original account number or pattern
+    nacct   next     account number or pattern
+    oblz    original Bankleitzahl
+    nblz    next     Bankleitzahl
+    niban   new      IBAN
+    nbic    new      BIC
+    ocheck  whether oacct must have a proper checkdigit (default: true)
+    inst    institution, bank which maintaines the rule
+    remark  comment, result of test
+
+    okey/nkey have the following values:
+    rule    select by orid
+    blz     select by orid, oblz
+    acct    select by orid, oaact
+    blzacct select by orid, oblz, oacct
+    blzmact select by orid, oblz; test pattern against oacct
+    mact    select by orid; test pattern against oacct
+    mac3    select by orid, first 3 digits in oacct; test pattern against oacct
+
+    The IBAN rule number orid has low values (currently 0000 to 0057).
+    Normally, nrid is 0000 = standard IBAN rule, or 0001 = account has no IBAN.
+    In some cases, a chain of fictitious rule numbers nrid=90nn, 80nn, 70nn, ...
+    is used to check different aspects of the account and blz.
+
+    When okey is "mact" of "blzmact", oacct contains a pattern.
+    Such patterns are a subset of standard Java regular expressions
+    with the follwing components:
+    \d      for a digit 0-9
+    [1-9]   a character range, e.g. 1-9
+    [2]     a single character, e.g. 2
+    (...)   group of characters (for replacement of $n in nacct)
+
+    The "catchall" pattern "\d+" is used to match all remaining combinations.
+    Internally, this is stored as "\d~" for proper ASCII ordering.
+    The set of patterns must always match all 10 digits of the account number;
+    if necessary, the patterns must mention leading zeroes.
+
+    When oacct contains a pattern, nacct may contain placeholders
+    $1, $2 etc. which are replaced by the correspondingly named group 1,
+    group 2 etc.
+
+    This XML description is transformed into rows of tab separated values
+    to be loaded into database tables. The following XSLT (and SQL) scripts
+    (all in checkdig/test/iban) are used:
+
+    rule_insert.xsl
+        generate rows for table iban_rules
+    rule_test.xsl
+        generate rows with test data to be read by IBANGenerator.main
+    rule_access.xsl
+        generate rows for auxiliary table iban_access
+    rule_new_ibans.xsl
+    rule_check_niban
+    rule_check_nbic
+        consistency checks
+-->
+<IBAN-Rules xmlns="http://www.teherba.org/2013/checkiban" version="2014-03">
+
+<rule orid="0000" version="00" inst="Standard IBAN" okey="rule">
+    <test oblz="100 900 44" oacct="532013018" niban="DE10 1009 0044 0532 0130 18" remark="! Example calculation" />
+</rule>
+
+<rule orid="0001" version="00" inst="No IBAN" okey="rule">
+</rule>
+
+<rule orid="0002" version="00" inst="Augsburger Aktienbank" okey="mact">
+    <!-- nnnnnnn86n und nnnnnnn6nn ungültig -->
+    <map oacct="\d{7}[1-5]\d{2}"    nrid="0000" />
+    <map oacct="\d{7}6\d{2}"        nrid="0001" />
+    <map oacct="\d{7}7\d{2}"        nrid="0000" />
+    <map oacct="\d{7}8[1-5]\d"      nrid="0000" />
+    <map oacct="\d{7}8[6]\d"        nrid="0001" />
+    <map oacct="\d{7}8[7-9]\d"      nrid="0000" />
+    <map oacct="\d{7}9\d{2}"        nrid="0000" />
+    <map oacct="\d+"                nrid="0000" /><!-- catch all others: standard -->
+</rule>
+
+<rule orid="0003" version="00" inst="Areal Bank AG, ZWL Wiesbaden" okey="acct">
+    <map oacct="6161604670"  nrid="0001" />
+</rule>
+
+<rule orid="0004" version="00" inst="Landesbank Berlin / Berliner Sparkasse" okey="acct">
+    <map oacct="135"     nacct="0990021440"   ocheck="false"  />
+    <map oacct="1111"    nacct="6600012020"   ocheck="false"  />
+    <map oacct="1900"    nacct="0920019005"   ocheck="false"  />
+    <map oacct="7878"    nacct="0780008006"   ocheck="false"  />
+    <map oacct="8888"    nacct="0250030942"   ocheck="false"  />
+    <map oacct="9595"    nacct="1653524703"   ocheck="false"  />
+    <map oacct="97097"   nacct="0013044150"   ocheck="false"  />
+    <map oacct="112233"  nacct="0630025819"   ocheck="false"  />
+    <map oacct="336666"  nacct="6604058903"   ocheck="false"  />
+    <map oacct="484848"  nacct="0920018963"   ocheck="false"  />
+</rule>
+
+<rule orid="0005" version="03" inst="Commerzbank AG" okey="blzmact">
+    <!-- 5.3 Ausnahme: BLZ ohne IBAN-Berechnung -->
+    <map oacct="\d+" oblz="50040033"    nrid="0001" />
+    <map oacct="\d+" oblz="99999999"    nrid="8005" nkey="blzmact" />
+    <test oblz="26580070" oacct="732502200"     nbic="DRESDEFF265" niban="DE32265800700732502200" remark="! Standard" />
+    <test oblz="26580070" oacct="7325022"       nbic="DRESDEFF265" niban="DE32265800700732502200" remark="! verschobenes Konto" />
+    <test oblz="26580070" oacct="8732502200"    nbic="DRESDEFF265" niban="DE60265800708732502200" remark="! gültige Kontoart" />
+    <test oblz="26580070" oacct="4820379900"    nbic="DRESDEFF265" niban="DE37265800704820379900" remark="! gültige Kontoart" />
+    <test oblz="50080000" oacct="1814706100"                                                      remark="? ungültig Kontoart" />
+    <test oblz="50080000" oacct="2814706100"                                                      remark="? ungültig Kontoart" />
+    <test oblz="50080000" oacct="3814706100"                                                      remark="? ungültig Kontoart" />
+    <test oblz="50080000" oacct="4814706100"    nbic="DRESDEFFXXX" niban="DE70500800004814706100" remark="! gültige Kontoart" />
+    <test oblz="50080000" oacct="5814706100"                                                      remark="? ungültig Kontoart" />
+    <test oblz="50080000" oacct="6814706100"    nbic="DRESDEFFXXX" niban="DE77500800006814706100" remark="! gültige Kontoart" />
+    <test oblz="50080000" oacct="7814706100"    nbic="DRESDEFFXXX" niban="DE32500800007814706100" remark="! gültige Kontoart" />
+    <test oblz="50080000" oacct="8814706100"    nbic="DRESDEFFXXX" niban="DE84500800008814706100" remark="! gültige Kontoart" />
+    <test oblz="50080000" oacct="9814706100"    nbic="DRESDEFFXXX" niban="DE39500800009814706100" remark="! gültige Kontoart" />
+    <test oblz="50080000" oacct="23165400"      nbic="DRESDEFFXXX" niban="DE42500800000023165400" remark="! gültige 6-stellige StammNr" />
+    <test oblz="50080000" oacct="231654"        nbic="DRESDEFFXXX" niban="DE42500800000023165400" remark="! verschobene 6-stellige St.Nr" />
+    <test oblz="50080000" oacct="4350300"       nbic="DRESDEFFXXX" niban="DE21500800000004350300" remark="! gültige 5-stellige StammNr" />
+    <test oblz="50080000" oacct="43503"         nbic="DRESDEFFXXX" niban="DE21500800000004350300" remark="! verschobene 5-stellige St.Nr" />
+    <test oblz="50080000" oacct="526400"        nbic="DRESDEFFXXX"                                remark="? ungültig 4-stellige St.Nr" />
+    <test oblz="50089400" oacct="526400"        nbic="DRESDEFFI01" niban="DE49500894000000526400" remark="! 4-stellige St.Nr, o. PZiffer" />
+    <test oblz="10080000" oacct="998761700"     nbic="DRESDEFF100" niban="DE73100800000998761700" remark="! gültiges IT-Konto" />
+    <test oblz="12080000" oacct="998761700"                                                       remark="? gesperrte BLZ/IT-Konto" />
+    <test oblz="26580070" oacct="43434280"      nbic="DRESDEFF265"                                remark="? Prüfziffer 10 unzulässig" />
+    <test oblz="26580070" oacct="4343428000"    nbic="DRESDEFF265"                                remark="? Prüfziff 10 geschoben unzul." />
+    <test oblz="26580070" oacct="99021000"      nbic="DRESDEFF265" niban="DE10265800709902100000" remark="! Prüfziffer 0 geschoben" />
+    <test oblz="50540028" oacct="4217386"       nbic="COBADEFFXXX" niban="DE24505400280421738600" remark="! verschobenes Konto" />
+    <test oblz="50540028" oacct="4217387"                                                         remark="? verschoben falsche PZ" />
+    <test oblz="72040046" oacct="111198800"     nbic="COBADEFFXXX" niban="DE10720400460111198800" remark="! Standard" />
+    <test oblz="72040046" oacct="111198700"                                                       remark="? falsche Prüfziffer" />
+    <test oblz="50540028" oacct="420086100"     nbic="COBADEFFXXX" niban="DE46505400280420086100" remark="! Standard" />
+    <test oblz="50540028" oacct="421573704"     nbic="COBADEFFXXX" niban="DE13505400280421573704" remark="! Standard mit U-Kto" />
+    <test oblz="50540028" oacct="421679200"     nbic="COBADEFFXXX" niban="DE26505400280421679200" remark="! Standard" />
+    <test oblz="65440087" oacct="130023500"     nbic="COBADEFFXXX" niban="DE63654400870130023500" remark="! Standard" />
+    <test oblz="23040022" oacct="104414"        nbic="COBADEFFXXX" niban="DE29230400220010441400" remark="! verschobene 6-stellige St.Nr" />
+    <test oblz="23040022" oacct="104417"                                                          remark="? 6-stellige St.Nr falsche PZ" />
+    <test oblz="12040000" oacct="40050700"      nbic="COBADEFFXXX" niban="DE27120400000040050700" remark="! Standard" />
+    <test oblz="23040022" oacct="101337"        nbic="COBADEFFXXX" niban="DE73230400220010133700" remark="! verschobene 6-stellige St.Nr" />
+    <test oblz="23040022" oacct="10503101"      nbic="COBADEFFXXX" niban="DE77230400220010503101" remark="! gültige 6-stellige StammNr" />
+    <test oblz="12040000" oacct="52065002"      nbic="COBADEFFXXX" niban="DE12120400000052065002" remark="! gültige 6-stellige StammNr" />
+    <test oblz="50040000" oacct="930125001"     nbic="COBADEFFXXX" niban="DE97500400000930125001" remark="! Standard" />
+    <test oblz="70040041" oacct="930125000"     nbic="COBADEFFXXX" niban="DE89700400410930125000" remark="! Standard" />
+    <test oblz="50040000" oacct="930125006"     nbic="COBADEFFXXX" niban="DE59500400000930125006" remark="! Standard" />
+    <test oblz="50040033" oacct="930125007"                                                       remark="? gesperrte BLZ" />
+    <test oblz="20041111" oacct="130023500"     nbic="COBADEHDXXX" niban="DE81200411110130023500" remark="! comdirect" />
+    <test oblz="37080040" oacct="111"           nbic="DRESDEFF370" niban="DE69370800400215022000" remark="! Spendenkontonummer" />
+    <test oblz="50040000" oacct="101010"        nbic="COBADEFFXXX" niban="DE46500400000311011100" remark="! Spendenkontonummer" />
+    <test oblz="15080000" oacct="42417704"      nbic="DRESDEFF150" niban="DE16150800004241770400" remark="! 8-stellig PZ auf Stelle 8" />
+    <test oblz="12080000" oacct="70548200"      nbic="DRESDEFF120" niban="DE41120800000070548200" remark="! 8-stellig PZ auf Stelle 8 und 10" />
+    <test oblz="21080050" oacct="1186504"       nbic="DRESDEFF210" niban="DE95210800500118650400" remark="! 7-stellig PZ auf Stelle 8" />
+    <test oblz="21080050" oacct="1186103"       nbic="DRESDEFF210" niban="DE58210800500001186103" remark="! 7-stellig PZ auf Stelle 8 und 10" />
+</rule><!--0005-->
+<rule orid="8005" version="03" inst="Commerzbank 5.2.2 Ausnahme" okey="blzmact">
+    <!--
+    Von einer IBAN-Berechnung ausgenommen sind alle
+    Konten von 0998000000 bis 0999499999,
+    sofern die BLZ in der nachstehenden Tabelle aufgeführt ist.
+    -->
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="10080900" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="12080000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="13080000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="14080000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="15080000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="16080000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="17080000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="18080000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="20080055" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="20080057" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="21080050" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="21280002" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="21480003" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="21580000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="22180000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="22181400" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="22280000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="24080000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="24180001" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="25480021" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="25780022" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="25980027" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="26080024" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="26281420" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="26580070" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="26880063" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="26981062" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="28280012" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="29280011" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="30080055" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="30080057" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="31080015" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="32080010" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="33080030" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="34080031" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="34280032" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="36280071" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="36580072" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="40080040" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="41280043" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="42080082" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="42680081" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="43080083" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="44080055" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="44080057" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="44580070" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="45080060" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="46080010" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="47880031" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="49080025" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="50080055" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="50080057" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="50080082" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="50680002" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="50780006" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="50880050" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="51380040" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="52080080" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="53080030" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="54080021" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="54280023" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="54580020" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="54680022" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="55080065" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="57080070" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="58580074" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="59080090" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="60080055" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="60080057" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="60380002" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="60480008" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="61080006" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="61281007" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="61480001" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="62080012" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="62280012" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="63080015" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="64080014" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="64380011" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="65080009" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="65180005" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="65380003" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="66280053" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="66680013" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="67280051" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="69280035" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="70080056" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="70080057" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="70380006" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="71180005" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="72180002" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="73180011" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="73380004" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="73480013" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="74180009" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="74380007" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="75080003" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="76080053" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="79080052" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="79380051" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="79580099" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="80080000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="81080000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="82080000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="83080000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="84080000" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="85080200" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="86080055" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="86080057" nrid="0001" />
+    <map oacct="099(8\d|9[0-4])\d{5}" oblz="87080000" nrid="0001" />
+    <map oacct="\d+" oblz="99999999" nrid="7005" nkey="blzmact" /><!-- catch all others -->
+</rule><!--8005-->
+<rule orid="7005" version="03" inst="Commerzbank 5.4 Pseudokontonummern" okey="blzmact">
+    <!-- 5.4 Verfahren bei Pseudokontonummern -->
+    <map oblz="30040000"    oacct="0000000036"   nacct="0261103600" nrid="0000" />
+    <map oblz="47880031"    oacct="0000000050"   nacct="0519899900" nrid="0000" />
+    <map oblz="47840065"    oacct="0000000050"   nacct="0150103000" nrid="0000" />
+    <map oblz="47840065"    oacct="0000000055"   nacct="0150103000" nrid="0000" />
+    <map oblz="70080000"    oacct="0000000094"   nacct="0928553201" nrid="0000" />
+    <map oblz="70040041"    oacct="0000000094"   nacct="0212808000" nrid="0000" />
+    <map oblz="47840065"    oacct="0000000099"   nacct="0150103000" nrid="0000" />
+    <map oblz="37080040"    oacct="0000000100"   nacct="0269100000" nrid="0000" />
+    <map oblz="38040007"    oacct="0000000100"   nacct="0119160000" nrid="0000" />
+    <map oblz="37080040"    oacct="0000000111"   nacct="0215022000" nrid="0000" />
+    <map oblz="51080060"    oacct="0000000123"   nacct="0012299300" nrid="0000" />
+    <map oblz="36040039"    oacct="0000000150"   nacct="0161620000" nrid="0000" />
+    <map oblz="68080030"    oacct="0000000202"   nacct="0416520200" nrid="0000" />
+    <map oblz="30040000"    oacct="0000000222"   nacct="0348010002" nrid="0000" />
+    <map oblz="38040007"    oacct="0000000240"   nacct="0109024000" nrid="0000" />
+    <map oblz="69240075"    oacct="0000000444"   nacct="0445520000" nrid="0000" />
+    <map oblz="60080000"    oacct="0000000502"   nacct="0901581400" nrid="0000" />
+    <map oblz="60040071"    oacct="0000000502"   nacct="0525950200" nrid="0000" />
+    <map oblz="55040022"    oacct="0000000555"   nacct="0211050000" nrid="0000" />
+    <map oblz="39080005"    oacct="0000000556"   nacct="0204655600" nrid="0000" />
+    <map oblz="39040013"    oacct="0000000556"   nacct="0106555600" nrid="0000" />
+    <map oblz="57080070"    oacct="0000000661"   nacct="0604101200" nrid="0000" />
+    <map oblz="26580070"    oacct="0000000700"   nacct="0710000000" nrid="0000" />
+    <map oblz="50640015"    oacct="0000000777"   nacct="0222222200" nrid="0000" />
+    <map oblz="30040000"    oacct="0000000999"   nacct="0123799900" nrid="0000" />
+    <map oblz="86080000"    oacct="0000001212"   nacct="0480375900" nrid="0000" />
+    <map oblz="37040044"    oacct="0000001888"   nacct="0212129101" nrid="0000" />
+    <map oblz="25040066"    oacct="0000001919"   nacct="0141919100" nrid="0000" />
+    <map oblz="10080000"    oacct="0000001987"   nacct="0928127700" nrid="0000" />
+    <map oblz="50040000"    oacct="0000002000"   nacct="0728400300" nrid="0000" />
+    <map oblz="20080000"    oacct="0000002222"   nacct="0903927200" nrid="0000" />
+    <map oblz="38040007"    oacct="0000003366"   nacct="0385333000" nrid="0000" />
+    <map oblz="37080040"    oacct="0000004004"   nacct="0233533500" nrid="0000" />
+    <map oblz="37080040"    oacct="0000004444"   nacct="0233000300" nrid="0000" />
+    <map oblz="43080083"    oacct="0000004630"   nacct="0825110100" nrid="0000" />
+    <map oblz="50080000"    oacct="0000006060"   nacct="0096736100" nrid="0000" />
+    <map oblz="10040000"    oacct="0000007878"   nacct="0267878700" nrid="0000" />
+    <map oblz="10080000"    oacct="0000008888"   nacct="0928126501" nrid="0000" />
+    <map oblz="50080000"    oacct="0000009000"   nacct="0026492100" nrid="0000" />
+    <map oblz="79080052"    oacct="0000009696"   nacct="0300021700" nrid="0000" />
+    <map oblz="79040047"    oacct="0000009696"   nacct="0680210200" nrid="0000" />
+    <map oblz="39080005"    oacct="0000009800"   nacct="0208457000" nrid="0000" />
+    <map oblz="50080000"    oacct="0000042195"   nacct="0900333200" nrid="0000" />
+    <map oblz="32040024"    oacct="0000047800"   nacct="0155515000" nrid="0000" />
+    <map oblz="37080040"    oacct="0000055555"   nacct="0263602501" nrid="0000" />
+    <map oblz="38040007"    oacct="0000055555"   nacct="0305555500" nrid="0000" />
+    <map oblz="50080000"    oacct="0000101010"   nacct="0090003500" nrid="0000" />
+    <map oblz="50040000"    oacct="0000101010"   nacct="0311011100" nrid="0000" />
+    <map oblz="37040044"    oacct="0000102030"   nacct="0222344400" nrid="0000" />
+    <map oblz="86080000"    oacct="0000121200"   nacct="0480375900" nrid="0000" />
+    <map oblz="66280053"    oacct="0000121212"   nacct="0625242400" nrid="0000" />
+    <map oblz="16080000"    oacct="0000123456"   nacct="0012345600" nrid="0000" />
+    <map oblz="29080010"    oacct="0000124124"   nacct="0107502000" nrid="0000" />
+    <map oblz="37080040"    oacct="0000182002"   nacct="0216603302" nrid="0000" />
+    <map oblz="12080000"    oacct="0000212121"   nacct="4050462200" nrid="0000" />
+    <map oblz="37080040"    oacct="0000300000"   nacct="0983307900" nrid="0000" />
+    <map oblz="37040044"    oacct="0000300000"   nacct="0300000700" nrid="0000" />
+    <map oblz="37080040"    oacct="0000333333"   nacct="0270330000" nrid="0000" />
+    <map oblz="38040007"    oacct="0000336666"   nacct="0105232300" nrid="0000" />
+    <map oblz="55040022"    oacct="0000343434"   nacct="0217900000" nrid="0000" />
+    <map oblz="85080000"    oacct="0000400000"   nacct="0459488501" nrid="0000" />
+    <map oblz="37080040"    oacct="0000414141"   nacct="0041414100" nrid="0000" />
+    <map oblz="38040007"    oacct="0000414141"   nacct="0108000100" nrid="0000" />
+    <map oblz="20080000"    oacct="0000505050"   nacct="0500100600" nrid="0000" />
+    <map oblz="37080040"    oacct="0000555666"   nacct="0055566600" nrid="0000" />
+    <map oblz="20080000"    oacct="0000666666"   nacct="0900732500" nrid="0000" />
+    <map oblz="30080000"    oacct="0000700000"   nacct="0800005000" nrid="0000" />
+    <map oblz="70080000"    oacct="0000700000"   nacct="0750055500" nrid="0000" />
+    <map oblz="70080000"    oacct="0000900000"   nacct="0319966601" nrid="0000" />
+    <map oblz="37080040"    oacct="0000909090"   nacct="0269100000" nrid="0000" />
+    <map oblz="38040007"    oacct="0000909090"   nacct="0119160000" nrid="0000" />
+    <map oblz="70080000"    oacct="0000949494"   nacct="0575757500" nrid="0000" />
+    <map oblz="70080000"    oacct="0001111111"   nacct="0448060000" nrid="0000" />
+    <map oblz="70040041"    oacct="0001111111"   nacct="0152140000" nrid="0000" />
+    <map oblz="10080000"    oacct="0001234567"   nacct="0920192001" nrid="0000" />
+    <map oblz="38040007"    oacct="0001555555"   nacct="0258266600" nrid="0000" />
+    <map oblz="76040061"    oacct="0002500000"   nacct="0482146800" nrid="0000" />
+    <map oblz="16080000"    oacct="0003030400"   nacct="4205227110" nrid="0000" />
+    <map oblz="37080040"    oacct="0005555500"   nacct="0263602501" nrid="0000" />
+    <map oblz="75040062"    oacct="0006008833"   nacct="0600883300" nrid="0000" />
+    <map oblz="12080000"    oacct="0007654321"   nacct="0144000700" nrid="0000" />
+    <map oblz="70080000"    oacct="0007777777"   nacct="0443540000" nrid="0000" />
+    <map oblz="70040041"    oacct="0007777777"   nacct="0213600000" nrid="0000" />
+    <map oblz="64140036"    oacct="0008907339"   nacct="0890733900" nrid="0000" />
+    <map oblz="70080000"    oacct="0009000000"   nacct="0319966601" nrid="0000" />
+    <map oblz="61080006"    oacct="0009999999"   nacct="0202427500" nrid="0000" />
+    <map oblz="12080000"    oacct="0012121212"   nacct="4101725100" nrid="0000" />
+    <map oblz="29080010"    oacct="0012412400"   nacct="0107502000" nrid="0000" />
+    <map oblz="34280032"    oacct="0014111935"   nacct="0645753800" nrid="0000" />
+    <map oblz="38040007"    oacct="0043434343"   nacct="0118163500" nrid="0000" />
+    <map oblz="30080000"    oacct="0070000000"   nacct="0800005000" nrid="0000" />
+    <map oblz="70080000"    oacct="0070000000"   nacct="0750055500" nrid="0000" />
+    <map oblz="44040037"    oacct="0111111111"   nacct="0320565500" nrid="0000" />
+    <map oblz="70040041"    oacct="0400500500"   nacct="0400500500" nrid="0000" />
+    <map oblz="60080000"    oacct="0500500500"   nacct="0901581400" nrid="0000" />
+    <map oblz="60040071"    oacct="0500500500"   nacct="0512700600" nrid="0000" />
+    <map oblz="99999999"    oacct="\d+"                             nrid="6005" nkey="mact" />
+</rule><!--7005-->
+<rule orid="6005" version="03" inst="Commerzbank AG Unterkonto" okey="mact">
+    <map oacct="000000([0-9]\d{3})"                  nrid="0001" />
+    <map oacct="00000([1-9]\d{4})"   nacct="$100"    nrid="0000" />
+    <map oacct="0000([1-9]\d{5})"    nacct="$100"    nrid="0000" />
+    <map oacct="000([1-9]\d{6})"     nacct="$100"    nrid="0000" /><!-- ??? 7 digits undecideable yet -->
+    <map oacct="00([1-9]\d{7})"                      nrid="0000" />
+    <map oacct="0([1-9]\d{8})"                       nrid="0000" />
+    <map oacct="[46789]\d{9}"                        nrid="0000" />
+</rule><!--6005-->
+
+<rule orid="0006" version="00" inst="Stadtsparkasse München" okey="acct">
+    <map oacct="1111111"     nacct="20228888"     />
+    <map oacct="7777777"     nacct="903286003"    />
+    <map oacct="34343434"    nacct="1000506517"   />
+    <map oacct="70000"       nacct="18180018"     />
+</rule>
+
+<rule orid="0007" version="00" inst="Sparkasse KölnBonn" okey="acct">
+    <!-- applies to exactly one blz="37050198" -->
+    <map oacct="111"         nacct="1115"         niban="DE15370501980000001115"  />
+    <map oacct="221"         nacct="23002157"     niban="DE25370501980023002157"  />
+    <map oacct="1888"        nacct="18882068"     niban="DE15370501980018882068"  />
+    <map oacct="2006"        nacct="1900668508"   niban="DE57370501981900668508"  />
+    <map oacct="2626"        nacct="1900730100"   niban="DE41370501981900730100"  />
+    <map oacct="3004"        nacct="1900637016"   niban="DE39370501981900637016"  />
+    <map oacct="3636"        nacct="23002447"     niban="DE52370501980023002447"  />
+    <map oacct="4000"        nacct="4028"         niban="DE31370501980000004028"  />
+    <map oacct="4444"        nacct="17368"        niban="DE12370501980000017368"  />
+    <map oacct="5050"        nacct="73999"        niban="DE83370501980000073999"  />
+    <map oacct="8888"        nacct="1901335750"   niban="DE42370501981901335750"  />
+    <map oacct="30000"       nacct="9992959"      niban="DE22370501980009992959"  />
+    <map oacct="43430"       nacct="1901693331"   niban="DE56370501981901693331"  />
+    <map oacct="46664"       nacct="1900399856"   niban="DE98370501981900399856"  />
+    <map oacct="55555"       nacct="34407379"     niban="DE81370501980034407379"  />
+    <map oacct="102030"      nacct="1900480466"   niban="DE17370501981900480466"  />
+    <map oacct="151515"      nacct="57762957"     niban="DE64370501980057762957"  />
+    <map oacct="222222"      nacct="2222222"      niban="DE85370501980002222222"  />
+    <map oacct="300000"      nacct="9992959"      niban="DE22370501980009992959"  />
+    <map oacct="333333"      nacct="33217"        niban="DE53370501980000033217"  />
+    <map oacct="414141"      nacct="92817"        niban="DE83370501980000092817"  />
+    <map oacct="606060"      nacct="91025"        niban="DE64370501980000091025"  />
+    <map oacct="909090"      nacct="90944"        niban="DE20370501980000090944"  />
+    <map oacct="2602024"     nacct="5602024"      niban="DE24370501980005602024"  />
+    <map oacct="3000000"     nacct="9992959"      niban="DE22370501980009992959"  />
+    <map oacct="7777777"     nacct="2222222"      niban="DE85370501980002222222"  />
+    <map oacct="8090100"     nacct="38901"        niban="DE39370501980000038901"  />
+    <map oacct="14141414"    nacct="43597665"     niban="DE96370501980043597665"  />
+    <map oacct="15000023"    nacct="15002223"     niban="DE98370501980015002223"  />
+    <map oacct="15151515"    nacct="57762957"     niban="DE64370501980057762957"  />
+    <map oacct="22222222"    nacct="2222222"      niban="DE85370501980002222222"  />
+    <map oacct="200820082"   nacct="1901783868"   niban="DE54370501981901783868"  />
+    <map oacct="222220022"   nacct="2222222"      niban="DE85370501980002222222"  />
+
+    <test oacct="111"        oblz="37050198"      niban="DE15370501980000001115"  nbic="COLSDE33XXX" remark="!OK" />
+    <test oacct="221"        oblz="37050198"      niban="DE25370501980023002157"  nbic="COLSDE33XXX" remark="!OK" />
+    <test oacct="1888"       oblz="37050198"      niban="DE15370501980018882068"  nbic="COLSDE33XXX" remark="!OK" />
+    <test oacct="2006"       oblz="37050198"      niban="DE57370501981900668508"  nbic="COLSDE33XXX" remark="!OK" />
+    <test oacct="2626"       oblz="37050198"      niban="DE41370501981900730100"  nbic="COLSDE33XXX" remark="!OK" />
+</rule>
+
+<rule orid="0008" version="00" inst="BHF-Bank AG" okey="blz">
+    <!-- pz_method 60 -->
+    <map oblz="10020200"    nblz="50020200" nbic="BHFBDEFF500" />
+    <map oblz="20120200"    nblz="50020200" nbic="BHFBDEFF500" />
+    <map oblz="25020200"    nblz="50020200" nbic="BHFBDEFF500" />
+    <map oblz="30020500"    nblz="50020200" nbic="BHFBDEFF500" />
+    <map oblz="51020000"    nblz="50020200" nbic="BHFBDEFF500" />
+    <map oblz="55020000"    nblz="50020200" nbic="BHFBDEFF500" />
+    <map oblz="60120200"    nblz="50020200" nbic="BHFBDEFF500" />
+    <map oblz="70220200"    nblz="50020200" nbic="BHFBDEFF500" />
+    <map oblz="86020200"    nblz="50020200" nbic="BHFBDEFF500" />
+
+    <test oacct="38000"    oblz="50020200" niban="DE80500202000000038000" nbic="BHFBDEFF500" remark="!OK" />
+    <test oacct="30009963" oblz="51020000" niban="DE46500202000030009963" nbic="BHFBDEFF500" remark="!OK" />
+    <test oacct="40033086" oblz="30020500" niban="DE02500202000040033086" nbic="BHFBDEFF500" remark="!OK" />
+    <test oacct="50017409" oblz="20120200" niban="DE55500202000050017409" nbic="BHFBDEFF500" remark="!OK" />
+    <test oacct="55036107" oblz="70220200" niban="DE38500202000055036107" nbic="BHFBDEFF500" remark="!OK" />
+    <test oacct="70049754" oblz="10020200" niban="DE98500202000070049754" nbic="BHFBDEFF500" remark="!OK" />
+
+    <test oacct="30009963" oblz="51020000" niban="DE05510200000030009963" nbic="BHFBDEFF510" remark="?NOK" />
+    <test oacct="40033086" oblz="30020500" niban="DE41300205000040033086" nbic="BHFBDEFF300" remark="?NOK" />
+    <test oacct="50017409" oblz="20120200" niban="DE75201202000050017409" nbic="BHFBDEFF200" remark="?NOK" />
+    <test oacct="55036107" oblz="70220200" niban="DE18702202000055036107" nbic="BHFBDEFF700" remark="?NOK" />
+    <test oacct="70049754" oblz="10020200" niban="DE31100202000070049754" nbic="BHFBDEFF100" remark="?NOK" />
+</rule>
+
+<rule orid="0009" version="00" inst="Sparkasse Schopfheim-Zell" okey="mact">
+    <!-- Bei Kontonummern der ehemaligen Sparkasse Zell im Wiesental (BLZ: 683 519 76),
+    die bei zehnstelliger Darstellung mit 1116 beginnen, werden die linken vier Stellen
+    durch den Wert 3047 ersetzt.
+    -->
+    <map  oacct="1116(\d{6})" nacct="3047$1" oblz="68351976" nblz="68351557" nbic="SOLADES1SFH" nrid="0000" />
+    <map  oacct="\d+"                        oblz="68351976" nblz="68351557" nbic="SOLADES1SFH" nrid="0000" /><!-- catch all others: standard -->
+    <test oblz="683 519 76" oacct="1116232594" niban="DE03 6835 1557 3047 2325 94" nbic="SOLADES1SFH" remark="!OK" />
+    <test oblz="683 519 76" oacct="0016005845" niban="DE10 6835 1557 0016 0058 45" nbic="SOLADES1SFH" remark="!OK" />
+</rule>
+
+<rule orid="0010" version="01" inst="Frankfurter Sparkasse" okey="blz">
+    <map oblz="50050222" nblz="50050201" nbic="HELADEF1822" nrid="8010" nkey="acct" />
+    <test oblz="500 502 22" oacct="1241539870" niban="DE45 5005 0201 1241 5398 70" nbic="HELADEF1822" remark="!OK" />
+</rule>
+
+<rule orid="8010" version="01" inst="Frankfurter Sparkasse" okey="acct">
+    <map oacct="2000"    nacct="222000" /><!-- nblz="50050201" nbic="HELADEF1822" niban="DE42500502010000222000" -->
+    <map oacct="800000"  nacct="180802" /><!-- nblz="50050201" nbic="HELADEF1822" niban="DE89500502010000180802" -->
+</rule>
+
+<rule orid="0011" version="00" inst="Sparkasse Krefeld" okey="acct">
+    <map oacct="1000"    nacct="8010001"  niban="DE44320500000008010001" />
+    <map oacct="47800"   nacct="47803"    niban="DE36320500000000047803" />
+    <test oacct="1000"   oblz="3205 0000" niban="DE44320500000008010001" nbic="SPKRDE33XXX" remark="!OK" />
+    <test oacct="47800"  oblz="3205 0000" niban="DE36320500000000047803" nbic="SPKRDE33XXX" remark="!OK" />
+</rule>
+
+<rule orid="0012" version="01" inst="Landesbank Hessen-Thüringen Girozentrale" okey="rule">
+    <map    nblz="50050000" nbic="HELADEFFXXX" />
+    <test oacct="5000002096"   oblz="508 500 49" niban="DE95 5005 0000 5000 0020 96" nbic="HELADEFFXXX"  remark="!OK" />
+</rule>
+
+<rule orid="0013" version="01" inst="Landesbank Hessen-Thüringen Girozentrale" okey="rule">
+    <map    nblz="30050000" nbic="WELADEDDXXX"/>
+    <test oacct="60624"        oblz="400 500 00" niban="DE15 3005 0000 0000 0606 24" nbic="WELADEDDXXX"  remark="!OK" />
+</rule>
+
+<rule orid="0014" version="00" inst="Deutsche Apotheker- und Ärztebank eG" okey="rule">
+    <map    nblz="30060601" nbic="DAAEDEDDXXX" />
+    <test oacct="0501144685" oblz="300 606 01" niban="DE57300606010501144685" nbic="DAAEDEDDXXX" remark="!OK" /><!-- href="http://www.naev.de/index.php/kontakt/standort"‎ -->
+</rule>
+
+<rule orid="0015" version="01" inst="Pax-Bank eG" okey="acct">
+    <!-- oblz="37060193" -->
+    <map oacct="94"          nacct="3008888018"   />
+    <map oacct="556"         nacct="0000101010"   />
+    <map oacct="888"         nacct="0031870011"   />
+    <map oacct="4040"        nacct="4003600101"   />
+    <map oacct="5826"        nacct="1015826017"   />
+    <map oacct="25000"       nacct="0025000110"   />
+    <map oacct="393393"      nacct="0033013019"   />
+    <map oacct="444555"      nacct="0032230016"   />
+    <map oacct="603060"      nacct="6002919018"   />
+    <map oacct="2120041"     nacct="0002130041"   />
+    <map oacct="80868086"    nacct="4007375013"   />
+    <map oacct="400569017"   nacct="4000569017"   />
+    <test oacct="4040" oblz="37060193" niban="DE13 3706 0193 4003 6001 01" nbic="GENODED1PAX" remark="!OK" /><!-- href="http://www.sankt-georgen.de/foerderer/aktion.html"  -->
+<!--
+6002432011, BLZ 37060193 bei der Pax-Bank Köln IBAN: DE64370601936002432011 BIC: GENODED1PAX
+-->
+</rule>
+
+<rule orid="0016" version="00" inst="Kölner Bank eG" okey="acct">
+    <!-- oblz="37160087" -->
+    <map oacct="300000"      nacct="18128012"     />
+</rule>
+
+<rule orid="0017" version="00" inst="Volksbank Bonn Rhein-Sieg" okey="acct">
+    <!-- oblz="38060186" -->
+    <map oacct="100"         nacct="2009090013"   />
+    <map oacct="111"         nacct="2111111017"   />
+    <map oacct="240"         nacct="2100240010"   />
+    <map oacct="4004"        nacct="2204004016"   />
+    <map oacct="4444"        nacct="2044444014"   />
+    <map oacct="6060"        nacct="2016060014"   />
+    <map oacct="102030"      nacct="1102030016"   />
+    <map oacct="333333"      nacct="2033333016"   />
+    <map oacct="909090"      nacct="2009090013"   />
+    <map oacct="50005000"    nacct="5000500013"   />
+    <test oblz="380 601 86"  oacct="5000 5000" niban="DE95 3806 0186 5000 5000 13" nbic="GENODED1BRS" remark="!OK" /><!-- href="http://www.5000.ag/index.php?id=18"  -->
+</rule>
+
+<rule orid="0018" version="00" inst="Aachener Bank eG" okey="acct">
+    <!-- oblz="39060180" -->
+    <map oacct="556"         nacct="120440110"    />
+    <map oacct="5435435430"  nacct="543543543"    />
+    <map oacct="2157"        nacct="121787016"    />
+    <map oacct="9800"        nacct="120800019"    />
+    <map oacct="202050"      nacct="1221864014"   />
+</rule>
+
+<rule orid="0019" version="00" inst="Bethmann Bank" okey="blz">
+    <map oblz="50130100"    nblz="50120383" nbic="DELBDE33XXX" />
+    <map oblz="50220200"    nblz="50120383" nbic="DELBDE33XXX" />
+    <map oblz="70030800"    nblz="50120383" nbic="DELBDE33XXX" />
+    <test oacct="20475000"  oblz="501 301 00" niban="DE82 5012 0383 0020 4750 00" nbic="DELBDE33XXX"  remark="!OK" />
+</rule>
+
+<rule orid="0020" version="02" inst="Deutsche Bank AG" okey="mact">
+    <!-- special; oblz="10020000" (Berliner Bank alt) is deleted -->
+    <map oacct="000000(9999)" ocheck="false" oblz="50070010" nacct="0092777202" niban="DE80 5007 0010 0092777202" nbic="DEUTDEFFXXX" /><!-- Stiftung Deutsche Sporthilfe -->
+    <map oacct="000000([0-9]\d{3})"                  nrid="0001" />
+    <map oacct="00000([1-9]\d{4})"   nacct="$100"    nrid="0000" />
+    <map oacct="0000([1-9]\d{5})"    nacct="$100"    nrid="0000" />
+    <map oacct="000([1-9]\d{6})"                     nrid="0001" /><!-- ??? undecideable yet -->
+    <map oacct="00([1-9]\d{7})"                      nrid="0000" />
+    <map oacct="0([1-9]\d{8})"                       nrid="0000" />
+    <test oblz="500 700 10" oacct="9999"       niban="DE80 5007 0010 0092777202"   nbic="DEUTDEFFXXX" remark="!OK Spendenkonto" />
+    <test oblz="100 700 10" oacct="9999"       niban="DE80 5007 0010 0092777202"   nbic="DEUTDEFFXXX" remark="?NOK Spendenkonto only for 50070010" />
+    <test oblz="100 700 00" oacct="0017845900" niban="DE06 1007 0000 0017 8459 00" nbic="DEUTDEBBXXX" remark="!OK" /><!-- http://www.deutsche-rentenversicherung.de/Bund/de/Inhalt/6_Wir_ueber_uns/01_infos_zum_unternehmen/07_bankverbindung/bankverbindung_zahlungsverkehr.html -->
+    <test oblz="330 700 90" oacct="0821433000" niban="DE10 3307 0090 0821 4330 00" nbic="DEUTDEDWXXX" remark="!OK" /><!-- https://www.barmer-gek.de/barmer/web/Portale/Versicherte/Rundum-gutversichert/Leistungen-Beitraege/Beitraege/Beitragsbankkonten/_C3_9Cbersicht__Bankkonten.html -->
+</rule>
+
+<rule orid="0021" version="01" inst="National-Bank AG" okey="mact">
+    <!--
+    Für alle BLZ wird der einheitliche BIC NBAGDE3EXXX und die einheitliche BLZ
+    360 200 30 verwendet. Zusätzlich ist zu beachten, dass die jeweiligen Kontonummern
+    nur sechs-, sieben-, neun- oder zehnstellig sind.
+    -->
+    <map oacct="00000[1-9]\d{4}"                                        nrid="0001" />
+    <map oacct="0000[1-9]\d{5}"     nblz="36020030"  nbic="NBAGDE3EXXX" nrid="0000" />
+    <map oacct="000[1-9]\d{6}"      nblz="36020030"  nbic="NBAGDE3EXXX" nrid="0000" />
+    <map oacct="00[1-9]\d{7}"                                           nrid="0001" />
+    <map oacct="0[1-9]\d{8}"        nblz="36020030"  nbic="NBAGDE3EXXX" nrid="0000" />
+    <map oacct="[1-9]\d{9}"         nblz="36020030"  nbic="NBAGDE3EXXX" nrid="0000" />
+    <map oacct="\d+"                nblz="36020030"  nbic="NBAGDE3EXXX" nrid="0001" /><!-- catch all others: invalid -->
+
+    <test oblz="350 200 30" oacct="305200"  niban="DE81360200300000305200" nbic="NBAGDE3EXXX" remark="!OK" />
+    <test oblz="362 200 30" oacct="900826"  niban="DE03360200300000900826" nbic="NBAGDE3EXXX" remark="!OK" />
+    <test oblz="365 200 30" oacct="705020"  niban="DE71360200300000705020" nbic="NBAGDE3EXXX" remark="!OK" />
+    <test oblz="360 200 30" oacct="9197354" niban="DE18360200300009197354" nbic="NBAGDE3EXXX" remark="!OK" />
+</rule>
+
+<rule orid="0022" version="00" inst="GLS Gemeinschaftsbank eG" okey="acct">
+    <map oacct="1111111" nacct="2222200000" /><!-- oblz="43060967" -->
+</rule>
+
+<rule orid="0023" version="00" inst="Volksbank Osnabrück eG" okey="acct">
+    <map oacct="700" nacct="1000700800" /><!-- oblz="26590025" -->
+</rule>
+
+<rule orid="0024" version="00" inst="Bank im Bistum Essen eG" okey="acct">
+    <!-- oblz="36060295" -->
+    <map oacct="94"  nacct="1694"     />
+    <map oacct="248" nacct="17248"    />
+    <map oacct="345" nacct="17345"    />
+    <map oacct="400" nacct="14400"    />
+</rule>
+
+<rule orid="0025" version="00" inst="Landesbank Baden-Württemberg / Baden-Württembergische Bank" okey="rule">
+    <map nblz="60050101" />
+    <test oblz="641 501 82" oacct="2777939"    niban="DE81 6005 0101 0002 7779 39" nbic="SOLADEST600" remark="!OK" />
+    <test oblz="644 502 88" oacct="7893500686" niban="DE80 6005 0101 7893 5006 86" nbic="SOLADEST600" remark="!OK" />
+</rule>
+
+<rule orid="0026" version="00" inst="Bank für Kirche und Diakonie eG, KD Bank" okey="acct">
+    <!-- oblz="35060190" -->
+    <map oacct="55111"   ocheck="false"  />
+    <map oacct="8090100" ocheck="false"  />
+</rule>
+
+<rule orid="0027" version="00" inst="Volksbank Krefeld eG" okey="acct">
+    <!-- oblz="32060362" -->
+    <map oacct="3333"    ocheck="false"  />
+    <map oacct="4444"    ocheck="false"  />
+</rule>
+
+<rule orid="0028" version="00" inst="Sparkasse Hannover" okey="blz">
+    <map oblz="25050299"    nblz="25050180" nbic="SPKHDE2HXXX" />
+    <test oblz="250 502 99" oacct="17095" niban="DE69 2505 0180 0000 0170 95" nbic="SPKHDE2HXXX" remark="!OK" />
+</rule>
+
+<rule orid="0029" version="00" inst="Société Générale" okey="mact">
+    <map oacct="(\d{3})0(\d{6})"     nacct="0$1$2" nrid="0000" />
+    <map oacct="(\d{3})[1-9](\d{6})"               nrid="0000" />
+    <map oacct="\d+"                               nrid="0000" /><!-- catch all others: standard -->
+    <!--
+    10-stellige Kontonummern, die
+    Position 4 eine "0" enthalten, können nicht 1:1 in eine gültige IBAN konvertiert werden.
+    In diesen Fällen wird die korrekte Kontonummer für IBAN gebildet indem die 4. Ziffer
+    (die "0") entfernt wird. Man erhält eine 9-stellige Konto-Nummer, die 1. Ziffer der Kontonummer
+    in der IBAN ist damit implizit eine "0".
+    -->
+</rule>
+
+<rule orid="0030" version="00" inst="Pommersche Volksbank eG" okey="acct">
+    <!-- oblz="13091054" -->
+    <map oacct="1718190"    ocheck="false" />
+    <map oacct="22000225"   ocheck="false" />
+    <map oacct="49902271"   ocheck="false" />
+    <map oacct="49902280"   ocheck="false" />
+    <map oacct="101680029"  ocheck="false" />
+    <map oacct="104200028"  ocheck="false" />
+    <map oacct="106200025"  ocheck="false" />
+    <map oacct="108000171"  ocheck="false" />
+    <map oacct="108000279"  ocheck="false" />
+    <map oacct="108001364"  ocheck="false" />
+    <map oacct="108001801"  ocheck="false" />
+    <map oacct="108002514"  ocheck="false" />
+    <map oacct="300008542"  ocheck="false" />
+    <map oacct="9130099995" ocheck="false" />
+    <map oacct="9130500002" ocheck="false" />
+    <map oacct="9131100008" ocheck="false" />
+    <map oacct="9131600000" ocheck="false" />
+    <map oacct="9131610006" ocheck="false" />
+    <map oacct="9132200006" ocheck="false" />
+    <map oacct="9132400005" ocheck="false" />
+    <map oacct="9132600004" ocheck="false" />
+    <map oacct="9132700017" ocheck="false" />
+    <map oacct="9132700025" ocheck="false" />
+    <map oacct="9132700033" ocheck="false" />
+    <map oacct="9132700041" ocheck="false" />
+    <map oacct="9133200700" ocheck="false" />
+    <map oacct="9133200735" ocheck="false" />
+    <map oacct="9133200743" ocheck="false" />
+    <map oacct="9133200751" ocheck="false" />
+    <map oacct="9133200786" ocheck="false" />
+    <map oacct="9133200808" ocheck="false" />
+    <map oacct="9133200816" ocheck="false" />
+    <map oacct="9133200824" ocheck="false" />
+    <map oacct="9133200832" ocheck="false" />
+    <map oacct="9136700003" ocheck="false" />
+    <map oacct="9177300010" ocheck="false" />
+    <map oacct="9177300060" ocheck="false" />
+    <map oacct="9198100002" ocheck="false" />
+    <map oacct="9198200007" ocheck="false" />
+    <map oacct="9198200104" ocheck="false" />
+    <map oacct="9198300001" ocheck="false" />
+    <map oacct="9331300141" ocheck="false" />
+    <map oacct="9331300150" ocheck="false" />
+    <map oacct="9331401010" ocheck="false" />
+    <map oacct="9331401061" ocheck="false" />
+    <map oacct="9349010000" ocheck="false" />
+    <map oacct="9349100000" ocheck="false" />
+    <map oacct="9360500001" ocheck="false" />
+    <map oacct="9364902007" ocheck="false" />
+    <map oacct="9366101001" ocheck="false" />
+    <map oacct="9366104000" ocheck="false" />
+    <map oacct="9370620030" ocheck="false" />
+    <map oacct="9370620080" ocheck="false" />
+    <map oacct="9371900010" ocheck="false" />
+    <map oacct="9373600005" ocheck="false" />
+    <map oacct="9402900021" ocheck="false" />
+    <map oacct="9605110000" ocheck="false" />
+    <map oacct="9614001000" ocheck="false" />
+    <map oacct="9615000016" ocheck="false" />
+    <map oacct="9615010003" ocheck="false" />
+    <map oacct="9618500036" ocheck="false" />
+    <map oacct="9631020000" ocheck="false" />
+    <map oacct="9632600051" ocheck="false" />
+    <map oacct="9632600060" ocheck="false" />
+    <map oacct="9635000012" ocheck="false" />
+    <map oacct="9635000020" ocheck="false" />
+    <map oacct="9635701002" ocheck="false" />
+    <map oacct="9636010003" ocheck="false" />
+    <map oacct="9636013002" ocheck="false" />
+    <map oacct="9636016001" ocheck="false" />
+    <map oacct="9636018004" ocheck="false" />
+    <map oacct="9636019000" ocheck="false" />
+    <map oacct="9636022001" ocheck="false" />
+    <map oacct="9636024004" ocheck="false" />
+    <map oacct="9636025000" ocheck="false" />
+    <map oacct="9636027003" ocheck="false" />
+    <map oacct="9636028000" ocheck="false" />
+    <map oacct="9636045001" ocheck="false" />
+    <map oacct="9636048000" ocheck="false" />
+    <map oacct="9636051001" ocheck="false" />
+    <map oacct="9636053004" ocheck="false" />
+    <map oacct="9636120003" ocheck="false" />
+    <map oacct="9636140004" ocheck="false" />
+    <map oacct="9636150000" ocheck="false" />
+    <map oacct="9636320002" ocheck="false" />
+    <map oacct="9636700000" ocheck="false" />
+    <map oacct="9638120000" ocheck="false" />
+    <map oacct="9639401100" ocheck="false" />
+    <map oacct="9639801001" ocheck="false" />
+    <map oacct="9670010004" ocheck="false" />
+    <map oacct="9680610000" ocheck="false" />
+    <map oacct="9705010002" ocheck="false" />
+    <map oacct="9705403004" ocheck="false" />
+    <map oacct="9705404000" ocheck="false" />
+    <map oacct="9705509996" ocheck="false" />
+    <map oacct="9707901001" ocheck="false" />
+    <map oacct="9736010000" ocheck="false" />
+    <map oacct="9780100050" ocheck="false" />
+    <map oacct="9791000030" ocheck="false" />
+    <map oacct="9990001003" ocheck="false" />
+    <map oacct="9990001100" ocheck="false" />
+    <map oacct="9990002000" ocheck="false" />
+    <map oacct="9990004002" ocheck="false" />
+    <map oacct="9991020001" ocheck="false" />
+    <map oacct="9991040002" ocheck="false" />
+    <map oacct="9991060003" ocheck="false" />
+    <map oacct="9999999993" ocheck="false" />
+    <map oacct="9999999994" ocheck="false" />
+    <map oacct="9999999995" ocheck="false" />
+    <map oacct="9999999996" ocheck="false" />
+    <map oacct="9999999997" ocheck="false" />
+    <map oacct="9999999998" ocheck="false" />
+    <map oacct="9999999999" ocheck="false" />
+</rule>
+
+<rule orid="0031" version="01" inst="UniCredit Bank AG" okey="mac3">
+    <map oacct="0\d{9}"   nrid="0001" /><!-- rule out 9 and fewer digits (for performance only) -->
+
+    <map oacct="100\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="101\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="102\d{7}" oblz="78020429" nblz="78320076" />
+    <map oacct="103\d{7}" oblz="79320432" nblz="79320075" />
+    <map oacct="104\d{7}" oblz="76020214" nblz="76320072" />
+    <map oacct="105\d{7}" oblz="79020325" nblz="79020076" />
+    <map oacct="106\d{7}" oblz="79320432" nblz="79320075" />
+    <map oacct="107\d{7}" oblz="79320432" nblz="79320075" />
+    <map oacct="108\d{7}" oblz="78020429" nblz="77320072" />
+    <map oacct="109\d{7}" oblz="79320432" nblz="79320075" />
+    <map oacct="110\d{7}" oblz="76020214" nblz="76220073" />
+    <map oacct="111\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="112\d{7}" oblz="79320432" nblz="79320075" />
+    <map oacct="113\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="114\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="115\d{7}" oblz="76020214" nblz="76520071" />
+    <map oacct="117\d{7}" oblz="78020429" nblz="77120073" />
+    <map oacct="118\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="119\d{7}" oblz="78020429" nblz="75320075" />
+    <map oacct="120\d{7}" oblz="72120207" nblz="72120078" />
+    <map oacct="121\d{7}" oblz="79020325" nblz="76220073" />
+    <map oacct="122\d{7}" oblz="76020214" nblz="76320072" />
+    <map oacct="123\d{7}" oblz="76020214" nblz="76420080" />
+    <map oacct="124\d{7}" oblz="76020214" nblz="76320072" />
+    <map oacct="125\d{7}" oblz="79520533" nblz="79520070" />
+    <map oacct="126\d{7}" oblz="78020429" nblz="77320072" />
+    <map oacct="127\d{7}" oblz="78020429" nblz="78020070" />
+    <map oacct="128\d{7}" oblz="78020429" nblz="78020070" />
+    <map oacct="129\d{7}" oblz="78020429" nblz="77120073" />
+    <map oacct="130\d{7}" oblz="78020429" nblz="78020070" />
+    <map oacct="131\d{7}" oblz="78020429" nblz="78020070" />
+    <map oacct="132\d{7}" oblz="60120050" nblz="60020290" />
+    <map oacct="134\d{7}" oblz="78020429" nblz="78020070" />
+    <map oacct="135\d{7}" oblz="76020214" nblz="77020070" />
+    <map oacct="136\d{7}" oblz="79520533" nblz="79520070" />
+    <map oacct="137\d{7}" oblz="79320432" nblz="79320075" />
+
+    <map oacct="138\d{7}" oblz="60120050" nblz="61120286" />
+    <map oacct="139\d{7}" oblz="60120050" nblz="66020286" />
+    <map oacct="140\d{7}" oblz="79020325" nblz="79020076" />
+    <map oacct="142\d{7}" oblz="60120050" nblz="64020186" />
+    <map oacct="143\d{7}" oblz="60120050" nblz="60020290" />
+    <map oacct="144\d{7}" oblz="79020325" nblz="79020076" />
+    <map oacct="145\d{7}" oblz="66020150" nblz="66020286" />
+    <map oacct="146\d{7}" oblz="72120207" nblz="72120078" />
+    <map oacct="147\d{7}" oblz="72020240" nblz="72223182" />
+    <map oacct="148\d{7}" oblz="76020214" nblz="76520071" />
+    <map oacct="149\d{7}" oblz="79020325" nblz="79020076" />
+    <map oacct="150\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="151\d{7}" oblz="76020214" nblz="76320072" />
+    <map oacct="152\d{7}" oblz="78020429" nblz="78320076" />
+    <map oacct="154\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="155\d{7}" oblz="76020214" nblz="76520071" />
+    <map oacct="156\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="157\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="158\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="159\d{7}" oblz="54020474" nblz="54520194" />
+    <map oacct="160\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="161\d{7}" oblz="54520071" nblz="54520194" />
+    <map oacct="162\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="163\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="164\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="166\d{7}" oblz="70020001" nblz="71120078" />
+    <map oacct="167\d{7}" oblz="75020314" nblz="74320073" />
+    <map oacct="167\d{7}" oblz="74320307" nblz="74320073" />
+    <map oacct="168\d{7}" oblz="70320305" nblz="70320090" />
+    <map oacct="169\d{7}" oblz="79020325" nblz="79020076" />
+    <map oacct="170\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="172\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="174\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="175\d{7}" oblz="72120207" nblz="72120078" />
+    <map oacct="176\d{7}" oblz="74320307" nblz="74020074" />
+    <map oacct="177\d{7}" oblz="74320307" nblz="74320073" />
+    <map oacct="178\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="181\d{7}" oblz="78020429" nblz="77320072" />
+
+    <map oacct="182\d{7}" oblz="79520533" nblz="79520070" />
+    <map oacct="183\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="185\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="186\d{7}" oblz="79020325" nblz="79020076" />
+    <map oacct="188\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="189\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="190\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="191\d{7}" oblz="78020429" nblz="77020070" />
+    <map oacct="192\d{7}" oblz="70020001" nblz="70025175" />
+    <map oacct="193\d{7}" oblz="85020890" nblz="85020086" />
+    <map oacct="194\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="196\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="198\d{7}" oblz="76020214" nblz="76320072" />
+    <map oacct="199\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="201\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="202\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="203\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="204\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="205\d{7}" oblz="79520533" nblz="79520070" />
+    <map oacct="206\d{7}" oblz="79520533" nblz="79520070" />
+    <map oacct="207\d{7}" oblz="70020001" nblz="71120078" />
+    <map oacct="208\d{7}" oblz="73420546" nblz="73120075" />
+    <map oacct="209\d{7}" oblz="10120760" nblz="18020086" />
+    <map oacct="210\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="211\d{7}" oblz="60120050" nblz="60020290" />
+    <map oacct="212\d{7}" oblz="50020160" nblz="51020186" />
+    <map oacct="214\d{7}" oblz="75020314" nblz="75020073" />
+    <map oacct="215\d{7}" oblz="63020450" nblz="63020086" />
+    <map oacct="216\d{7}" oblz="75020314" nblz="75020073" />
+    <map oacct="217\d{7}" oblz="79020325" nblz="79020076" />
+    <map oacct="218\d{7}" oblz="54520071" nblz="59020090" />
+    <map oacct="219\d{7}" oblz="79520533" nblz="79520070" />
+    <map oacct="220\d{7}" oblz="73320442" nblz="73322380" />
+    <map oacct="221\d{7}" oblz="63020450" nblz="73120075" />
+    <map oacct="222\d{7}" oblz="70320305" nblz="73421478" />
+    <map oacct="223\d{7}" oblz="74320307" nblz="74320073" />
+    <map oacct="224\d{7}" oblz="73420546" nblz="73322380" />
+    <map oacct="225\d{7}" oblz="74320307" nblz="74020074" />
+
+    <map oacct="227\d{7}" oblz="75020314" nblz="75020073" />
+    <map oacct="228\d{7}" oblz="70020001" nblz="71120078" />
+    <map oacct="229\d{7}" oblz="86020880" nblz="80020086" />
+    <map oacct="230\d{7}" oblz="72120207" nblz="72120078" />
+    <map oacct="231\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="232\d{7}" oblz="75020314" nblz="75021174" />
+    <map oacct="233\d{7}" oblz="70020001" nblz="71020072" />
+    <map oacct="234\d{7}" oblz="70020001" nblz="71022182" />
+    <map oacct="235\d{7}" oblz="74320307" nblz="74320073" />
+    <map oacct="236\d{7}" oblz="70020001" nblz="71022182" />
+    <map oacct="237\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="238\d{7}" oblz="63020450" nblz="63020086" />
+    <map oacct="239\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="240\d{7}" oblz="78020429" nblz="75320075" />
+    <map oacct="241\d{7}" oblz="76020214" nblz="76220073" />
+    <map oacct="243\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="245\d{7}" oblz="72120207" nblz="72120078" />
+    <map oacct="246\d{7}" oblz="70020001" nblz="74320073" />
+    <map oacct="247\d{7}" oblz="73320442" nblz="60020290" />
+    <map oacct="248\d{7}" oblz="85020890" nblz="85020086" />
+    <map oacct="249\d{7}" oblz="73320442" nblz="73321177" />
+    <map oacct="250\d{7}" oblz="73420546" nblz="73420071" />
+    <map oacct="251\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="252\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="253\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="254\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="255\d{7}" oblz="50020160" nblz="50820292" />
+    <map oacct="256\d{7}" oblz="70020001" nblz="71022182" />
+    <map oacct="257\d{7}" oblz="86020880" nblz="83020086" />
+    <map oacct="258\d{7}" oblz="79320432" nblz="79320075" />
+    <map oacct="259\d{7}" oblz="70020001" nblz="71120077" />
+    <map oacct="260\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="261\d{7}" oblz="70020001" nblz="70025175" />
+    <map oacct="262\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="264\d{7}" oblz="74320307" nblz="74020074" />
+    <map oacct="267\d{7}" oblz="63020450" nblz="63020086" />
+    <map oacct="268\d{7}" oblz="70320305" nblz="70320090" />
+    <map oacct="269\d{7}" oblz="70020001" nblz="71122183" />
+
+    <map oacct="270\d{7}" oblz="86020880" nblz="82020086" />
+    <map oacct="271\d{7}" oblz="75020314" nblz="75020073" />
+    <map oacct="272\d{7}" oblz="73420546" nblz="73420071" />
+    <map oacct="274\d{7}" oblz="63020450" nblz="63020086" />
+    <map oacct="276\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="277\d{7}" oblz="74320307" nblz="74320073" />
+    <map oacct="278\d{7}" oblz="70020001" nblz="71120077" />
+    <map oacct="279\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="281\d{7}" oblz="70020001" nblz="71120078" />
+    <map oacct="282\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="283\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="284\d{7}" oblz="79320432" nblz="79320075" />
+    <map oacct="286\d{7}" oblz="54220576" nblz="54520194" />
+    <map oacct="287\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="288\d{7}" oblz="76020214" nblz="75220070" />
+    <map oacct="291\d{7}" oblz="78020429" nblz="77320072" />
+    <map oacct="292\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="293\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="294\d{7}" oblz="54620574" nblz="54520194" />
+    <map oacct="295\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="296\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="299\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="301\d{7}" oblz="85020890" nblz="85020086" />
+    <map oacct="302\d{7}" oblz="54520071" nblz="54520194" />
+    <map oacct="304\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="308\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="309\d{7}" oblz="54820674" nblz="54520194" />
+    <map oacct="310\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="312\d{7}" oblz="74120514" nblz="74120071" />
+    <map oacct="313\d{7}" oblz="76020214" nblz="76320072" />
+    <map oacct="314\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="315\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="316\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="317\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="318\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="320\d{7}" oblz="70020001" nblz="71022182" />
+    <map oacct="321\d{7}" oblz="76020214" nblz="75220070" />
+    <map oacct="322\d{7}" oblz="79520533" nblz="79520070" />
+
+    <map oacct="324\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="326\d{7}" oblz="85020890" nblz="85020086" />
+    <map oacct="327\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="328\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="329\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="330\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="331\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="333\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="334\d{7}" oblz="72120207" nblz="75020073" />
+    <map oacct="335\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="337\d{7}" oblz="86020880" nblz="80020086" />
+    <map oacct="341\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="342\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="344\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="345\d{7}" oblz="78020429" nblz="77020070" />
+    <map oacct="346\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="350\d{7}" oblz="79320432" nblz="79320075" />
+    <map oacct="351\d{7}" oblz="79320432" nblz="79320075" />
+    <map oacct="352\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="353\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="354\d{7}" oblz="72020240" nblz="72223182" />
+    <map oacct="355\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="356\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="358\d{7}" oblz="54220576" nblz="54220091" />
+    <map oacct="359\d{7}" oblz="76020214" nblz="76220073" />
+    <map oacct="360\d{7}" oblz="86020880" nblz="80020087" />
+    <map oacct="361\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="362\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="363\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="366\d{7}" oblz="72020240" nblz="72220074" />
+    <map oacct="367\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="368\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="369\d{7}" oblz="76020214" nblz="76520071" />
+    <map oacct="370\d{7}" oblz="85020890" nblz="85020086" />
+    <map oacct="371\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="373\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="374\d{7}" oblz="73420546" nblz="73120075" />
+    <map oacct="375\d{7}" oblz="70020001" nblz="70020270" />
+
+    <map oacct="379\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="380\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="381\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="382\d{7}" oblz="79520533" nblz="79520070" />
+    <map oacct="383\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="384\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="386\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="387\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="389\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="390\d{7}" oblz="67020259" nblz="67020190" />
+    <map oacct="391\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="392\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="393\d{7}" oblz="54520071" nblz="54520194" />
+    <map oacct="394\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="396\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="398\d{7}" oblz="54820674" nblz="66020286" />
+    <map oacct="399\d{7}" oblz="86020880" nblz="87020088" />
+    <map oacct="401\d{7}" oblz="70020001" nblz="30220190" />
+    <map oacct="402\d{7}" oblz="30120764" nblz="36020186" />
+    <map oacct="403\d{7}" oblz="30120764" nblz="38020090" />
+    <map oacct="404\d{7}" oblz="30120764" nblz="30220190" />
+    <map oacct="405\d{7}" oblz="68020460" nblz="68020186" />
+    <map oacct="406\d{7}" oblz="25120960" nblz="48020086" />
+    <map oacct="407\d{7}" oblz="30120764" nblz="37020090" />
+    <map oacct="408\d{7}" oblz="68020460" nblz="68020186" />
+    <map oacct="409\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="410\d{7}" oblz="66220562" nblz="66020286" />
+    <map oacct="411\d{7}" oblz="60120050" nblz="60420186" />
+    <map oacct="412\d{7}" oblz="50020160" nblz="57020086" />
+    <map oacct="422\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="423\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="424\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="426\d{7}" oblz="70020001" nblz="70025175" />
+    <map oacct="427\d{7}" oblz="50020160" nblz="50320191" />
+    <map oacct="428\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="429\d{7}" oblz="85020890" nblz="85020086" />
+    <map oacct="432\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="434\d{7}" oblz="60120050" nblz="60020290" />
+
+    <map oacct="435\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="436\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="437\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="438\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="439\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="440\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="441\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="442\d{7}" oblz="85020890" nblz="85020086" />
+    <map oacct="443\d{7}" oblz="50020160" nblz="55020486" />
+    <map oacct="444\d{7}" oblz="50020160" nblz="50520190" />
+    <map oacct="446\d{7}" oblz="86020880" nblz="80020086" />
+    <map oacct="447\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="450\d{7}" oblz="30120764" nblz="30220190" />
+    <map oacct="451\d{7}" oblz="30120764" nblz="44020090" />
+    <map oacct="452\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="453\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="456\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="457\d{7}" oblz="86020880" nblz="87020086" />
+    <map oacct="458\d{7}" oblz="54520071" nblz="54520194" />
+    <map oacct="459\d{7}" oblz="60120050" nblz="61120286" />
+    <map oacct="460\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="461\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="462\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="463\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="465\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="466\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="467\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="468\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="469\d{7}" oblz="60120050" nblz="60320291" />
+    <map oacct="470\d{7}" oblz="73320442" nblz="65020186" />
+    <map oacct="471\d{7}" oblz="79020325" nblz="84020087" />
+    <map oacct="472\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="473\d{7}" oblz="74320307" nblz="74020074" />
+    <map oacct="476\d{7}" oblz="78020429" nblz="78320076" />
+    <map oacct="477\d{7}" oblz="86020880" nblz="78320076" />
+    <map oacct="478\d{7}" oblz="86020880" nblz="87020088" />
+    <map oacct="480\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="481\d{7}" oblz="70020001" nblz="70020270" />
+
+    <map oacct="482\d{7}" oblz="79020325" nblz="84020087" />
+    <map oacct="484\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="485\d{7}" oblz="50020160" nblz="50320191" />
+    <map oacct="486\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="488\d{7}" oblz="67220464" nblz="67220286" />
+    <map oacct="489\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="490\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="491\d{7}" oblz="10120760" nblz="16020086" />
+    <map oacct="492\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="494\d{7}" oblz="79020325" nblz="79020076" />
+    <map oacct="495\d{7}" oblz="86020880" nblz="87020088" />
+    <map oacct="497\d{7}" oblz="78020429" nblz="87020087" />
+    <map oacct="499\d{7}" oblz="79020325" nblz="79020076" />
+    <map oacct="502\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="503\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="505\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="506\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="507\d{7}" oblz="86020880" nblz="87020086" />
+    <map oacct="508\d{7}" oblz="86020880" nblz="86020086" />
+    <map oacct="509\d{7}" oblz="86020880" nblz="83020087" />
+    <map oacct="510\d{7}" oblz="86020880" nblz="80020086" />
+    <map oacct="511\d{7}" oblz="86020880" nblz="83020086" />
+    <map oacct="513\d{7}" oblz="85020890" nblz="85020086" />
+    <map oacct="515\d{7}" oblz="10120760" nblz="17020086" />
+    <map oacct="518\d{7}" oblz="86020880" nblz="82020086" />
+    <map oacct="519\d{7}" oblz="86020880" nblz="83020086" />
+    <map oacct="522\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="523\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="524\d{7}" oblz="85020890" nblz="85020086" />
+    <map oacct="525\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="527\d{7}" oblz="86020880" nblz="82020088" />
+    <map oacct="528\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="530\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="531\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="533\d{7}" oblz="50020160" nblz="50320191" />
+    <map oacct="534\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="536\d{7}" oblz="85020890" nblz="85020086" />
+    <map oacct="538\d{7}" oblz="86020880" nblz="82020086" />
+
+    <map oacct="540\d{7}" oblz="73320442" nblz="65020186" />
+    <map oacct="541\d{7}" oblz="86020880" nblz="80020087" />
+    <map oacct="545\d{7}" oblz="10120760" nblz="18020086" />
+    <map oacct="546\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="547\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="548\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="549\d{7}" oblz="86020880" nblz="82020087" />
+    <map oacct="555\d{7}" oblz="79020325" nblz="79020076" />
+    <map oacct="560\d{7}" oblz="79020325" nblz="79320075" />
+    <map oacct="567\d{7}" oblz="86020880" nblz="86020086" />
+    <map oacct="572\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="580\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="581\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="601\d{7}" oblz="74320307" nblz="74320073" />
+    <map oacct="602\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="603\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="604\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="605\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="606\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="607\d{7}" oblz="74320307" nblz="74320073" />
+    <map oacct="608\d{7}" oblz="63020450" nblz="72020070" />
+    <map oacct="609\d{7}" oblz="63020450" nblz="72020070" />
+    <map oacct="610\d{7}" oblz="63020450" nblz="72020070" />
+    <map oacct="611\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="612\d{7}" oblz="70020001" nblz="71120077" />
+    <map oacct="613\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="614\d{7}" oblz="63020450" nblz="72020070" />
+    <map oacct="615\d{7}" oblz="70020001" nblz="70025175" />
+    <map oacct="616\d{7}" oblz="73420546" nblz="73420071" />
+    <map oacct="617\d{7}" oblz="68020460" nblz="68020186" />
+    <map oacct="618\d{7}" oblz="63020450" nblz="73120075" />
+    <map oacct="619\d{7}" oblz="60120050" nblz="60020290" />
+    <map oacct="620\d{7}" oblz="70020001" nblz="71120077" />
+    <map oacct="621\d{7}" oblz="70020001" nblz="71120077" />
+    <map oacct="622\d{7}" oblz="74320307" nblz="74320073" />
+    <map oacct="623\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="624\d{7}" oblz="70020001" nblz="71020072" />
+    <map oacct="625\d{7}" oblz="70020001" nblz="71023173" />
+
+    <map oacct="626\d{7}" oblz="70020001" nblz="71020072" />
+    <map oacct="627\d{7}" oblz="70020001" nblz="71021270" />
+    <map oacct="628\d{7}" oblz="70020001" nblz="71120077" />
+    <map oacct="629\d{7}" oblz="63020450" nblz="73120075" />
+    <map oacct="630\d{7}" oblz="70020001" nblz="71121176" />
+    <map oacct="631\d{7}" oblz="70020001" nblz="71022182" />
+    <map oacct="632\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="633\d{7}" oblz="70020001" nblz="74320073" />
+    <map oacct="634\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="635\d{7}" oblz="70320305" nblz="70320090" />
+    <map oacct="636\d{7}" oblz="70320305" nblz="70320090" />
+    <map oacct="637\d{7}" oblz="72120207" nblz="72120078" />
+    <map oacct="638\d{7}" oblz="74320307" nblz="72120078" />
+    <map oacct="640\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="641\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="643\d{7}" oblz="74320307" nblz="74320073" />
+    <map oacct="644\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="645\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="646\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="647\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="648\d{7}" oblz="72120207" nblz="72120078" />
+    <map oacct="649\d{7}" oblz="72120207" nblz="72122181" />
+    <map oacct="650\d{7}" oblz="54520071" nblz="54520194" />
+    <map oacct="652\d{7}" oblz="74320307" nblz="71021270" />
+    <map oacct="653\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="654\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="655\d{7}" oblz="72120207" nblz="72120078" />
+    <map oacct="656\d{7}" oblz="70020001" nblz="71120078" />
+    <map oacct="657\d{7}" oblz="70020001" nblz="71020072" />
+    <map oacct="658\d{7}" oblz="68020460" nblz="68020186" />
+    <map oacct="659\d{7}" oblz="54820674" nblz="54520194" />
+    <map oacct="660\d{7}" oblz="54620574" nblz="54620093" />
+    <map oacct="661\d{7}" oblz="74320307" nblz="74320073" />
+    <map oacct="662\d{7}" oblz="63020450" nblz="73120075" />
+    <map oacct="663\d{7}" oblz="70320305" nblz="70322192" />
+    <map oacct="664\d{7}" oblz="72120207" nblz="72120078" />
+    <map oacct="665\d{7}" oblz="70320305" nblz="70321194" />
+    <map oacct="666\d{7}" oblz="73320442" nblz="73322380" />
+
+    <map oacct="667\d{7}" oblz="73320442" nblz="60020290" />
+    <map oacct="668\d{7}" oblz="73320442" nblz="60020290" />
+    <map oacct="669\d{7}" oblz="73320442" nblz="73320073" />
+    <map oacct="670\d{7}" oblz="75020314" nblz="75020073" />
+    <map oacct="671\d{7}" oblz="75020314" nblz="74220075" />
+    <map oacct="672\d{7}" oblz="74020414" nblz="74020074" />
+    <map oacct="673\d{7}" oblz="74320307" nblz="74020074" />
+    <map oacct="674\d{7}" oblz="74120514" nblz="74120071" />
+    <map oacct="675\d{7}" oblz="74320307" nblz="74020074" />
+    <map oacct="676\d{7}" oblz="74320307" nblz="74020074" />
+    <map oacct="677\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="678\d{7}" oblz="72020240" nblz="72020070" />
+    <map oacct="679\d{7}" oblz="54520071" nblz="54520194" />
+    <map oacct="680\d{7}" oblz="70020001" nblz="71120077" />
+    <map oacct="681\d{7}" oblz="67020259" nblz="67020190" />
+    <map oacct="682\d{7}" oblz="78020429" nblz="78020070" />
+    <map oacct="683\d{7}" oblz="70020001" nblz="71020072" />
+    <map oacct="684\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="685\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="686\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="687\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="688\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="689\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="690\d{7}" oblz="76020214" nblz="76520071" />
+    <map oacct="692\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="693\d{7}" oblz="73420546" nblz="73420071" />
+    <map oacct="694\d{7}" oblz="70020001" nblz="70021180" />
+    <map oacct="695\d{7}" oblz="70320305" nblz="70320090" />
+    <map oacct="696\d{7}" oblz="74320307" nblz="74320073" />
+    <map oacct="697\d{7}" oblz="54020474" nblz="54020090" />
+    <map oacct="698\d{7}" oblz="73420546" nblz="73320073" />
+    <map oacct="710\d{7}" oblz="50020160" nblz="30220190" />
+    <map oacct="711\d{7}" oblz="70020001" nblz="70020270" />
+    <map oacct="712\d{7}" oblz="10120760" nblz="10020890" />
+    <map oacct="714\d{7}" oblz="76020214" nblz="76020070" />
+    <map oacct="715\d{7}" oblz="70020001" nblz="75020073" />
+    <map oacct="717\d{7}" oblz="70020001" nblz="74320073" />
+    <map oacct="718\d{7}" oblz="86020880" nblz="87020086" />
+
+    <map oacct="719\d{7}" oblz="30120764" nblz="37020090" />
+    <map oacct="720\d{7}" oblz="30120764" nblz="30220190" />
+    <map oacct="723\d{7}" oblz="78020429" nblz="77320072" />
+    <map oacct="733\d{7}" oblz="86020880" nblz="83020087" />
+    <map oacct="798\d{7}" oblz="70020001" nblz="70020270" />
+
+    <map oacct="\d{1-9}"  nrid="0001" />
+    <map oacct="\d+"      nrid="0000" /><!-- catch all others -->
+
+    <test oblz="545 200 71" oacct="6790149813"  niban="DE77545201946790149813" nbic="HYVEDEMM483"   remark="!OK 1" />
+    <test oblz="545 200 71" oacct="6791000000"                                                      remark="?NOK 2 wrong checkdigit" />
+    <test oblz="101 207 60" oacct="897"                                                             remark="?NOK 3 not 10 digits" />
+
+    <test oblz="790 203 25" oacct="1210100047"  niban="DE70762200731210100047" nbic="HYVEDEMM419"   remark="!OK A" />
+    <test oblz="700 200 01" oacct="1210100047"  niban="DE70762200731210100047" nbic="HYVEDEMM419"   remark="!OK B" />
+    <test oblz="760 202 14" oacct="1210100047"  niban="DE70762200731210100047" nbic="HYVEDEMM419"   remark="!OK C" />
+    <test oblz="762 200 73" oacct="1210100047"  niban="DE70762200731210100047" nbic="HYVEDEMM419"   remark="!OK D" />
+    <test oblz="790 203 25" oacct="1210100047"  niban="DE70762200731210100047" nbic="HYVEDEMM419"   remark="!OK E" />
+    <test oblz="630 204 50" oacct="44613352"                                                        remark="?NOK F" />
+</rule>
+
+<rule orid="0032" version="00" inst="UniCredit Bank AG" okey="mac3">
+    <map oacct="\d{10}"   nrid="0031" />
+    <map oacct="08\d{8}"  nrid="0001" />
+    <map oacct="\d+"      nrid="0000" /><!-- catch all others -->
+<!--
+BLZ 700 200 01
+- Konto Nr.
+1210100047 IBAN:
+DE70762200731210100047
+ BIC: HYVEDEMM419
+
+BLZ 760 202 14
+- Konto Nr.
+1210100047 IBAN:
+DE70762200731210100047
+ BIC: HYVEDEMM419
+
+BLZ 762 200 73
+- Konto Nr.
+1210100047 ?NOK
+
+BLZ 790 203 25
+- Konto Nr.
+1210100047 BIC???
+
+BLZ 630 204 50
+- Konto Nr.
+44613352 ?NOK
+
+BLZ 660 201 50
+- Konto Nr.
+1457032621 IBAN:
+DE92660202861457032621
+ BIC: HYVEDEMM475
+
+BLZ 790 203 25
+- Konto Nr.
+1210100040 ?NOK
+    -->
+    <test oblz="302 201 90" oacct="4391900" niban="DE98 3022 0190 0004 3919 00" nbic="HYVEDEMM414" remark="!OK" /><!-- https://www.barmer-gek.de/barmer/web/Portale/Versicherte/Rundum-gutversichert/Leistungen-Beitraege/Beitraege/Beitragsbankkonten/_C3_9Cbersicht__Bankkonten.html -->
+</rule>
+
+<rule orid="0033" version="01" inst="UniCredit Bank AG" okey="mac3">
+    <map oacct="\d{10}"   nrid="0031" />
+    <map oacct="22222"    oblz="70020270" nacct="5803435253"   niban="DE11700202705803435253" nbic="HYVEDEMMXXX" />
+    <map oacct="1111111"  oblz="70020270" nacct="39908140"     niban="DE88700202700039908140" nbic="HYVEDEMMXXX" />
+    <map oacct="94"       oblz="70020270" nacct="2711931"      niban="DE83700202700002711931" nbic="HYVEDEMMXXX" />
+    <map oacct="7777777"  oblz="70020270" nacct="5800522694"   niban="DE40700202705800522694" nbic="HYVEDEMMXXX" />
+    <map oacct="55555"    oblz="70020270" nacct="5801800000"   niban="DE61700202705801800000" nbic="HYVEDEMMXXX" />
+    <map oacct="\d+"      nrid="0000" /><!-- catch all others -->
+
+    <test oacct="22222"    oblz="70020270" niban="DE11700202705803435253" nbic="HYVEDEMMXXX" remark="!OK Pseudo" />
+</rule>
+
+<rule orid="0034" version="00" inst="UniCredit Bank AG" okey="mac3">
+    <map oacct="\d{10}"   nrid="0031" nkey="mact" />
+    <map oacct="500500500"   oblz="60020290" nacct="4340111112"   niban="DE82600202904340111112" nbic="HYVEDEMM473" />
+    <map oacct="502"         oblz="60020290" nacct="4340118001"   niban="DE28600202904340118001" nbic="HYVEDEMM473" />
+    <map oacct="08\d{8}"  nrid="0001" />
+    <map oacct="\d+"      nrid="0000" />
+
+    <test oacct="500500500"   oblz="60020290" niban="DE82600202904340111112" nbic="HYVEDEMM473" remark="!OK Pseudo" />
+    <test oacct="502"         oblz="60020290" niban="DE28600202904340118001" nbic="HYVEDEMM473" remark="!OK Pseudo" />
+</rule>
+
+<rule orid="0035" version="01" inst="UniCredit Bank AG" okey="mac3">
+    <!-- oblz="79020076" --><!-- nbic="HYVEDEMM455" -->
+    <map oacct="\d{10}"   nrid="0031" nkey="mact" />
+    <map oacct="9696"        oblz="79020076" nacct="1490196966" />
+    <map oacct="08\d{8}"  nrid="0001" />
+    <map oacct="\d+"      nrid="0000" />
+
+    <test oacct="9696" oblz="79020076" niban="DE29790200761490196966" nbic="HYVEDEMM455" remark="!OK Pseudo" />
+</rule>
+
+<rule orid="0036" version="00" inst="HSH Nordbank AG, Hamburg und Kiel" okey="mact">
+    <!-- oblz="20050000" oblz="23050000" to nblz="21050000", pz_method="C5" -->
+<!--
+Variante 1
+Die Kontonummern müssen rechtsbündig mit 3 Nullen aufgefüllt werden, die Bankleitzahl
+ist immer 210 500 00. Für die Berechnung der Prüfziffer der IBAN wird folgende
+Struktur verwendet:
+DExx210500000KKKKKK000
+Die Prüfziffer kann wie im Standardverfahren beschrieben ermittelt werden.
+
+Variante 3
+Für die folgenden Kontonummernkreise gibt es keine IBAN-Ermittlung:
+Kontonummernkreis 0000000000 bis 0000099999
+Kontonummernkreis 0000900000 bis 0029999999
+Kontonummernkreis 0060000000 bis 0099999999
+Kontonummernkreis 0900000000 bis 0999999999
+Kontonummernkreis 2000000000 bis 2999999999
+Kontonummernkreis 7100000000 bis 8499999999
+Kontonummernkreis 8600000000 bis 8999999999
+-->
+    <map oacct="0000[0]\d{5}"                                                          nrid="0001" />
+    <map oacct="0000([1-8]\d{5})"   nacct="0$1000"  nblz="21050000" nbic="HSHNDEHHXXX" nrid="0000" />
+    <map oacct="0000[9]\d{5}"                                                          nrid="0001" />
+    <map oacct="000[1-9]\d{6}"                                                         nrid="0001" />
+    <map oacct="00[1-2]\d{7}"                                                          nrid="0001" />
+    <map oacct="00[3-5]\d{7}"                       nblz="21050000" nbic="HSHNDEHHXXX" nrid="0000" />
+    <map oacct="00[6-9]\d{7}"                                                          nrid="0001" />
+    <map oacct="0[1-8]\d{8}"                        nblz="21050000" nbic="HSHNDEHHXXX" nrid="0000" />
+    <map oacct="0[9]\d{8}"                                                             nrid="0001" />
+    <map oacct="1\d{9}"                             nblz="21050000" nbic="HSHNDEHHXXX" nrid="0000" />
+    <map oacct="2\d{9}"                                                                nrid="0001" />
+    <map oacct="[3-6]\d{9}"                         nblz="21050000" nbic="HSHNDEHHXXX" nrid="0000" />
+    <map oacct="70\d{8}"                            nblz="21050000" nbic="HSHNDEHHXXX" nrid="0000" />
+    <map oacct="7[1-9]\d{8}"                                                           nrid="0001" />
+    <map oacct="8[0-4]\d{8}"                                                           nrid="0001" />
+    <map oacct="85\d{8}"                            nblz="21050000" nbic="HSHNDEHHXXX" nrid="0000" />
+    <map oacct="8[6-9]\d{8}"                                                           nrid="0001" />
+    <map oacct="9\d{9}"                             nblz="21050000" nbic="HSHNDEHHXXX" nrid="0000" />
+    <map oacct="\d+"                                nblz="21050000" nbic="HSHNDEHHXXX" nrid="0000" /><!-- catch all others: standard -->
+
+    <test oacct="0000101105" oblz="21050000" niban="DE32 21050000 0101105000" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="0000840132" oblz="21050000" niban="DE91 21050000 0840132000" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="0000631879" oblz="21050000" niban="DE81 21050000 0631879000" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="0000101105" oblz="21050000" niban="DE55 21050000 0000101105" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="0000840132" oblz="20050000" niban="DE19 20050000 0840132000" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="0000631879" oblz="23050000" niban="DE31 23050000 0631879000" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="0000101105" oblz="21050000" niban="DE31 21050000 0101105000" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="0000631879" oblz="21050000" niban="DE82 21050000 0631879000" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="0030000025" oblz="21050000" niban="DE75 21050000 0030000025" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="0051300528" oblz="21050000" niban="DE76 21050000 0051300528" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="0030000025" oblz="20050000" niban="DE03 20050000 0030000025" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="0051300528" oblz="23050000" niban="DE26 23050000 0051300528" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="0030000025" oblz="21050000" niban="DE74 21050000 0030000025" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="0100271010" oblz="21050000" niban="DE85 21050000 0100271010" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="0319574000" oblz="21050000" niban="DE55 21050000 0319574000" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="0100271010" oblz="20050000" niban="DE13 20050000 0100271010" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="0319574000" oblz="23050000" niban="DE05 23050000 0319574000" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="0100271010" oblz="21050000" niban="DE84 21050000 0100271010" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="3060000035" oblz="21050000" niban="DE13 21050000 3060000035" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="3070010313" oblz="21050000" niban="DE09 21050000 3070010313" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="1100001928" oblz="21050000" niban="DE51 21050000 1100001928" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="3060000035" oblz="20050000" niban="DE38 20050000 3060000035" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="3070010313" oblz="23050000" niban="DE56 23050000 3070010313" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="1100001928" oblz="21050000" niban="DE52 21050000 1100001928" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="7052000037" oblz="21050000" niban="DE82 21050000 7052000037" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="7053001166" oblz="21050000" niban="DE07 21050000 7053001166" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="7052000037" oblz="20050000" niban="DE10 20050000 7052000037" nbic="HSHNDEHHXXX" remark="?NOK" />
+    <test oacct="7053001166" oblz="23050000" niban="DE54 23050000 7053001166" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="7052000037" oblz="21050000" niban="DE81 21050000 7052000037" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="8553002045" oblz="21050000" niban="DE20 21050000 8553002045" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="8553009087" oblz="21050000" niban="DE06 21050000 8553009087" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="8553002045" oblz="20050000" niban="DE45 20050000 8553002045" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="8553009087" oblz="23050000" niban="DE53 23050000 8553009087" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="8553002045" oblz="21050000" niban="DE21 21050000 8553002045" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="9000010040" oblz="21050000" niban="DE37 21050000 9000010040" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="9000906093" oblz="21050000" niban="DE55 21050000 9000906093" nbic="HSHNDEHHXXX" remark="!OK"  />
+    <test oacct="9000010040" oblz="20050000" niban="DE62 20050000 9000010040" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="9000906093" oblz="23050000" niban="DE05 23050000 9000906093" nbic="HSHNDEHHXXX" remark="?NOK"  />
+    <test oacct="9000010040" oblz="21050000" niban="DE38 21050000 9000010040" nbic="HSHNDEHHXXX" remark="?NOK"  />
+</rule>
+
+<rule orid="0037" version="00" inst="The Bank of Tokyo-Mitsubishi UFJ, Ltd." okey="blz">
+    <map oblz="20110700"    nblz="30010700" nbic="BOTKDEDXXXX" />
+    <test oblz="201 107 00" oacct="0000123456" niban="DE41 3001 0700 0000 1234 56" nbic="BOTKDEDXXXX" remark="!OK" />
+    <test oblz="300 107 00" oacct="0000654321" niban="DE85 3001 0700 0000 6543 21" nbic="BOTKDEDXXXX" remark="!OK" />
+</rule>
+
+<rule orid="0038" version="00" inst="Ostfriesische Volksbank eG" okey="blz">
+    <map oblz="26691213"    nblz="28590075" nbic="GENODEF1LER" />
+    <map oblz="28591579"    nblz="28590075" nbic="GENODEF1LER" />
+    <map oblz="25090300"    nblz="28590075" nbic="GENODEF1LER" />
+</rule>
+
+<rule orid="0039" version="00" inst="Oldenburgische Landesbank AG" okey="blz">
+    <!-- nbic added -->
+    <map oblz="25621327"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="26520017"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="26521703"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="26522319"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="26620010"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="26621413"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="26720028"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28021002"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28021301"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28021504"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28021623"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28021705"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28021906"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28022015"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28022412"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28022511"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28022620"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28022822"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28023224"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28023325"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28220026"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28222208"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28222621"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28320014"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28321816"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28420007"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28421030"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28520009"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="28521518"    nblz="28020050" nbic="OLBODEH2XXX" />
+    <map oblz="29121731"    nblz="28020050" nbic="OLBODEH2XXX" />
+</rule>
+
+<rule orid="0040" version="01" inst="Sparkasse Staufen-Breisach" okey="blz">
+    <map oblz="68051310" nblz="68052328"    nbic="SOLADES1STF" />
+    <test oblz="680 513 10" oacct="6015002" niban="DE17680523280006015002" nbic="SOLADES1STF" remark="!OK" />
+</rule>
+
+<rule orid="0041" version="00" inst="Bausparkasse Schwäbisch Hall AG" okey="mact">
+    <!-- oblz="62220000" -->
+    <map oacct="\d+" nacct="11404" oblz="62220000" nblz="50060400" niban="DE96500604000000011404" nbic="GENODEFFXXX" /><!-- DZ-Bank, Frankfurt -->
+    <test oblz="622 200 00" oacct="0062220000" niban="DE96 5006 0400 0000 0114 04" nbic="GENODEFFXXX" remark="!OK" />
+    <test oblz="622 200 00" oacct="1234567890" niban="DE96 5006 0400 0000 0114 04" nbic="GENODEFFXXX" remark="!OK" />
+</rule>
+
+<rule orid="0042" version="00" inst="Deutsche Bundesbank" okey="mact">
+    <!--
+    Die Kontonummern der Deutschen Bundesbank, die für die IBAN-Ermittlung freigegeben
+    sind, sind immer achtstellig.
+    * Die Kontonummer muss an der 4. Stelle immer gleich "0" sein (Beispiel: 100 0 1000).
+    Davon abweichend ist die IBAN-Ermittlung für die Kontonummern
+    . 504 6 2000 bis 504 6 3999 sowie
+    . 504 6 9000 bis 504 6 9999
+    mit der Standard-IBAN-Regel möglich
+    * Konten ohne IBAN-Berechnung
+    . nnn 0 0000 bis nnn 0 0999
+    -->
+    <map oacct="000\d{7}"                nrid="0001" />
+    <map oacct="0[1-9]\d{8}"             nrid="0001" />
+    <map oacct="[1-9]\d{9}"              nrid="0001" />
+    <map oacct="00[1-9]\d{2}0[1-9]\d{3}" nrid="0000" />
+    <map oacct="00[1-9]\d{2}00\d{3}"     nrid="0001" />
+    <map oacct="005046[2-3]\d{3}"        nrid="0000" />
+    <map oacct="005046[9]\d{3}"          nrid="0000" />
+    <map oacct="\d+"                     nrid="0000" /><!-- catch all others: standard -->
+    <test oacct="0030001713" oblz="30000000" niban="DE35 3000 0000 0030 0017 13" nbic="MARKDEF1300" remark="!OK" /><!-- http://www.duisburg.de/vv/21/102010100000092350.php -->
+    <test oacct="59001020"   oblz="59000000" niban="DE81 5900 0000 0059 0010 20" nbic="MARKDEF1590" remark="!OK" /><!-- http://www.bzst.de/DE/Steuern_International/USt_Kontrollverfahren_ZM_eCommerce/VAT_on_eService/FAQ/FAQ_Texte/faq_14.html?nn=50538 -->
+</rule>
+
+<rule orid="0043" version="01" inst="Sparkasse Pforzheim Calw" okey="blz">
+    <map oblz="60651070"    nblz="66650085" nbic="PZHSDE66XXX" />
+    <!--Sobald die BLZ 606 510 70 durch die BLZ 666 500 85 ersetzt wurde, darf nur noch die
+    Prüfziffernmethode 06 (Methode für BLZ 666 500 85) für die Ursprungskontonummer
+    verwendet werden. Führt dies zu einem Prüfziffer-Fehler, kann die Kontonummer nicht
+    auf die IBAN umgestellt werden.
+    -->
+    <test oblz="606 510 70" oacct="868"        niban="DE 49 66650085 0000000868" nbic="PZHSDE66XXX" remark="!OK" />
+    <test oblz="606 510 70" oacct="12602"      niban="DE 33 66650085 0000012602" nbic="PZHSDE66XXX" remark="!OK" />
+</rule>
+
+<rule orid="0044" version="00" inst="Sparkasse Freiburg" okey="acct">
+    <map oacct="202" nacct="2282022" niban="DE51680501010002282022" />
+    <test oblz="68050101" oacct="202"      niban="DE51680501010002282022" nbic="FRSPDE66XXX" remark="!OK" />
+    <test oblz="68050101" oacct="12711899" niban="DE86680501010012711899" nbic="FRSPDE66XXX" remark="!OK" /><!-- http://anwaeltinnen-ohne-grenzen.de/kontakt/spenden/ -->
+</rule>
+
+<rule orid="0045" version="01" inst="SEB AG" okey="rule">
+    <!-- this BIC assigned by BLZ file
+        nbic="ESSEDE5FXXX"
+    -->
+    <map nrid="0000" />
+</rule>
+
+<rule orid="0046" version="00" inst="Santander Consumer Bank" okey="rule">
+    <!-- nbic added -->
+    <map  nblz="31010833" nbic="CCBADE31XXX" />
+<!--
+    <test oblz="10120600" oacct="1234567890" niban="DE62 3101 0833 1234 5678 90" nbic="CCBADE31XXX" remark="!OK 0046" />
+-->
+    <test oblz="25020600" oacct="1234567890" niban="DE62 3101 0833 1234 5678 90" nbic="CCBADE31XXX" remark="!OK 0046" />
+</rule>
+
+<rule orid="0047" version="00" inst="Santander Consumer Bank" okey="mact">
+    <map oacct="0[1-9]\d{8}"                 nrid="0000" />
+    <map oacct="00[0]\d{7}"                  nrid="0000" />
+    <map oacct="00([1-9]\d{7})" nacct="$100" nrid="0000" />
+    <map oacct="\d+"                         nrid="0000" /><!-- catch all others: standard -->
+    <!-- Achtstellige Kontonummern sind rechtsbündig mit Nullen aufzufüllen.
+    Alle anderen Kontonummern mit weniger als zehn Stellen werden nach der Standard-
+    Regel linksbündig mit Nullen aufgefüllt.
+    -->
+</rule>
+
+<rule orid="0048" version="00" inst="VON ESSEN GmbH &amp; Co. KG Bankgesellschaft" okey="blz">
+    <map oblz="10120800"    nblz="36010200" nbic="VONEDE33XXX" />
+    <map oblz="27010200"    nblz="36010200" nbic="VONEDE33XXX" />
+    <map oblz="60020300"    nblz="36010200" nbic="VONEDE33XXX" />
+    <test oblz="101 208 00" oacct="1231234567" niban="DE12 3601 0200 1231 2345 67" nbic="VONEDE33XXX" remark="!OK" />
+</rule>
+
+<rule orid="0049" version="00" inst="WGZ Bank" okey="mact">
+    <map oacct="(\d{4})[9](\d{5})" nacct="9$2$1" />
+    <!--
+    Für Kontonummern mit einer '9' an der 5. Stelle muss die Kontonummer, auf deren Basis
+    die IBAN ermittelt wird, abweichend berechnet werden. Die ersten 4 Stellen (inkl.
+    aufgefüllter Nullen) müssen ans Ende gestellt werden, so dass die Kontonummer dann
+    immer mit der '9' anfängt.
+    -->
+    <map oacct="0000000036"  nacct="0002310113"   />
+    <map oacct="0000000936"  nacct="0002310113"   />
+    <map oacct="0000000999"  nacct="0001310113"   />
+    <map oacct="0000006060"  nacct="0000160602"   />
+    <map oacct="\d+"                            nrid="0000" /><!-- catch all others: standard -->
+    <test oblz="300 600 10"  oacct="0001991182" niban="DE26 3006 0010 9911 8200 01" nbic="GENODEDDXXX" remark="!OK" />
+</rule>
+
+<rule orid="0050" version="00" inst="Sparkasse LeerWittmund" okey="blz">
+    <map  oblz="28252760"    nblz="28550000" nbic="BRLADE21LER" />
+    <test oblz="28252760" oacct="0130084981" niban="DE24 2855 0000 0130 0849 81" nbic="BRLADE21LER" remark="!OK" />
+</rule>
+
+<rule orid="0051" version="00" inst="Landesbank Baden-Württemberg / Baden-Württembergische Bank" okey="acct">
+    <map oacct="0000000333"  nacct="7832500881"   ocheck="false" />
+    <map oacct="0000000502"  nacct="0001108884"   ocheck="false" />
+    <map oacct="0500500500"  nacct="0005005000"   ocheck="false" />
+    <map oacct="0502502502"  nacct="0001108884"   ocheck="false" />
+</rule>
+
+<rule orid="0052" version="00" inst="Landesbank Baden-Württemberg / Baden-Württembergische Bank" okey="blzacct">
+    <map oblz="67220020" oacct="5308810004" nblz="60050101" nacct="0002662604" nbic="SOLADEST600" />
+    <map oblz="67220020" oacct="5308810000" nblz="60050101" nacct="0002659600" nbic="SOLADEST600" />
+    <map oblz="67020020" oacct="5203145700" nblz="60050101" nacct="7496510994" nbic="SOLADEST600" />
+    <map oblz="69421020" oacct="6208908100" nblz="60050101" nacct="7481501341" nbic="SOLADEST600" />
+    <map oblz="66620020" oacct="4840404000" nblz="60050101" nacct="7498502663" nbic="SOLADEST600" />
+    <map oblz="64120030" oacct="1201200100" nblz="60050101" nacct="7477501214" nbic="SOLADEST600" />
+    <map oblz="64020030" oacct="1408050100" nblz="60050101" nacct="7469534505" nbic="SOLADEST600" />
+    <map oblz="63020130" oacct="1112156300" nblz="60050101" nacct="0004475655" nbic="SOLADEST600" />
+    <map oblz="62030050" oacct="7002703200" nblz="60050101" nacct="7406501175" nbic="SOLADEST600" />
+    <map oblz="69220020" oacct="6402145400" nblz="60050101" nacct="7485500252" nbic="SOLADEST600" />
+    <test oblz="67220020" oacct="5308810004" niban="DE38 6005 0101 0002 6626 04" nbic="SOLADEST600" remark="!OK" />
+</rule>
+
+<rule orid="0053" version="00" inst="Landesbank Baden-Württemberg / Baden-Württembergische Bank" okey="blzacct">
+    <map oblz="55050000" oacct="35000"       nblz="60050101" nacct="7401555913" nbic="SOLADEST600" />
+    <map oblz="55050000" oacct="119345106"   nblz="60050101" nacct="7401555906" nbic="SOLADEST600" />
+    <map oblz="55050000" oacct="908"         nblz="60050101" nacct="7401507480" nbic="SOLADEST600" />
+    <map oblz="55050000" oacct="901"         nblz="60050101" nacct="7401507497" nbic="SOLADEST600" />
+    <map oblz="55050000" oacct="910"         nblz="60050101" nacct="7401507466" nbic="SOLADEST600" />
+    <map oblz="55050000" oacct="35100"       nblz="60050101" nacct="7401555913" nbic="SOLADEST600" />
+    <map oblz="55050000" oacct="902"         nblz="60050101" nacct="7401507473" nbic="SOLADEST600" />
+    <map oblz="55050000" oacct="44000"       nblz="60050101" nacct="7401555872" nbic="SOLADEST600" />
+    <map oblz="55050000" oacct="110132511"   nblz="60050101" nacct="7401550530" nbic="SOLADEST600" />
+    <map oblz="55050000" oacct="110024270"   nblz="60050101" nacct="7401501266" nbic="SOLADEST600" />
+    <map oblz="55050000" oacct="3500"        nblz="60050101" nacct="7401555913" nbic="SOLADEST600" />
+    <map oblz="55050000" oacct="110050002"   nblz="60050101" nacct="7401502234" nbic="SOLADEST600" />
+    <map oblz="55050000" oacct="55020100"    nblz="60050101" nacct="7401555872" nbic="SOLADEST600" />
+    <map oblz="55050000" oacct="110149226"   nblz="60050101" nacct="7401512248" nbic="SOLADEST600" />
+    <map oblz="60020030" oacct="1047444300"  nblz="60050101" nacct="7871538395" nbic="SOLADEST600" />
+    <map oblz="60020030" oacct="1040748400"  nblz="60050101" nacct="0001366705" nbic="SOLADEST600" />
+    <map oblz="60020030" oacct="1000617900"  nblz="60050101" nacct="0002009906" nbic="SOLADEST600" />
+    <map oblz="60020030" oacct="1003340500"  nblz="60050101" nacct="0002001155" nbic="SOLADEST600" />
+    <map oblz="60020030" oacct="1002999900"  nblz="60050101" nacct="0002588991" nbic="SOLADEST600" />
+    <map oblz="60020030" oacct="1004184600"  nblz="60050101" nacct="7871513509" nbic="SOLADEST600" />
+    <map oblz="60020030" oacct="1000919900"  nblz="60050101" nacct="7871531505" nbic="SOLADEST600" />
+    <map oblz="60020030" oacct="1054290000"  nblz="60050101" nacct="7871521216" nbic="SOLADEST600" />
+    <map oblz="60050000" oacct="1523"        nblz="60050101" nacct="0001364934" nbic="SOLADEST600" />
+    <map oblz="60050000" oacct="2811"        nblz="60050101" nacct="0001367450" nbic="SOLADEST600" />
+    <map oblz="60050000" oacct="2502"        nblz="60050101" nacct="0001366705" nbic="SOLADEST600" />
+    <map oblz="60050000" oacct="250412"      nblz="60050101" nacct="7402051588" nbic="SOLADEST600" />
+    <map oblz="60050000" oacct="3009"        nblz="60050101" nacct="0001367924" nbic="SOLADEST600" />
+    <map oblz="60050000" oacct="4596"        nblz="60050101" nacct="0001372809" nbic="SOLADEST600" />
+    <map oblz="60050000" oacct="3080"        nblz="60050101" nacct="0002009906" nbic="SOLADEST600" />
+    <map oblz="60050000" oacct="1029204"     nblz="60050101" nacct="0002782254" nbic="SOLADEST600" />
+    <map oblz="60050000" oacct="3002"        nblz="60050101" nacct="0001367924" nbic="SOLADEST600" />
+    <map oblz="60050000" oacct="123456"      nblz="60050101" nacct="0001362826" nbic="SOLADEST600" />
+    <map oblz="60050000" oacct="2535"        nblz="60050101" nacct="0001119897" nbic="SOLADEST600" />
+    <map oblz="60050000" oacct="5500"        nblz="60050101" nacct="0001375703" nbic="SOLADEST600" />
+    <map oblz="66020020" oacct="4002401000"  nblz="60050101" nacct="7495500967" nbic="SOLADEST600" />
+    <map oblz="66020020" oacct="4000604100"  nblz="60050101" nacct="0002810030" nbic="SOLADEST600" />
+    <map oblz="66020020" oacct="4002015800"  nblz="60050101" nacct="7495530102" nbic="SOLADEST600" />
+    <map oblz="66020020" oacct="4003746700"  nblz="60050101" nacct="7495501485" nbic="SOLADEST600" />
+    <map oblz="66050000" oacct="86567"       nblz="60050101" nacct="0001364934" nbic="SOLADEST600" />
+    <map oblz="66050000" oacct="86345"       nblz="60050101" nacct="7402046641" nbic="SOLADEST600" />
+    <map oblz="66050000" oacct="85304"       nblz="60050101" nacct="7402045439" nbic="SOLADEST600" />
+    <map oblz="66050000" oacct="85990"       nblz="60050101" nacct="7402051588" nbic="SOLADEST600" />
+    <map oblz="86050000" oacct="1016"        nblz="60050101" nacct="7461500128" nbic="SOLADEST600" />
+    <map oblz="86050000" oacct="3535"        nblz="60050101" nacct="7461505611" nbic="SOLADEST600" />
+    <map oblz="86050000" oacct="2020"        nblz="60050101" nacct="7461500018" nbic="SOLADEST600" />
+    <map oblz="86050000" oacct="4394"        nblz="60050101" nacct="7461505714" nbic="SOLADEST600" />
+    <test oblz="55050000" oacct="35000" niban="DE94 6005 0101 7401 5559 13" nbic="SOLADEST600" remark="!OK" />
+</rule>
+
+<rule orid="0054" version="01" inst="Evangelische Darlehnsgenossenschaft eG" okey="acct">
+    <!-- oblz="10060237", oblz="21060237" -->
+    <map oacct="500"         nacct="500500"       />
+    <map oacct="502"         nacct="502502"       />
+    <map oacct="18067"       nacct="180670"       />
+    <map oacct="484848"      nacct="484849"       />
+    <map oacct="636306"      nacct="63606"        />
+    <map oacct="760440"      nacct="160440"       />
+    <map oacct="1018413"     nacct="10108413"     />
+    <map oacct="2601577"     nacct="26015776"     />
+    <map oacct="5005000"     nacct="500500"       />
+    <map oacct="10796740"    nacct="10796743"     />
+    <map oacct="11796740"    nacct="11796743"     />
+    <map oacct="12796740"    nacct="12796743"     />
+    <map oacct="13796740"    nacct="13796743"     />
+    <map oacct="14796740"    nacct="14796743"     />
+    <map oacct="15796740"    nacct="15796743"     />
+    <map oacct="16307000"    nacct="163107000"    />
+    <map oacct="16610700"    nacct="166107000"    />
+    <map oacct="16796740"    nacct="16796743"     />
+    <map oacct="17796740"    nacct="17796743"     />
+    <map oacct="18796740"    nacct="18796743"     />
+    <map oacct="19796740"    nacct="19796743"     />
+    <map oacct="20796740"    nacct="20796743"     />
+    <map oacct="21796740"    nacct="21796743"     />
+    <map oacct="22796740"    nacct="22796743"     />
+    <map oacct="23796740"    nacct="23796743"     />
+    <map oacct="24796740"    nacct="24796743"     />
+    <map oacct="25796740"    nacct="25796743"     />
+    <map oacct="26610700"    nacct="266107000"    />
+    <map oacct="26796740"    nacct="26796743"     />
+    <map oacct="27796740"    nacct="27796743"     />
+    <map oacct="28796740"    nacct="28796743"     />
+    <map oacct="29796740"    nacct="29796743"     />
+    <map oacct="45796740"    nacct="45796743"     />
+    <map oacct="50796740"    nacct="50796743"     />
+    <map oacct="51796740"    nacct="51796743"     />
+    <map oacct="52796740"    nacct="52796743"     />
+    <map oacct="53796740"    nacct="53796743"     />
+    <map oacct="54796740"    nacct="54796743"     />
+    <map oacct="55796740"    nacct="55796743"     />
+    <map oacct="56796740"    nacct="56796743"     />
+    <map oacct="57796740"    nacct="57796743"     />
+    <map oacct="58796740"    nacct="58796743"     />
+    <map oacct="59796740"    nacct="59796743"     />
+    <map oacct="60796740"    nacct="60796743"     />
+    <map oacct="61796740"    nacct="61796743"     />
+    <map oacct="62796740"    nacct="62796743"     />
+    <map oacct="63796740"    nacct="63796743"     />
+    <map oacct="64796740"    nacct="64796743"     />
+    <map oacct="65796740"    nacct="65796743"     />
+    <map oacct="66796740"    nacct="66796743"     />
+    <map oacct="67796740"    nacct="67796743"     />
+    <map oacct="68796740"    nacct="68796743"     />
+    <map oacct="69796740"    nacct="69796743"     />
+    <map oacct="1761070000"  nacct="176107000"    />
+    <map oacct="2210531180"  nacct="201053180"    />
+
+    <map oacct="624044"    ocheck="false" niban="DE96210602370000624044" />
+    <map oacct="4063060"   ocheck="false" niban="DE11210602370004063060" />
+    <map oacct="20111908"  ocheck="false" niban="DE97210602370020111908" />
+    <map oacct="20211908"  ocheck="false" niban="DE92210602370020211908" />
+    <map oacct="20311908"  ocheck="false" niban="DE87210602370020311908" />
+    <map oacct="20411908"  ocheck="false" niban="DE82210602370020411908" />
+    <map oacct="20511908"  ocheck="false" niban="DE77210602370020511908" />
+    <map oacct="20611908"  ocheck="false" niban="DE72210602370020611908" />
+    <map oacct="20711908"  ocheck="false" niban="DE67210602370020711908" />
+    <map oacct="20811908"  ocheck="false" niban="DE62210602370020811908" />
+    <map oacct="20911908"  ocheck="false" niban="DE57210602370020911908" />
+    <map oacct="21111908"  ocheck="false" niban="DE47210602370021111908" />
+    <map oacct="21211908"  ocheck="false" niban="DE42210602370021211908" />
+    <map oacct="21311908"  ocheck="false" niban="DE37210602370021311908" />
+    <map oacct="21411908"  ocheck="false" niban="DE32210602370021411908" />
+    <map oacct="21511908"  ocheck="false" niban="DE27210602370021511908" />
+    <map oacct="21611908"  ocheck="false" niban="DE22210602370021611908" />
+    <map oacct="21711908"  ocheck="false" niban="DE17210602370021711908" />
+    <map oacct="21811908"  ocheck="false" niban="DE12210602370021811908" />
+    <map oacct="21911908"  ocheck="false" niban="DE07210602370021911908" />
+    <map oacct="22111908"  ocheck="false" niban="DE94210602370022111908" />
+    <map oacct="22211908"  ocheck="false" niban="DE89210602370022211908" />
+    <map oacct="22311908"  ocheck="false" niban="DE84210602370022311908" />
+    <map oacct="22411908"  ocheck="false" niban="DE79210602370022411908" />
+    <map oacct="22511908"  ocheck="false" niban="DE74210602370022511908" />
+    <map oacct="22611908"  ocheck="false" niban="DE69210602370022611908" />
+    <map oacct="46211991"  ocheck="false" niban="DE43210602370046211991" />
+    <map oacct="50111908"  ocheck="false" niban="DE52210602370050111908" />
+    <map oacct="50211908"  ocheck="false" niban="DE47210602370050211908" />
+    <map oacct="50311908"  ocheck="false" niban="DE42210602370050311908" />
+    <map oacct="50411908"  ocheck="false" niban="DE37210602370050411908" />
+    <map oacct="50511908"  ocheck="false" niban="DE32210602370050511908" />
+    <map oacct="50611908"  ocheck="false" niban="DE27210602370050611908" />
+    <map oacct="50711908"  ocheck="false" niban="DE22210602370050711908" />
+    <map oacct="50811908"  ocheck="false" niban="DE17210602370050811908" />
+    <map oacct="50911908"  ocheck="false" niban="DE12210602370050911908" />
+    <map oacct="51111908"  ocheck="false" niban="DE02210602370051111908" />
+    <map oacct="51111991"  ocheck="false" niban="DE89210602370051111991" />
+    <map oacct="51211908"  ocheck="false" niban="DE94210602370051211908" />
+    <map oacct="51211991"  ocheck="false" niban="DE84210602370051211991" />
+    <map oacct="51311908"  ocheck="false" niban="DE89210602370051311908" />
+    <map oacct="51411908"  ocheck="false" niban="DE84210602370051411908" />
+    <map oacct="51511908"  ocheck="false" niban="DE79210602370051511908" />
+    <map oacct="51611908"  ocheck="false" niban="DE74210602370051611908" />
+    <map oacct="51711908"  ocheck="false" niban="DE69210602370051711908" />
+    <map oacct="51811908"  ocheck="false" niban="DE64210602370051811908" />
+    <map oacct="51911908"  ocheck="false" niban="DE59210602370051911908" />
+    <map oacct="52111908"  ocheck="false" niban="DE49210602370052111908" />
+    <map oacct="52111991"  ocheck="false" niban="DE39210602370052111991" />
+    <map oacct="52211908"  ocheck="false" niban="DE44210602370052211908" />
+    <map oacct="52211991"  ocheck="false" niban="DE34210602370052211991" />
+    <map oacct="52311908"  ocheck="false" niban="DE39210602370052311908" />
+    <map oacct="52411908"  ocheck="false" niban="DE34210602370052411908" />
+    <map oacct="52511908"  ocheck="false" niban="DE29210602370052511908" />
+    <map oacct="52611908"  ocheck="false" niban="DE24210602370052611908" />
+    <map oacct="52711908"  ocheck="false" niban="DE19210602370052711908" />
+    <map oacct="52811908"  ocheck="false" niban="DE14210602370052811908" />
+    <map oacct="52911908"  ocheck="false" niban="DE09210602370052911908" />
+    <map oacct="53111908"  ocheck="false" niban="DE96210602370053111908" />
+    <map oacct="53211908"  ocheck="false" niban="DE91210602370053211908" />
+    <map oacct="53311908"  ocheck="false" niban="DE86210602370053311908" />
+    <map oacct="57111908"  ocheck="false" niban="DE90210602370057111908" />
+    <map oacct="58111908"  ocheck="false" niban="DE40210602370058111908" />
+    <map oacct="58211908"  ocheck="false" niban="DE35210602370058211908" />
+    <map oacct="58311908"  ocheck="false" niban="DE30210602370058311908" />
+    <map oacct="58411908"  ocheck="false" niban="DE25210602370058411908" />
+    <map oacct="58511908"  ocheck="false" niban="DE20210602370058511908" />
+    <map oacct="80111908"  ocheck="false" niban="DE07210602370080111908" />
+    <map oacct="80211908"  ocheck="false" niban="DE02210602370080211908" />
+    <map oacct="80311908"  ocheck="false" niban="DE94210602370080311908" />
+    <map oacct="80411908"  ocheck="false" niban="DE89210602370080411908" />
+    <map oacct="80511908"  ocheck="false" niban="DE84210602370080511908" />
+    <map oacct="80611908"  ocheck="false" niban="DE79210602370080611908" />
+    <map oacct="80711908"  ocheck="false" niban="DE74210602370080711908" />
+    <map oacct="80811908"  ocheck="false" niban="DE69210602370080811908" />
+    <map oacct="80911908"  ocheck="false" niban="DE64210602370080911908" />
+    <map oacct="81111908"  ocheck="false" niban="DE54210602370081111908" />
+    <map oacct="81211908"  ocheck="false" niban="DE49210602370081211908" />
+    <map oacct="81311908"  ocheck="false" niban="DE44210602370081311908" />
+    <map oacct="81411908"  ocheck="false" niban="DE39210602370081411908" />
+    <map oacct="81511908"  ocheck="false" niban="DE34210602370081511908" />
+    <map oacct="81611908"  ocheck="false" niban="DE29210602370081611908" />
+    <map oacct="81711908"  ocheck="false" niban="DE24210602370081711908" />
+    <map oacct="81811908"  ocheck="false" niban="DE19210602370081811908" />
+    <map oacct="81911908"  ocheck="false" niban="DE14210602370081911908" />
+    <map oacct="82111908"  ocheck="false" niban="DE04210602370082111908" />
+    <map oacct="82211908"  ocheck="false" niban="DE96210602370082211908" />
+    <map oacct="82311908"  ocheck="false" niban="DE91210602370082311908" />
+    <map oacct="82411908"  ocheck="false" niban="DE86210602370082411908" />
+    <map oacct="82511908"  ocheck="false" niban="DE81210602370082511908" />
+    <map oacct="82611908"  ocheck="false" niban="DE76210602370082611908" />
+    <map oacct="82711908"  ocheck="false" niban="DE71210602370082711908" />
+    <map oacct="82811908"  ocheck="false" niban="DE66210602370082811908" />
+    <map oacct="82911908"  ocheck="false" niban="DE61210602370082911908" />
+    <map oacct="99624044"  ocheck="false" niban="DE93210602370099624044" />
+    <map oacct="300143869" ocheck="false" niban="DE30210602370300143869" />
+</rule>
+
+<rule orid="0055" version="00" inst="BHW Kreditservice GmbH" okey="rule">
+    <!-- oblz="25410300" -->
+    <map    nblz="25410200" nbic="BHWBDE2HXXX" />
+    <test oblz="254 103 00" oacct="7456123400" niban="DE47 2541 0200 7456 1234 00" nbic="BHWBDE2HXXX" remark="!OK" />
+</rule>
+
+<rule orid="0056" version="00" inst="SEB AG" okey="mact">
+    <map oacct="\d{1,9}" nrid="0001" />
+    <!-- BLZ with 10-digit accounts: ???
+    -->
+    <map oacct="36"          ocheck="false"  nacct="1010240003"   niban="DE29380101111010240003"  />
+    <map oacct="50"          ocheck="false"  nacct="1328506100"   niban="DE55480101111328506100"  />
+    <map oacct="99"          ocheck="false"  nacct="1826063000"   niban="DE26430101111826063000"  />
+    <map oacct="110"         ocheck="false"  nacct="1015597802"   niban="DE52250101111015597802"  />
+    <map oacct="240"         ocheck="false"  nacct="1010240000"   niban="DE13380101111010240000"  />
+    <map oacct="333"         ocheck="false"  nacct="1011296100"   niban="DE15380101111011296100"  />
+    <map oacct="555"         ocheck="false"  nacct="1600220800"   niban="DE54100101111600220800"  />
+    <map oacct="556"         ocheck="false"  nacct="1000556100"   niban="DE42390101111000556100"  />
+    <map oacct="606"         ocheck="false"  nacct="1967153801"   niban="DE70250101111967153801"  />
+    <map oacct="700"         ocheck="false"  nacct="1070088000"   niban="DE92265101111070088000"  />
+    <map oacct="777"         ocheck="false"  nacct="1006015200"   niban="DE72250101111006015200"  />
+    <map oacct="999"         ocheck="false"  nacct="1010240001"   niban="DE83380101111010240001"  />
+    <map oacct="1234"        ocheck="false"  nacct="1369152400"   niban="DE91250101111369152400"  />
+    <map oacct="1313"        ocheck="false"  nacct="1017500000"   niban="DE48570101111017500000"  />
+    <map oacct="1888"        ocheck="false"  nacct="1241113000"   niban="DE81370101111241113000"  />
+    <map oacct="1953"        ocheck="false"  nacct="1026500901"   niban="DE30250101111026500901"  />
+    <map oacct="1998"        ocheck="false"  nacct="1547620500"   niban="DE47670101111547620500"  />
+    <map oacct="2007"        ocheck="false"  nacct="1026500907"   niban="DE62250101111026500907"  />
+    <map oacct="4004"        ocheck="false"  nacct="1635100100"   niban="DE45370101111635100100"  />
+    <map oacct="4444"        ocheck="false"  nacct="1304610900"   niban="DE88670101111304610900"  />
+    <map oacct="5000"        ocheck="false"  nacct="1395676000"   niban="DE20250101111395676000"  />
+    <map oacct="5510"        ocheck="false"  nacct="1611754300"   niban="DE96290101111611754300"  />
+    <map oacct="6060"        ocheck="false"  nacct="1000400200"   niban="DE43500101111000400200"  />
+    <map oacct="6800"        ocheck="false"  nacct="1296401301"   niban="DE02670101111296401301"  />
+    <map oacct="55555"       ocheck="false"  nacct="1027758200"   niban="DE13380101111027758200"  />
+    <map oacct="60000"       ocheck="false"  nacct="1005007001"   niban="DE98500101111005007001"  />
+    <map oacct="66666"       ocheck="false"  nacct="1299807801"   niban="DE10200101111299807801"  />
+    <map oacct="102030"      ocheck="false"  nacct="1837501600"   niban="DE59370101111837501600"  />
+    <map oacct="121212"      ocheck="false"  nacct="1249461502"   niban="DE48700101111249461502"  />
+    <map oacct="130500"      ocheck="false"  nacct="1413482100"   niban="DE78300101111413482100"  />
+    <map oacct="202020"      ocheck="false"  nacct="1213431002"   niban="DE24370101111213431002"  />
+    <map oacct="414141"      ocheck="false"  nacct="1010555101"   niban="DE59380101111010555101"  />
+    <map oacct="666666"      ocheck="false"  nacct="1798758900"   niban="DE49200101111798758900"  />
+    <map oacct="5000000"     ocheck="false"  nacct="1403124100"   niban="DE62370101111403124100"  />
+    <map oacct="500500500"   ocheck="false"  nacct="1045720000"   niban="DE17600101111045720000"  />
+    <map oacct="\d+"  nrid="0000" /><!-- catch all others -->
+</rule>
+
+<rule orid="0057" version="00" inst="Badenia Bausparkasse" okey="blz">
+    <!-- nbic added -->
+    <map oblz="50810900"    nblz="66010200" nbic="BBSPDE6KXXX" />
+</rule>
+
+</IBAN-Rules>

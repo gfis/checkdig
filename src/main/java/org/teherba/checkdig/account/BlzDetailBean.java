@@ -1,5 +1,6 @@
 /*  BlzDetailBean.java - specific data for a German Bankleitzahl record
  *  @(#) $Id: BlzDetailBean.java 37 2008-09-08 06:11:04Z gfis $
+    2017-05-29: javadoc 1.8
  *  2014-01-20: Georg Fischer
  */
 /*
@@ -22,7 +23,7 @@ import  org.teherba.checkdig.account.BlzDetailBeanBase;
 import  java.sql.ResultSet;
 
 /** Specific properties for a German Bankleitzahl.
- *  <p />
+ *  <p>
  *  See also the document
  *  <a href="http://www.bundesbank.de/Navigation/DE/Kerngeschaeftsfelder/Unbarer_Zahlungsverkehr/Bankleitzahlen/bankleitzahlen.html">Bankleitzahlen</a>
  *  (77 pages in Jan. 2014).

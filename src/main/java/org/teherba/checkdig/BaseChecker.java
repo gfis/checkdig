@@ -1,6 +1,7 @@
 /*  BaseChecker.java - abstract checker class
     Copyright (c) 2005 Dr. Georg Fischer, D-79341 Kenzingen <punctum@punctum.com>
     @(#) $Id: BaseChecker.java 78 2009-02-05 17:11:47Z gfis $
+    2017-05-29: javadoc 1.8
     2014-01-20: LF and no tabs
     2009-01-09: result of 'check' is: new (formatted) number, space, [questionmark|exclamationmark]returnstring
     2008-11-14: test cases convention; process; success + error codes
@@ -299,6 +300,7 @@ public abstract class BaseChecker {
 
     /** Removes format specific hyphenation, dots and spaces from a number
      *  @param rawNumber trim this number
+     *  @return trimmed number
      */
     public String trim(String rawNumber) {
         return rawNumber.replaceAll("[ \\-\\.]", "");
@@ -307,6 +309,7 @@ public abstract class BaseChecker {
     /** Formats a number, for example with proper hyphenation or inserted spaces,
      *  and converts letters to upper case.
      *  @param rawNumber format this number, may NOT contain hyphens, dots or spaces
+     *  @return formatted number
      */
     public String format(String rawNumber) {
         return rawNumber.toUpperCase();
@@ -314,6 +317,7 @@ public abstract class BaseChecker {
 
     /** Reformats a string of digits which may contain separators.
      *  @param rawNumber format this number, MAY contain hyphens, dots or spaces
+     *  @return formatted number
      */
     public String reformat(String rawNumber) {
         return format(trim(rawNumber));

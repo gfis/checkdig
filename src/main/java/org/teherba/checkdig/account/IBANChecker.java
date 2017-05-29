@@ -1,5 +1,7 @@
 /*  IBANChecker.java - check International Bank Account Numbers
     @(#) $Id: IBANChecker.java 77 2009-01-16 08:14:16Z gfis $
+ *  2017-05-29: javadoc 1.8
+    2016-10-12: less imports
     2009-01-09: result of 'check' is: new (formatted) number, space, [questionmark|exclamationmark]returnstring
     2008-11-18: success and error return codes
     2008-03-21: MA??; Berlin -> Andernach
@@ -38,8 +40,6 @@ Activation:
 package org.teherba.checkdig.account;
 import  org.teherba.checkdig.BaseChecker;
 import  org.teherba.checkdig.account.IBANDetailBean;
-import  java.io.BufferedReader;
-import  java.io.FileReader;
 import  java.math.BigInteger;
 import  java.util.HashMap;
 
@@ -125,7 +125,7 @@ public class IBANChecker extends BaseChecker {
     /** Computes the check digits of an IBAN.
      *  @param rawNumber IBAN to be tested
      *  @return recomputed IBAN with proper check digits,
-     *  or "too short" if length(IBAN) < 4
+     *  or "too short" if length(IBAN) &lt; 4
      */
     public String check(String rawNumber) {
         String result = null;
@@ -203,9 +203,18 @@ public class IBANChecker extends BaseChecker {
     } // format
 
     /** Maps country codes to IBAN details */
-    private HashMap/*<1.5*/<String, IBANDetailBean>/*1.5>*/ map;
+    private HashMap<String, IBANDetailBean> map;
 
     /** Defines the country specific details of one European IBAN.
+     *  @param cc         country code
+     *  @param width      length of IBAN
+     *  @param bbidStart  bank id start
+     *  @param bbidLen    bank id length
+     *  @param acctStart  account number start
+     *  @param acctLen    account number length
+     *  @param chkMethod  check method
+     *  @param chkStart   start of check digits
+     *  @param chkLen     length of check digits
      */
     private void define1(String cc, int width, int bbidStart, int bbidLen, int acctStart, int acctLen, int chkMethod, int chkStart, int chkLen) {
         map.put(cc, new IBANDetailBean(cc, width,  bbidStart,     bbidLen ,    acctStart,     acctLen,     chkMethod,     chkStart,     chkLen));
@@ -219,7 +228,7 @@ public class IBANChecker extends BaseChecker {
      *  http://www.swift.com/, and the BICIBAN+ directory
      */
     public void defineDetails() {
-        map = new HashMap/*<1.5*/<String, IBANDetailBean>/*1.5>*/(64);
+        map = new HashMap<String, IBANDetailBean>(64);
         //       cc   len  bs bl  as  al  cm  cs  cl
         define1("AD", 24,  4,  8, 12, 12,  0,  0,  0); // Andorra: 4 bank, 4 branch
         define1("AT", 20,  4,  5,  9, 11,  0,  0,  0); // Austria: Postgiro = 60000

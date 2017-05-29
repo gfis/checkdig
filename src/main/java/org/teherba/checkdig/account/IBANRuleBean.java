@@ -25,7 +25,7 @@ import  java.util.regex.Pattern;
 import  java.sql.ResultSet;
 
 /** Specific properties for a German Bankleitzahl.
- *  <p />
+ *  <p>
  *  See also the document
  *  <a href="http://www.bundesbank.de/Navigation/DE/Kerngeschaeftsfelder/Unbarer_Zahlungsverkehr/Bankleitzahlen/bankleitzahlen.html">Bankleitzahlen</a>
  *  (77 pages in Jan. 2014).

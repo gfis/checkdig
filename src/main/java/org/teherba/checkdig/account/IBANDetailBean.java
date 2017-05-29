@@ -1,5 +1,6 @@
 /*  IBANDetailBean.java - Country specific data for checking of IBAN subfields
  *  @(#) $Id: IBANDetailBean.java 37 2008-09-08 06:11:04Z gfis $
+    2017-05-29: javadoc 1.8
  *  2014-01-20: LF, no tabs
  *  2007-12-31: Georg Fischer
  */
@@ -27,7 +28,7 @@ import  org.teherba.checkdig.account.IBANDetailBeanBase;
  *  All IBANs start with a 2 letter ISO country code, followed
  *  by 2 numeric checkdigits calculated by a mod 97 algorithm.
  *  All starting positions count from 0.
- *  <p />
+ *  <p>
  *	See also the
  *  <a href="http://www.swift.com/dsp/resources/documents/IBAN_Registry.pdf">SWIFT IBAN Registry</a>
  *  (77 pages in Jan. 2014).

@@ -1,11 +1,12 @@
 /*  ISINChecker.java - check International Securities Identification Numbers (ISINs)
     using the algorithm from ISO 7812:1987(E), also called "Luhn check"
     @(#) $Id: ISINChecker.java 77 2009-01-16 08:14:16Z gfis $
-	2009-01-09: result of 'check' is: new (formatted) number, space, [questionmark|exclamationmark]returnstring
-	2008-11-18: success and error codes
+    2016-10-12: less imports
+    2009-01-09: result of 'check' is: new (formatted) number, space, [questionmark|exclamationmark]returnstring
+    2008-11-18: success and error codes
     2007-05-24: name was ISINChecker
     2005-11-09, Georg Fischer: copied from IbanChecker.java
-    
+
     Activation (test data at the end of this source program):
         java -cp dist/checkdig.jar org.teherba.checkdig.ISINChecker checkdig/ISINChecker.java
 */
@@ -26,8 +27,6 @@
  */
 package org.teherba.checkdig;
 import  org.teherba.checkdig.BaseChecker;
-import  java.io.BufferedReader;
-import  java.io.FileReader;
 
 /** Class for the checkdigit in International Securities Identification Numbers (ISINs),
  *  using the algorithm from ISO 7812:1987(E), also called "Luhn check"
@@ -35,80 +34,80 @@ import  java.io.FileReader;
  */
 public class ISINChecker extends BaseChecker {
     public final static String CVSID = "@(#) $Id: ISINChecker.java 77 2009-01-16 08:14:16Z gfis $";
-    
+
     /** No-args constructor
      */
     public ISINChecker() {
         super();
     } // constructor
-    
+
     /** positions = numerical value of the character */
     //                                                 1         2         3
     //                                         0123456789012345678901234567890123456789
     protected static final String LETTERMAP = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    
+
     /** length of the ISIN */
     protected static final int LEN_ISIN = 12;
-    
+
     /** Computes the check digits of an ISIN which starts with a 2-character country
      *  code, and which may contain letters thereafter.
      *  @param rawNumber ISIN to be tested
-     *  @return formatted number, tab, return code 
+     *  @return formatted number, tab, return code
      */
-    public String check(String rawNumber) { 
+    public String check(String rawNumber) {
         String result = null;
         StringBuffer buffer = new StringBuffer(32);
         String isin = trim(rawNumber);
         int ipos   = isin.length() - 1;
         int sum    = 0;
         int toggle = 0;
-		int imap   = 0;
+        int imap   = 0;
         if (false) {
-        } else if (isin.length() < LEN_ISIN) { 
-        	result = checkResponse(rawNumber, BaseChecker.TOO_SHORT);
-        } else if (isin.length() > LEN_ISIN) { 
-        	result = checkResponse(rawNumber, BaseChecker.TOO_LONG);
+        } else if (isin.length() < LEN_ISIN) {
+            result = checkResponse(rawNumber, BaseChecker.TOO_SHORT);
+        } else if (isin.length() > LEN_ISIN) {
+            result = checkResponse(rawNumber, BaseChecker.TOO_LONG);
         } else { // length ok
-        	ipos = 0;
-	        while (ipos < isin.length() - 1) { // omit the last character ( = check digit)
-    	        char ch = isin.charAt(ipos);
-    	        imap = LETTERMAP.indexOf(ch);
-    	        if (imap < 0) { // not found 
-		        	result = checkResponse(rawNumber, BaseChecker.WRONG_CHAR);
-					return result;
-    	        } else if (imap < 10) { // digit
-    	            buffer.append(ch);
-    	        } else { // letter
-    	            buffer.append(Integer.toString(imap)); // 2 digits >= 10
-    	        }
-    	        ipos ++;
-    	    } // while ipos // 0ABC29 => 010111229
-        
-    	    ipos = buffer.length() - 1;
-    	    sum    = 0;
-    	    toggle = 0;
-    	    while (ipos >= 0) {
-    	        imap = Character.digit(buffer.charAt(ipos), 10);
-    	        int prod = (toggle == 0) ? 2 * imap : imap;
-    	        toggle = 1 - toggle;
-    	        sum += prod % 10 + (int) prod / 10;
-    	        // System.out.print(prod + "/" + sum + ", ");
-    	        ipos --;
-    	    } // while ipos
-    	    sum = (10 - sum % 10) % 10;
+            ipos = 0;
+            while (ipos < isin.length() - 1) { // omit the last character ( = check digit)
+                char ch = isin.charAt(ipos);
+                imap = LETTERMAP.indexOf(ch);
+                if (imap < 0) { // not found
+                    result = checkResponse(rawNumber, BaseChecker.WRONG_CHAR);
+                    return result;
+                } else if (imap < 10) { // digit
+                    buffer.append(ch);
+                } else { // letter
+                    buffer.append(Integer.toString(imap)); // 2 digits >= 10
+                }
+                ipos ++;
+            } // while ipos // 0ABC29 => 010111229
+
+            ipos = buffer.length() - 1;
+            sum    = 0;
+            toggle = 0;
+            while (ipos >= 0) {
+                imap = Character.digit(buffer.charAt(ipos), 10);
+                int prod = (toggle == 0) ? 2 * imap : imap;
+                toggle = 1 - toggle;
+                sum += prod % 10 + (int) prod / 10;
+                // System.out.print(prod + "/" + sum + ", ");
+                ipos --;
+            } // while ipos
+            sum = (10 - sum % 10) % 10;
             String newCheck = String.valueOf(sum);
-        	result = checkResponse(rawNumber, format(isin), newCheck);
+            result = checkResponse(rawNumber, format(isin), newCheck);
         } // length ok
         return result;
     } // check
-    
+
     /** Gets a predefined set of test numbers.
      *  @return array of all testcases as strings
      */
-	public String[] getTestCases() {
-		return new String[]
+    public String[] getTestCases() {
+        return new String[]
             { "ID1000023609" // from indonesian paper
-            , "IDA0000001J1" 
+            , "IDA0000001J1"
             , "HRPLVARA0004" // Pliva Inc.
             , "HRRIBAO011A2" // Bank of Rijeka Inc.
             , "HRVABAPA0005" // Bank of Varazdin Inc.
@@ -116,8 +115,8 @@ public class ISINChecker extends BaseChecker {
             , "EU0009658145" // Euro Stoxx 50
             , "ES0178430E18" // Telefonica de Espana
             , "FR0000131104" // BNP Parisbas
-            , "FR0000120537" // Lafarge      
-            , "FR0000131906" // Renault      
+            , "FR0000120537" // Lafarge
+            , "FR0000131906" // Renault
             , "IT0000062072" // Ass. Generali
             , "IE0000197834" // Allied Irish Banks
             , "NL0000009538" // Philips Electronics
@@ -138,16 +137,16 @@ public class ISINChecker extends BaseChecker {
             , "FI0009000681" // Nokia
             , "WRONGISINXXX"
             };
-	} // getTestCases
+    } // getTestCases
 
     /** Test Frame, reads lines with ISINs and checks each.
      *  @param args commandline arguments:
      *  <ul>
      *  <li>args[0] = name of file containing single ISINs on a line</li>
      *  </ul>
-     */     
-    public static void main (String args[]) { 
-    	(new ISINChecker()).process(args);
+     */
+    public static void main (String args[]) {
+        (new ISINChecker()).process(args);
     } // main
 
 } // ISINChecker
@@ -179,7 +178,7 @@ DE000A0CAYB2
 DE000TUAG000
 DE0007172009
 DE0008032004
-AT0000969985 
+AT0000969985
 FI0009000681
 WRONGISINXXX
 */

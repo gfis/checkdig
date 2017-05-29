@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    Schema for descriptions of IBAN exception rules for German bank account numbers
+    @(#) $Id$
+    2014-01-22, Georg Fischer
+    keep synchronized with test/iban/iban_rules_create.sql
+-->
+<!--
+ * Copyright 2014 Dr. Georg Fischer <punctum at punctum dot kom>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<xs:schema
+        targetNamespace="http://www.teherba.org/2013/checkiban"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns   ="http://www.teherba.org/2013/checkiban"
+        >
+    <xs:element name="IBAN-Rules" type="RulesType" />
+    <xs:complexType name="RulesType">
+        <xs:sequence>
+            <xs:element name="rule" type="RuleType" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="version" type="xs:string"  use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="RuleType">
+        <xs:choice minOccurs="0" maxOccurs="unbounded" >
+            <xs:element name="map"      type="MapType"     />
+            <xs:element name="test"     type="TestType"    />
+        </xs:choice>
+        <xs:attribute name="orid"    type="xs:string"  use="required" />
+        <xs:attribute name="version" type="xs:string"  use="required" />
+        <xs:attribute name="inst"    type="xs:string"                 />
+        <xs:attribute name="okey"    type="xs:string"  use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="MapType">
+        <xs:attribute name="oacct"      type="xs:string"  />
+        <xs:attribute name="oblz"       type="xs:string"  />
+        <xs:attribute name="ocheck"     type="BoolType"   />
+        <xs:attribute name="nacct"      type="xs:string"  />
+        <xs:attribute name="nblz"       type="xs:string"  />
+        <xs:attribute name="niban"      type="xs:string"  />
+        <xs:attribute name="nbic"       type="xs:string"  />
+        <xs:attribute name="nrid"       type="xs:string"  />
+        <xs:attribute name="nkey"       type="xs:string"  />
+    </xs:complexType>
+
+    <xs:complexType name="TestType">
+        <xs:attribute name="oacct"      type="xs:string" use="required" />
+        <xs:attribute name="oblz"       type="xs:string" use="required" />
+        <xs:attribute name="niban"      type="xs:string"                />
+        <xs:attribute name="nbic"       type="xs:string"                />
+        <xs:attribute name="remark"     type="xs:string" use="required" />
+    <!--
+        <xs:attribute name="href"       type="xs:string"                />
+    -->
+    </xs:complexType>
+
+    <xs:complexType name="SpecialType">
+    </xs:complexType>
+
+    <xs:simpleType name="BoolType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="false"       ></xs:enumeration>
+            <xs:enumeration value="true"        ></xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

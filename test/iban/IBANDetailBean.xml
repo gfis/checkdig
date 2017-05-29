@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!--
+    Country specific data for checking of IBAN subfields
+    @(#)$Id: IBANDetailBean.xml 50 2008-09-26 15:18:32Z gfis $
+    2014-01-20: LF; no tabs
+    2007-06-11, Dr. Georg Fischer
+-->
+<!--
+ * Copyright 2006 Dr. Georg Fischer <punctum at punctum dot kom>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+<record name="IBANDetail" version="1.0"
+        xmlns="http://www.teherba.org/2006/xtrans/Record"
+        package="org.teherba.checkdig.account" type="Bean" code="ASCII" length="18"
+        rem="Country specific data for checking of IBAN subfields"
+        sql="true" >
+    <field name="cc"        rem="Country Code"              type="String" key="1" />
+    <field name="width"     rem="Total Length"              type="int"     />
+    <field name="bbidStart" rem="Start of Bank/Branch Id"   type="int"     />
+    <field name="bbidLen"   rem="Length of Bank/Branch Id"  type="int"     />
+    <field name="acctStart" rem="Start of Account Number"   type="int"     />
+    <field name="acctLen"   rem="Length of Account Number"  type="int"     />
+    <field name="chkMethod" rem="Number of Check Method"    type="int"     />
+    <field name="chkStart"  rem="Start of Check Digits"     type="int"     />
+    <field name="chkLen"    rem="Length of Check Digits"    type="int"     />
+</record>

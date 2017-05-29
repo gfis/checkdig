@@ -30,7 +30,7 @@
 <project name="checkdig" default="all" basedir=".">
     <property name="app.version"        value="1.8" />
     <property name="app.main-class"     value="org.teherba.checkdig.DigitChecker" />
-    <property name="xtrans"             value="../../webapps-super/xtrans" />
+    <property name="xtrans"             value="../xtrans" />
     <property name="src.account"        value="src/main/java/org/teherba/checkdig/account" />
     <property name="tomcat.base"        value="/var/lib/tomcat" />
     <property name="tomcat.home"        value="/usr/share/tomcat" />
@@ -60,7 +60,7 @@
         </copy>
     </target>
 
-    <target name="gendata" depends="gen.account,gen.test.account,gen.blz.bean,gen.iban.bean,gen.isbn,gen.ismn" />
+    <target name="gendata" depends="gen.account,gen.test.account,gen.blz.bean,gen.iban.bean,gen.rule.bean,gen.isbn,gen.ismn" />
         <!-- gen.blz-->
 
     <target name="gen.account" depends="">
