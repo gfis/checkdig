@@ -1,5 +1,6 @@
 /*  IBANRuleBean.java - specific data for a German Bankleitzahl record
  *  @(#) $Id: IBANRuleBean.java 37 2008-09-08 06:11:04Z gfis $
+ *  2017-05-29: javadoc 1.8
  *  2014-01-22: Georg Fischer
  */
 /*
@@ -104,7 +105,7 @@ public class IBANRuleBean extends IBANRuleBeanBase {
         boolean result = false; // assume failure
         String opat = getOacct();
         if (opat.equals("\\d}")) {
-        	opat =      "\\d+"; // restore regular expression syntax
+            opat =      "\\d+"; // restore regular expression syntax
         }
         Pattern pattern = Pattern.compile(opat);
         Matcher matcher = pattern.matcher(account);

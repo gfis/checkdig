@@ -1,5 +1,6 @@
 /*  Messages.java - Static help texts and other language specific messages.
  *  @(#) $Id: 57d01d0860aef0c2f2783647be70c3c381710c86 $
+ *  2017-05-29: javadoc 1.8
  *  2016-08-31: Dr. Georg Fischer: copied from Xtool; Rainer=74
  */
 /*
@@ -27,7 +28,6 @@ import  java.io.Serializable;
  *  <li>en - English</li>
  *  <li>de - German</li>
  *  </ul>
- *  <p />
  *  @author Dr. Georg Fischer
  */
 public class Messages implements Serializable {
@@ -37,7 +37,7 @@ public class Messages implements Serializable {
      */
     public Messages() {
     } // Constructor
-    
+
     /** Sets the application-specific error message texts
      *  @param basePage reference to the hash for message texts
      */
@@ -45,6 +45,11 @@ public class Messages implements Serializable {
         String appLink = "<a href=\"servlet?view=index\">" + basePage.getAppName() + "</a>";
         //--------
         basePage.add("en", "001", appLink);
+        basePage.add("en", "002"
+                , " <a href=\"mailto:punctum@punctum.com"
+                + "?&subject=" + basePage.getAppName()
+                + "\">Dr. Georg Fischer</a>"
+                );
         //--------
         String laux = basePage.LANG_AUX;  // pseudo language code for links to auxiliary information
         int imess   = basePage.START_AUX; // start of messages    for links to auxiliary information
@@ -100,7 +105,7 @@ public class Messages implements Serializable {
     // Main method
     //================
 
-    /** Test driver 
+    /** Test driver
      *  @param args language code: "en", "de"
      */
     public static void main(String[] args) {
