@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
     @(#) $Id: web.xml 78 2009-02-05 17:11:47Z gfis $
     Copyright (c) 2005 Dr. Georg Fischer <punctum@punctum.com>
+    2017-05-31: moved to .web, ErrorServlet, Servlet 3.0
     2016-08-31: - DbatServlet; + welcom-file-list
     2014-01-16: + DbatServlet
     2009-01-29: /servlet instead of /checkservlet
@@ -22,10 +23,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
 -->
-<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-    "http://java.sun.com/dtd/web-app_2_3.dtd">
-<web-app>
-
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+        version="3.0">
     <display-name>Check Digits</display-name>
     <description>
         Compute check digits in account numbers, VAT ids, IBANs etc.
@@ -33,18 +34,29 @@
 
     <!-- Servlets -->
     <servlet>
-        <servlet-name>CheckServlet</servlet-name>
-        <servlet-class>org.teherba.checkdig.CheckServlet</servlet-class>
+        <servlet-name>CheckdigServlet</servlet-name>
+        <servlet-class>org.teherba.checkdig.web.CheckdigServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>CheckServlet</servlet-name>
+        <servlet-name>CheckdigServlet</servlet-name>
         <url-pattern>/servlet</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>ErrorServlet</servlet-name>
+        <servlet-class>org.teherba.common.web.ErrorServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ErrorServlet</servlet-name>
+        <url-pattern>/ErrorServlet</url-pattern>
+    </servlet-mapping>
+    <error-page>
+        <location>/ErrorServlet</location>
+    </error-page>
+
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
-        <welcome-file>index.htm</welcome-file>
     </welcome-file-list>
 
 </web-app>
