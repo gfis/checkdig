@@ -2,6 +2,7 @@
 <!--
     ant-buildfile for commandline, web application and web service
     @(#) $Id: build.xml 802 2011-09-12 06:46:18Z gfis $
+    2019-03-17: CRCGenerator with options
     2016-09-14: -xtrans, +mysql-connector
     2016-09-11: fill.lib
     2016-09-02: ${tomcat.*}, core.jar
@@ -261,7 +262,7 @@
     <target name="test.crc">
         <antcall target="run">
             <param name="class" value="org.teherba.checkdig.CRCGenerator"  />
-            <param name="args"  value="16 12 5 0 -1 test/crc.tst"      />
+            <param name="args"  value="-p 16,12,5,0 -i1 -x test/crc.tst"      />
         </antcall>
     </target>
 
