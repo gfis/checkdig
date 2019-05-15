@@ -151,9 +151,9 @@ public class DigitChecker {
                         out.write(checker.checkTestCases());
                     } else { // at least 1 parameter
                         if (parm2.equals("")) {
-                            out.write(checker.check(parm1));
+                            out.write(checker.check(parm1)        + nl);
                         } else {
-                            out.write(checker.check(parm1, parm2));
+                            out.write(checker.check(parm1, parm2) + nl);
                         }
                     } // at least 1 parameter
                 } else {
