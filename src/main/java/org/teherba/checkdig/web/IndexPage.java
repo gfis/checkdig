@@ -26,7 +26,8 @@ import  java.io.PrintWriter;
 import  java.io.Serializable;
 import  javax.servlet.http.HttpServletRequest;
 import  javax.servlet.http.HttpServletResponse;
-import  org.apache.log4j.Logger;
+import  org.apache.logging.log4j.Logger;
+import  org.apache.logging.log4j.LogManager;
 
 /** CheckDig main dialog page
  *  @author Dr. Georg Fischer
@@ -41,7 +42,7 @@ public class IndexPage implements Serializable {
     /** No-args Constructor
      */
     public IndexPage() {
-        log      = Logger.getLogger(IndexPage.class.getName());
+        log      = LogManager.getLogger(IndexPage.class.getName());
     } // Constructor
 
     /** Output the main dialog page for RaMath

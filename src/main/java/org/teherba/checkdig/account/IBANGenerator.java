@@ -36,7 +36,8 @@ import  java.sql.Connection;
 import  java.sql.PreparedStatement;
 import  java.sql.ResultSet;
 import  java.sql.Statement;
-import  org.apache.log4j.Logger;
+import  org.apache.logging.log4j.Logger;
+import  org.apache.logging.log4j.LogManager;
 
 /** Class which implements the bank-specific rules for the generation of IBANs
  *  from German account and Bankleitzahl parameters.
@@ -66,7 +67,7 @@ public class IBANGenerator {
     /** No-args constructor
      */
     public IBANGenerator() {
-        log = Logger.getLogger(IBANGenerator.class.getName());
+        log = LogManager.getLogger(IBANGenerator.class.getName());
         blzBean     = new BlzDetailBean();
         ruleBean    = new IBANRuleBean();
         ibanChecker = new IBANChecker();

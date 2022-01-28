@@ -36,7 +36,8 @@ import  javax.servlet.ServletException;
 import  javax.servlet.http.HttpServlet;
 import  javax.servlet.http.HttpServletRequest;
 import  javax.servlet.http.HttpServletResponse;
-import  org.apache.log4j.Logger;
+import  org.apache.logging.log4j.Logger;
+import  org.apache.logging.log4j.LogManager;
 
 /** Compute check digits for VAT ids, account numbers, IBANs etc.
  *  This class is the servlet interface to <em>DigitChecker</em>,
@@ -64,7 +65,7 @@ public class CheckdigServlet extends HttpServlet {
      */
     public void init(ServletConfig config) throws ServletException {
         super.init(config); // ???
-        log = Logger.getLogger(CheckdigServlet.class.getName());
+        log = LogManager.getLogger(CheckdigServlet.class.getName());
         basePage = new BasePage(APP_NAME);
         Messages.addMessageTexts(basePage);
     } // init
